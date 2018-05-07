@@ -1,4 +1,6 @@
-package main.controller;
+package ch.controller;
+
+import ch.MainApp;
 
 import javafx.fxml.FXML;
 
@@ -6,7 +8,7 @@ import javafx.fxml.FXML;
 public class CreateAsthmaAppUserCtrl {
 
     // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
-   // private main main;
+    private MainApp mainApp;
 
     /**
      * The constructor.
@@ -16,7 +18,7 @@ public class CreateAsthmaAppUserCtrl {
     }
 
     /**
-     * Initializes the controller class. This method is automatically called
+     * Initializes the ch.controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
     @FXML

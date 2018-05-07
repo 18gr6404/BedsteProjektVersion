@@ -1,6 +1,8 @@
-import db_And_FHIR.dbControl;
+package ch;
+
+import ch.db_And_FHIR.*;
+
 import javafx.application.Application;
-import db_And_FHIR.dbControl;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -8,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class main extends Application {
+public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
@@ -18,7 +20,7 @@ public class main extends Application {
     /**
      * Constructor
      */
-    public main() {
+    public MainApp() {
         //
     }
 
@@ -28,7 +30,7 @@ public class main extends Application {
         this.primaryStage.setTitle("AstmaAppSystem");
 
 
-    con = myDBClass.connect();
+        con = myDBClass.connect();
 
         //isRegistered = DBCtrl.requestIsRegistered();   - Her skal vi indhente isRegistered fra DB og have en if-sætning.
 
@@ -53,7 +55,7 @@ public class main extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(main.class.getResource("view/RootLayout.fxml"));
+            loader.setLocation(MainApp.class.getResource("/ch/view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.

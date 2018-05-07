@@ -26,7 +26,7 @@ public class PatientCtrl {
     }
 
     /**
-     * Initializes the controller class. This method is automatically called
+     * Initializes the ch.controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
     @FXML
