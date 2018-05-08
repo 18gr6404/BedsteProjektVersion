@@ -15,7 +15,7 @@ public class PractitionerCtrl {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PatientCtrl() {
+    public PractitionerCtrl() {
     }
 
     /**
