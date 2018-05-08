@@ -1,14 +1,11 @@
-package db_And_FHIR;
+package ch.db_And_FHIR;
 
 import java.io.IOException;
 
 import ca.uhn.fhir.context.FhirContext;
-//import ca.uhn.fhir.model.base.composite.BaseResourceReferenceDt;
-//import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import org.hl7.fhir.dstu3.model.*;
-//import org.hl7.fhir.instance.model.api.IIdType;
 
 public class FhirControl {
 
@@ -76,7 +73,7 @@ public class FhirControl {
         System.out.println("Found " + searchedPatient.getName() + " patients with CPR " + patientIdentifier);
         System.out.println(searchedPatient);
 
-       // ResourceRefere
+       // ResourceReference
         Reference random = new Reference();
         random.setReference(searchedPatient.getId());
         pObs.setSubject(random);

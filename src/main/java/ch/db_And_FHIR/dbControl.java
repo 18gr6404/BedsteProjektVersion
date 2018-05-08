@@ -1,4 +1,4 @@
-package db_And_FHIR;
+package ch.db_And_FHIR;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
