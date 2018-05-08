@@ -3,26 +3,24 @@ package ch.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+public class MedicineCtrl {
+    @FXML
+    private Label typeLabel;
 
-public class PatientCtrl {
     @FXML
-    private Label nameLabel;
-    @FXML
-    private Label cprLabel;
-    @FXML
-    private Label ageLabel;
-    @FXML
-    private Label genderLabel;
+    private Label dosisLabel;
 
+    @FXML
+    private Label dateLabel;
 
     // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
-     // private main main;
+    // private main main;
 
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PatientCtrl() {
+    public MedicineCtrl() {
     }
 
     /**
@@ -39,9 +37,9 @@ public class PatientCtrl {
      *
      * @param main
      */
-   // public void setmain(main main) {
-     //   this.main = main;
+    // public void setmain(main main) {
+    //   this.main = main;
 
-   // }
+    // }
 
 }
