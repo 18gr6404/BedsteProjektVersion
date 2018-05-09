@@ -1,4 +1,4 @@
-package main.controller;
+package ch.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -15,7 +15,7 @@ public class PractitionerCtrl {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PatientCtrl() {
+    public PractitionerCtrl() {
     }
 
     /**
