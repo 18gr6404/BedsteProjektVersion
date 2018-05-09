@@ -33,7 +33,7 @@
             <TextField fx:id="ConsultationMeasurementTextField" GridPane.columnIndex="1" />
          </children>
       </GridPane>
-      <Button fx:id="CancelButton" layoutX="519.0" layoutY="175.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="OKButton" layoutX="459.0" layoutY="175.0" mnemonicParsing="false" text="OK" />
+      <Button fx:id="CancelButton" layoutX="519.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+      <Button fx:id="OKButton" layoutX="459.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleOK" text="OK" />
    </children>
 </AnchorPane>

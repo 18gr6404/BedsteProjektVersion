@@ -86,31 +86,25 @@ public class ConsultationMeasurementCtrl {
         this.mainAppRef = inputMain;
     }
 
+
+
     public boolean isOkClicked() {
         return okClicked;
     }
 
     @FXML
-    private boolean handleOk() {
+    private void handleOK() {
         if (isInputValid()) {
             //person.setFirstName(firstNameField.getText());
 
             okClicked = true;
             consultationMeasurementStage.close();
-
-            // Her skal Xenia finde på noget at skrive
-            return true;
-        }
-        else{
-
-            //noget alarmeringskode eller lign.
-            return false;
         }
     }
 
-/*@FXML
+@FXML
 private void handleCancel() {
-    dialogStage.close();
+    consultationMeasurementStage.close();
 }
 
     /**
