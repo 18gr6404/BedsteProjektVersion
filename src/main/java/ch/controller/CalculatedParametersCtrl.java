@@ -1,4 +1,4 @@
-package main.controller;
+package ch.controller;
 
 public class CalculatedParametersCtrl {
 }

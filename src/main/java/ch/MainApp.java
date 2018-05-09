@@ -1,10 +1,13 @@
 package ch;
 
+import ch.controller.CreateAsthmaAppUserCtrl;
+import ch.controller.PatientCtrl;
 import ch.db_And_FHIR.*;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -39,6 +42,13 @@ public class MainApp extends Application {
 
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
+        //CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
+        //createAsthmaAppUserCtrl.setMainApp(this);
+        //createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+
+        // PatientCtrl patientCtrl = new PatientCtrl();
+        // patientCtrl.setMainApp(this);
+        // patientCtrl.showPatient();
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
         //}
@@ -62,11 +72,41 @@ public class MainApp extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
+            //primaryStage.
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
+/*
+    public void showCreateAsthmaAppUser(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
+            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
 
+            // Set person overview into the center of root layout.
+
+            rootLayout.setCenter(createAstmaAppUserView);
+
+            // Give the controller access to the main app.
+            CreateAsthmaAppUserCtrl controller = loader.getController();
+            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+*/
+
+    /**
+     * Returnerer vores rootLayout så vi kan hente det fra de andre controlleres og de kan sætte deres respektive view heri. Se showCreateAsthmaAppUser() i CreateAsthmaAppUserCtrl for et eksempel.
+     * @return
+     */
+    public BorderPane getRootLayout(){
+    return rootLayout;
+}
 
 }
