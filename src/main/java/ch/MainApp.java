@@ -1,5 +1,6 @@
 package ch;
 
+import ch.controller.AllergyIntoleranceCtrl;
 import ch.controller.ConditionCtrl;
 import ch.controller.CreateAsthmaAppUserCtrl;
 import ch.controller.PatientCtrl;
@@ -54,6 +55,10 @@ public class MainApp extends Application {
         //ConditionCtrl conditionCtrl = new ConditionCtrl();
         //conditionCtrl.setMainApp(this);
         //conditionCtrl.showCondition();
+
+        //AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
+        //allergyIntoleranceCtrl.setMainApp(this);
+        //allergyIntoleranceCtrl.showAllergyIntolerance();
 
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
