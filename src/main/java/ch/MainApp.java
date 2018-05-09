@@ -67,7 +67,6 @@ public class MainApp extends Application {
         //showCreateAsthmaAppUser();
         //}
 
-<<<<<<< HEAD
        // PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
         //practitionerCtrl.setMainApp(this);
         //practitionerCtrl.showPractitioner();
@@ -75,11 +74,6 @@ public class MainApp extends Application {
         MedicationCtrl medicationCtrl = new MedicationCtrl();
         medicationCtrl.setMainApp(this);
         medicationCtrl.showMedication();
-=======
-        //PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        //practitionerCtrl.setMainApp(this);
-        //practitionerCtrl.showPractitioner();
->>>>>>> 60a868ea9260360aa260390ccbafac231b072e69
 
     }
 
