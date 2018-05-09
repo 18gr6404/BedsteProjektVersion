@@ -1,6 +1,7 @@
 package ch;
 
 import ch.controller.CreateAsthmaAppUserCtrl;
+import ch.controller.PractitionerCtrl;
 import ch.db_And_FHIR.*;
 
 import javafx.application.Application;
@@ -41,15 +42,19 @@ public class MainApp extends Application {
 
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
-        CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
-        createAsthmaAppUserCtrl.setMainApp(this);
-        createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+     //   CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
+     //   createAsthmaAppUserCtrl.setMainApp(this);
+     //   createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
         //}
         //else{
         //showCreateAsthmaAppUser();
         //}
+
+        PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
+        practitionerCtrl.setMainApp(this);
+        practitionerCtrl.showPractitioner();
 
     }
 

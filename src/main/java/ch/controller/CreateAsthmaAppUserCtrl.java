@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class CreateAsthmaAppUserCtrl {
 
-    // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
+    // Reference to the main application.
     private MainApp mainAppRef;
 
     /**
