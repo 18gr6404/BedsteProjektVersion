@@ -12,7 +12,9 @@ import java.io.IOException;
 public class AllergyIntoleranceCtrl{
 
     @FXML
-    private ListView AllergyIntoleranceList;
+    private ListView AllergyList;
+    @FXML
+    private ListView IntoleranceList;
 
     // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
     private MainApp mainAppRef;
