@@ -44,7 +44,7 @@ public class PatientCtrl {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/patientView.fxml"));
+            loader.setLocation(PatientCtrl.class.getResource("/ch/view/patientView.fxml"));
             AnchorPane patientView = (AnchorPane) loader.load();
 
             // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
