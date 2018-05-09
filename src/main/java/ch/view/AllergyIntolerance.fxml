@@ -13,10 +13,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-<<<<<<< HEAD:src/main/java/ch/view/AllergyIntolarence.fxml
       <ListView fx:id="komorbiditetList" layoutY="41.0" prefHeight="358.0" prefWidth="200.0" />
-=======
       <ListView fx:id="AllergyIntoleranceList" layoutY="41.0" prefHeight="358.0" prefWidth="200.0" />
->>>>>>> da4c9a45ab3f264c9950a435c20e6a544f5ee3b2:src/main/java/ch/view/AllergyIntolerance.fxml
    </children>
 </AnchorPane>
