@@ -1,5 +1,10 @@
 package ch;
 
+<<<<<<< HEAD
+=======
+import ch.controller.AllergyIntoleranceCtrl;
+import ch.controller.ConditionCtrl;
+>>>>>>> da4c9a45ab3f264c9950a435c20e6a544f5ee3b2
 import ch.controller.CreateAsthmaAppUserCtrl;
 import ch.controller.PractitionerCtrl;
 import ch.db_And_FHIR.*;
@@ -42,9 +47,28 @@ public class MainApp extends Application {
 
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
+<<<<<<< HEAD
      //   CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
      //   createAsthmaAppUserCtrl.setMainApp(this);
      //   createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+=======
+        //CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
+        //createAsthmaAppUserCtrl.setMainApp(this);
+        //createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+
+        // PatientCtrl patientCtrl = new PatientCtrl();
+        // patientCtrl.setMainApp(this);
+        // patientCtrl.showPatient();
+
+        //ConditionCtrl conditionCtrl = new ConditionCtrl();
+        //conditionCtrl.setMainApp(this);
+        //conditionCtrl.showCondition();
+
+        //AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
+        //allergyIntoleranceCtrl.setMainApp(this);
+        //allergyIntoleranceCtrl.showAllergyIntolerance();
+
+>>>>>>> da4c9a45ab3f264c9950a435c20e6a544f5ee3b2
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
         //}
