@@ -1,9 +1,6 @@
 package ch;
 
-import ch.controller.AllergyIntoleranceCtrl;
-import ch.controller.ConditionCtrl;
-import ch.controller.CreateAsthmaAppUserCtrl;
-import ch.controller.PractitionerCtrl;
+import ch.controller.*;
 import ch.db_And_FHIR.*;
 
 import javafx.application.Application;
@@ -32,7 +29,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("AstmaAppSystem");
+        this.primaryStage.setTitle("Sundhedsappmodul");
 
 
         con = myDBClass.connect();
@@ -70,9 +67,13 @@ public class MainApp extends Application {
         //showCreateAsthmaAppUser();
         //}
 
-        PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        practitionerCtrl.setMainApp(this);
-        practitionerCtrl.showPractitioner();
+       // PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
+        //practitionerCtrl.setMainApp(this);
+        //practitionerCtrl.showPractitioner();
+
+        MedicationCtrl medicationCtrl = new MedicationCtrl();
+        medicationCtrl.setMainApp(this);
+        medicationCtrl.showMedication();
 
     }
 

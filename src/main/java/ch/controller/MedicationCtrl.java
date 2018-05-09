@@ -1,9 +1,19 @@
 package ch.controller;
 
+import ch.MainApp;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+
+import java.io.IOException;
 
 public class MedicationCtrl {
+
+    // Reference to the main application.
+    private MainApp mainAppRef;
+
     @FXML
     private Label typeLabel;
 
@@ -13,8 +23,6 @@ public class MedicationCtrl {
     @FXML
     private Label dateLabel;
 
-    // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
-    // private main main;
 
     /**
      * The constructor.
@@ -32,14 +40,31 @@ public class MedicationCtrl {
 
     }
 
+    public void showMedication() {
+        try {
+            //Load showMedication
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MedicationCtrl.class.getResource("/ch/view/MedicationView.fxml"));
+            AnchorPane MedicationView = (AnchorPane) loader.load();
+
+            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
+            BorderPane tempRootLayout = mainAppRef.getRootLayout();
+            tempRootLayout.setCenter(MedicationView);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * Is called by the main application to give a reference back to itself.
      *
-     * @param main
+     * @param inputMain
      */
-    // public void setmain(main main) {
-    //   this.main = main;
-
-    // }
+    public void setMainApp(MainApp inputMain) {
+        this.mainAppRef = inputMain;
+    }
 
 }
