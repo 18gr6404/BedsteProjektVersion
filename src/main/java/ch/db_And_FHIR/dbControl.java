@@ -42,7 +42,8 @@ public class dbControl {
 //dbName= vores databases navn
 
 
-    public getPatientData(int patientCPR) {
+    //Skal nok ikke være Void
+    public void getPatientData(int patientCPR) {
         Connection con = connect();
 
         Statement stmnt = null;

@@ -32,7 +32,7 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Sundhedsappmodul");
 
 
-
+        myDBClass.getPatientData(1207731450);
         con = myDBClass.connect();
 
         //isRegistered = DBCtrl.requestIsRegistered();   - Her skal vi indhente isRegistered fra DB og have en if-sætning.
@@ -136,8 +136,6 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
-    dbControl patient1 = new dbControl();
-    patient1.hentPatientData(String patientCPR);
-            return patientCPR;
+
 }
-}
+

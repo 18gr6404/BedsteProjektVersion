@@ -93,10 +93,18 @@ public class ConsultationMeasurementCtrl {
     @FXML
     private boolean handleOk() {
         if (isInputValid()) {
-            person.setFirstName(firstNameField.getText());
+            //person.setFirstName(firstNameField.getText());
 
             okClicked = true;
             consultationMeasurementStage.close();
+
+            // Her skal Xenia finde på noget at skrive
+            return true;
+        }
+        else{
+
+            //noget alarmeringskode eller lign.
+            return false;
         }
     }
 
