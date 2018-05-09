@@ -13,6 +13,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <ListView fx:id="komorbiditetList" layoutY="41.0" prefHeight="358.0" prefWidth="200.0" />
+      <ListView fx:id="AllergyIntolarenceList" layoutY="41.0" prefHeight="358.0" prefWidth="200.0" />
    </children>
 </AnchorPane>
