@@ -1,5 +1,6 @@
 package ch;
 
+import ch.controller.ConditionCtrl;
 import ch.controller.CreateAsthmaAppUserCtrl;
 import ch.controller.PatientCtrl;
 import ch.db_And_FHIR.*;
@@ -49,6 +50,11 @@ public class MainApp extends Application {
         // PatientCtrl patientCtrl = new PatientCtrl();
         // patientCtrl.setMainApp(this);
         // patientCtrl.showPatient();
+
+        //ConditionCtrl conditionCtrl = new ConditionCtrl();
+        //conditionCtrl.setMainApp(this);
+        //conditionCtrl.showCondition();
+
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
         //}
