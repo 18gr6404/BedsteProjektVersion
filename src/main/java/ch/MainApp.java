@@ -136,4 +136,8 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
+    dbControl patient1 = new dbControl();
+    patient1.hentPatientData(String patientCPR);
+            return patientCPR;
+}
 }
