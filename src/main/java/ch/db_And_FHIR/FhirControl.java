@@ -157,8 +157,7 @@ pObs.setSubject(new Reference(searchedPatient.getId()));
        // }
 
 
-
-
+        System.out.println(Observations.getValue());
         System.out.println(Observations.getCode().getText());
  //      System.out.println(observationArrayList.get(0).getCode().getText());
 
