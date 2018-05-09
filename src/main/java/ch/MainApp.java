@@ -32,6 +32,7 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Sundhedsappmodul");
 
 
+
         con = myDBClass.connect();
 
         //isRegistered = DBCtrl.requestIsRegistered();   - Her skal vi indhente isRegistered fra DB og have en if-sætning.
@@ -131,5 +132,8 @@ public class MainApp extends Application {
     public BorderPane getRootLayout(){
     return rootLayout;
 }
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
 }

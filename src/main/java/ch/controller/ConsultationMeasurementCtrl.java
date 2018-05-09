@@ -4,9 +4,11 @@ import ch.MainApp;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -23,6 +25,8 @@ public class ConsultationMeasurementCtrl {
 
     // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
     private MainApp mainAppRef;
+    private Stage consultationMeasurementStage;
+    private boolean okClicked = false;
 
     /**
      * The constructor.
@@ -40,24 +44,37 @@ public class ConsultationMeasurementCtrl {
 
     }
 
-    public void showConsultationMeasurement(){
+    public boolean showConsultationMeasurement() {
         try {
-            // Load person overview.
+            // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ConsultationMeasurementCtrl.class.getResource("/ch/view/ConsultationMeasurementView.fxml"));
-            AnchorPane consultationMeasurementView = loader.load();
+            AnchorPane page = loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            tempRootLayout.setCenter(consultationMeasurementView);
+            // Create the dialog Stage.
+            Stage consultationMeasurementStage = new Stage();
+            consultationMeasurementStage.setTitle("Indtast konsultationsmålinger");
+            consultationMeasurementStage.initModality(Modality.WINDOW_MODAL);
+            // consultationMeasurementStage.initOwner();
+            Scene consultationmeasurementscene = new Scene(page);
+            consultationMeasurementStage.setScene(consultationmeasurementscene);
 
+            // Set the person into the controller.
+            //PersonEditDialogController controller = loader.getController();
+            //controller.setDialogStage(dialogStage);
+            //controller.setPerson(person);
 
+            // Show the dialog and wait until the user closes it
+            consultationMeasurementStage.showAndWait();
+            return isOkClicked();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
-    }
 
+
+    }
 
 
     /**
@@ -69,5 +86,40 @@ public class ConsultationMeasurementCtrl {
         this.mainAppRef = inputMain;
     }
 
+    public boolean isOkClicked() {
+        return okClicked;
+    }
+
+    @FXML
+    private boolean handleOk() {
+        if (isInputValid()) {
+            person.setFirstName(firstNameField.getText());
+
+            okClicked = true;
+            consultationMeasurementStage.close();
+        }
+    }
+
+/*@FXML
+private void handleCancel() {
+    dialogStage.close();
+}
+
+    /**
+     * Validates the user input in the text fields.
+     *
+     * @return true if the input is valid
+     */
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+        if (FEV1Label.getText() == null || FEV1Label.getText().length() == 0) {
+            errorMessage += "No valid first name!\n"; }
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            return false;}
+    }
 
 }
+
