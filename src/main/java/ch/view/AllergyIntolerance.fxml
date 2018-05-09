@@ -5,15 +5,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.controller.AllergyIntoleranceCtrl">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="AllergyIntolerance:">
+      <Label layoutX="14.0" layoutY="14.0" text="Allergier:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <ListView fx:id="komorbiditetList" layoutY="41.0" prefHeight="358.0" prefWidth="200.0" />
-      <ListView fx:id="AllergyIntoleranceList" layoutY="41.0" prefHeight="358.0" prefWidth="200.0" />
+      <ListView fx:id="AllergyList" layoutY="41.0" prefHeight="150.0" prefWidth="200.0" />
+      <Label layoutX="14.0" layoutY="207.0" text="Irritanter:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <ListView fx:id="IntoleranceList" layoutY="248.0" prefHeight="150.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

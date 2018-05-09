@@ -59,9 +59,9 @@ public class MainApp extends Application {
         //conditionCtrl.setMainApp(this);
         //conditionCtrl.showCondition();
 
-        //AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
-        //allergyIntoleranceCtrl.setMainApp(this);
-        //allergyIntoleranceCtrl.showAllergyIntolerance();
+        AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
+        allergyIntoleranceCtrl.setMainApp(this);
+        allergyIntoleranceCtrl.showAllergyIntolerance();
 
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
@@ -70,9 +70,9 @@ public class MainApp extends Application {
         //showCreateAsthmaAppUser();
         //}
 
-        PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        practitionerCtrl.setMainApp(this);
-        practitionerCtrl.showPractitioner();
+        //PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
+        //practitionerCtrl.setMainApp(this);
+        //practitionerCtrl.showPractitioner();
 
     }
 
