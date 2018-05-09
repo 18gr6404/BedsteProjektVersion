@@ -56,9 +56,13 @@ public class MainApp extends Application {
         //conditionCtrl.setMainApp(this);
         //conditionCtrl.showCondition();
 
-        AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
-        allergyIntoleranceCtrl.setMainApp(this);
-        allergyIntoleranceCtrl.showAllergyIntolerance();
+        //AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
+        //allergyIntoleranceCtrl.setMainApp(this);
+        //allergyIntoleranceCtrl.showAllergyIntolerance();
+
+        ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
+        consultationMeasurementCtrl.setMainApp(this);
+        consultationMeasurementCtrl.showConsultationMeasurement();
 
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
@@ -71,9 +75,9 @@ public class MainApp extends Application {
         //practitionerCtrl.setMainApp(this);
         //practitionerCtrl.showPractitioner();
 
-        MedicationCtrl medicationCtrl = new MedicationCtrl();
-        medicationCtrl.setMainApp(this);
-        medicationCtrl.showMedication();
+        //MedicationCtrl medicationCtrl = new MedicationCtrl();
+        //medicationCtrl.setMainApp(this);
+        //medicationCtrl.showMedication();
 
     }
 
