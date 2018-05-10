@@ -44,9 +44,6 @@ public class dbControl {
         }
     }
 
-//dbName= vores databases navn
-
-
     public void getPatientData(int patientCPR) {
         Connection con = connect();
 
@@ -74,27 +71,97 @@ public class dbControl {
                         ", " + age + ", " + gender+
                         ", " + cpr + ", " + practitionerID);
 
-                Patient firstName = new Patient();
-                String cpr = cpr;
-                firstName.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(cpr);
-                firstName.addName().setFamily(lastName).addGiven(firstName);
-                firstName.setGender(Enumerations.AdministrativeGender.X);
-                LocalDate dato = dateUtil.parse();
-                firstName.setBirthDate(java.sql.Date.valueOf(dato));
-                Extension ext = new Extension();
-                ext.setUrl("Is Registered?");
-                ext.setValue(new BooleanType(true));
-                firstName.addExtension(ext);
-                LocalDate dato1 = dateUtil.parse("");
-                Extension ext1 = new Extension();
-                ext1.setUrl("Creation Date");
-                ext1.setValue(new DateType(java.sql.Date.valueOf(dato1)));
-                firstName.addExtension(ext1);
-                Extension ext2 = new Extension();
-                ext2.setUrl("Chosen App");
-                ext2.setValue(new StringType("Astma App"));
-                firstName.addExtension(ext2);
             }
+            /* Patient firstName = new Patient();
+            String cpr = cpr;
+            firstName.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(cpr);
+            firstName.addName().setFamily(lastName).addGiven(firstName);
+            firstName.setGender(Enumerations.AdministrativeGender.gender);
+            LocalDate dato = dateUtil.parse("");
+            firstName.setBirthDate(java.sql.Date.valueOf(dato));
+            Extension ext = new Extension();
+            ext.setUrl("Is Registered?");
+            ext.setValue(new BooleanType(true));
+            firstName.addExtension(ext);
+            LocalDate dato1 = dateUtil.parse("");
+            Extension ext1 = new Extension();
+            ext1.setUrl("Creation Date");
+            ext1.setValue(new DateType(java.sql.Date.valueOf(dato1)));
+            firstName.addExtension(ext1);
+            Extension ext2 = new Extension();
+            ext2.setUrl("Chosen App");
+            ext2.setValue(new StringType("Astma App"));
+            firstName.addExtension(ext2); */
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
+    public void getPractitionerData(int practitionerIDET) {
+        Connection con = connect();
+
+        Statement stmnt = null;
+        String query = "SELECT firstName, lastName, practitionerID FROM Practitioner WHERE practitionerID=" + practitionerIDET;
+
+        try {
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(query);
+            while (rs.next()) {
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                int practitionerID = rs.getInt("practitionerID");
+                System.out.println(firstName + ", " + lastName +
+                        ", "+ practitionerID);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void getAllergyIntolerance(int patientCPR) {
+        Connection con = connect();
+
+        Statement stmnt = null;
+        String query = "SELECT cpr, name FROM Allergy WHERE cpr=" + patientCPR;
+
+        try {
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(query);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                int cpr = rs.getInt("cpr");
+                System.out.println(name + ", "+ cpr);
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
+    public void getCondition(int patientCPR) {
+        Connection con = connect();
+
+        Statement stmnt = null;
+        String query = "SELECT cpr, name FROM Diagnosis WHERE cpr=" + patientCPR;
+
+        try {
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(query);
+            while (rs.next()) {
+                String name = rs.getString("name");
+                int cpr = rs.getInt("cpr");
+                System.out.println(name + ", "+ cpr);
+
+            }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
