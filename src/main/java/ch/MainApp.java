@@ -19,8 +19,8 @@ public class MainApp extends Application {
     private java.sql.Connection con;
 
     dbControl myDBClass = new dbControl();
-    private Integer patientCPR = 1207731450; //Marianne.
-    //private Integer patientCPR = 1303803813;  //Jens
+    //private Integer patientCPR = 1207731450; //Marianne.
+    private Integer patientCPR = 1303803813;  //Jens
 
     /**
      * Constructor
@@ -97,6 +97,10 @@ public class MainApp extends Application {
         //MedicationCtrl medicationCtrl = new MedicationCtrl();
         //medicationCtrl.setMainApp(this);
         //medicationCtrl.showMedication();
+
+//        OverviewCtrl overviewCtrl = new OverviewCtrl();
+//        overviewCtrl.setMainApp(this);
+//        overviewCtrl.showOverview();
     }
 
     /**
