@@ -19,7 +19,8 @@ public class MainApp extends Application {
     private java.sql.Connection con;
 
     dbControl myDBClass = new dbControl();
-    private Integer patientCPR = 1207731450;
+    private Integer patientCPR = 1207731450; //Marianne.
+    //private Integer patientCPR = 1303803813;  //Jens
 
     /**
      * Constructor
@@ -34,27 +35,32 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Sundhedsappmodul");
 
         myDBClass.getPractitionerData(56789);
-
         myDBClass.getAllergyIntolerance(patientCPR);
-
         myDBClass.getCondition(patientCPR);
-
         myDBClass.getPatientData(patientCPR);
-        con = myDBClass.connect();
 
 
-        //isRegistered = DBCtrl.requestIsRegistered();   - Her skal vi indhente isRegistered fra DB og have en if-sætning.
+        initRootLayout(); //initiate root layout
 
-        //if(isRegistered){
-      //  initRootLayout(); //initiate root layout
+        boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
+
+        if(isRegistered) {
+
+
+
+
+        }
+        else {
+            CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
+            createAsthmaAppUserCtrl.setMainApp(this);
+            createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+        }
 
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
 
 
-        CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
-        createAsthmaAppUserCtrl.setMainApp(this);
-        createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+
 
 
         // PatientCtrl patientCtrl = new PatientCtrl();
@@ -96,7 +102,7 @@ public class MainApp extends Application {
     /**
      * Initializes the root layout.
      */
-    /* public void initRootLayout() {
+    private void initRootLayout() {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
@@ -111,30 +117,8 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    } */
-/*
-    public void showCreateAsthmaAppUser(){
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
-            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
-
-            rootLayout.setCenter(createAstmaAppUserView);
-
-            // Give the controller access to the main app.
-            CreateAsthmaAppUserCtrl controller = loader.getController();
-            controller.setMainApp(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
-*/
+
 
     /**
      * Returnerer vores rootLayout så vi kan hente det fra de andre controlleres og de kan sætte deres respektive view heri. Se showCreateAsthmaAppUser() i CreateAsthmaAppUserCtrl for et eksempel.

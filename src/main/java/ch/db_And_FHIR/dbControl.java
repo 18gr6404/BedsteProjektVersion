@@ -70,9 +70,9 @@ public class dbControl {
                 String gender = rs.getString("gender");
                 int practitionerID = rs.getInt("practitionerID");
                 int cpr = rs.getInt("cpr");
-                System.out.println(firstName + ", " + lastName +
+                /*System.out.println(firstName + ", " + lastName +
                         ", " + age + ", " + gender+
-                        ", " + cpr + ", " + practitionerID);
+                        ", " + cpr + ", " + practitionerID);*/
 
             }
             /* Patient firstName = new Patient();
@@ -105,6 +105,8 @@ public class dbControl {
         Connection con = connect();
 
           try{
+
+
             String SQL = "UPDATE App SET choosenApp = '" + choosenAppInput + "'," +
                     " isRegistered = '" + isRegisteredInput + "'," +
                     " pastDataWanted = '" + pastDataWantedInput+ "'" +
@@ -121,19 +123,37 @@ public class dbControl {
 
     }
 
-    public void requestIsRegistered(Integer patienCPR){
+    public boolean requestIsRegistered(Integer patienCPR){
         Connection con = connect();
 
+        int requestedIsRegistered= 0;
+
+        Statement stmnt = null;
         try{
-            String SQL = "SELECT isRegistered FROM App WHERE isRegistered = '" + patienCPR + "'";
-            int rows = con.createStatement().executeUpdate(SQL, 1);
-            if (rows > 0)
-                System.out.println("isRegistered fetched");
+            String SQL = "SELECT isRegistered FROM App WHERE cpr = '" + patienCPR + "'";
+            //ResultSet rs = con.createStatement().executeQuery(SQL);
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(SQL);
+
+            while (rs.next()) {
+                int isRegistered = rs.getInt("isRegistered");
+
+                System.out.print("Fra DB får vi isRegistered =" + isRegistered);
+                requestedIsRegistered = isRegistered;
+            }
+
         }
         catch(SQLException e){
             e.printStackTrace();
             System.out.println("Error fetching isRegistered");
         }
+
+
+       if(requestedIsRegistered == 0){
+            return false;
+        }
+        else return true;
+
     }
 
 
@@ -154,8 +174,8 @@ public class dbControl {
                 String firstName = rs.getString("firstName");
                 String lastName = rs.getString("lastName");
                 int practitionerID = rs.getInt("practitionerID");
-                System.out.println(firstName + ", " + lastName +
-                        ", "+ practitionerID);
+                /*System.out.println(firstName + ", " + lastName +
+                        ", "+ practitionerID); */
 
             }
 
@@ -176,7 +196,7 @@ public class dbControl {
             while (rs.next()) {
                 String name = rs.getString("name");
                 int cpr = rs.getInt("cpr");
-                System.out.println(name + ", "+ cpr);
+                //System.out.println(name + ", "+ cpr);
 
             }
 
@@ -199,7 +219,7 @@ public class dbControl {
             while (rs.next()) {
                 String name = rs.getString("name");
                 int cpr = rs.getInt("cpr");
-                System.out.println(name + ", "+ cpr);
+                //System.out.println(name + ", "+ cpr);
 
             }
 
