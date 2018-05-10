@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="734.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.7131147540983607" layoutX="2.0" layoutY="1.0" prefHeight="570.0" prefWidth="734.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="568.0" prefWidth="507.0">
+               <children>
+                  <ButtonBar layoutX="62.0" layoutY="14.0" prefHeight="40.0" prefWidth="395.0">
+                    <buttons>
+                      <Button mnemonicParsing="false" text="Ugeoversigt" />
+                        <Button mnemonicParsing="false" prefHeight="31.0" text="Indtast måling" />
+                        <Button mnemonicParsing="false" text="Udfyld notat" />
+                    </buttons>
+                  </ButtonBar>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="590.0" prefWidth="251.0">
+               <children>
+                  <TableView prefHeight="90.0" prefWidth="202.0" AnchorPane.bottomAnchor="178.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="300.0">
+                    <columns>
+                      <TableColumn prefWidth="205.0" text="Hyppigste dagssymptom" />
+                    </columns>
+                  </TableView>
+                  <TableView layoutX="2.0" layoutY="390.0" prefHeight="90.0" prefWidth="202.0" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="390.0">
+                    <columns>
+                      <TableColumn prefWidth="201.0" text="Hyppigste natsymptom" />
+                    </columns>
+                  </TableView>
+                  <TableView layoutX="3.0" layoutY="478.0" prefHeight="88.0" prefWidth="202.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="478.0">
+                    <columns>
+                      <TableColumn prefWidth="198.0" text="Trigger" />
+                    </columns>
+                  </TableView>
+                  <Text layoutX="51.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tidsindstilling" textOrigin="CENTER">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Text>
+                  <Button layoutX="10.0" layoutY="66.0" mnemonicParsing="false" text="Siden sidste konsultation" />
+                  <Button layoutX="12.0" layoutY="105.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="186.0" text="Seneste 2 uger" />
+                  <Button layoutX="12.0" layoutY="145.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="186.0" text="Seneste 4 uger" />
+                  <Text layoutX="51.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Brugerdefineret" />
+                  <TextField layoutX="16.0" layoutY="232.0" prefHeight="31.0" prefWidth="75.0" />
+                  <TextField layoutX="117.0" layoutY="232.0" prefHeight="31.0" prefWidth="75.0" />
+                  <Text layoutX="43.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fra">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="148.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Til">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
