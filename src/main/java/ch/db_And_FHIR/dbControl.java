@@ -1,5 +1,7 @@
 package ch.db_And_FHIR;
 
+import ch.MainApp;
+import ch.controller.CreateAsthmaAppUserCtrl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,13 +12,14 @@ import java.sql.Statement;
 
 public class dbControl {
 
-
     //Opretter forbindelse til vores database
 
     //?autoReconnect=true
     static String dbAdress = "jdbc:mysql://db.course.hst.aau.dk:3306/hst_2018_18gr6404?&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     static String dbUsername = "hst_2018_18gr6404";         // UNI-NET DETALJER
     static String dbPassword = "eenuathaiheugohxahmo";
+
+
 
 
     public static Connection connect() {
@@ -68,7 +71,47 @@ public class dbControl {
         }
     }
 
+    public void setAsthmaAppUser(Integer patientCPR, String choosenAppInput, Integer isRegisteredInput, Integer pastDataWantedInput) {
+        Connection con = connect();
+
+          try{
+            String SQL = "UPDATE App SET choosenApp = '" + choosenAppInput + "'," +
+                    " isRegistered = '" + isRegisteredInput + "'," +
+                    " pastDataWanted = '" + pastDataWantedInput+ "'" +
+                    "WHERE cpr = '" + patientCPR + "'";
+            int rows = con.createStatement().executeUpdate(SQL, 1);
+            if (rows > 0)
+                System.out.println("Updated!");
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            System.out.println("Error on updating Data");
+        }
+
+
+    }
+
+    public void requestIsRegistered(Integer patienCPR){
+        Connection con = connect();
+
+        try{
+            String SQL = "SELECT isRegistered FROM App WHERE isRegistered = '" + patienCPR + "'";
+            int rows = con.createStatement().executeUpdate(SQL, 1);
+            if (rows > 0)
+                System.out.println("isRegistered fetched");
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            System.out.println("Error fetching isRegistered");
+        }
+    }
+
+
 }
+
+
+
+
 
 
 //getConnection();

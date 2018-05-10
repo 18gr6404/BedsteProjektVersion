@@ -18,6 +18,7 @@ public class MainApp extends Application {
     private BorderPane rootLayout;
     private java.sql.Connection con;
     dbControl myDBClass = new dbControl();
+    private Integer patientCPR = 1207731450;
 
     /**
      * Constructor
@@ -32,7 +33,7 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Sundhedsappmodul");
 
 
-        myDBClass.getPatientData(1207731450);
+        myDBClass.getPatientData(patientCPR);
         con = myDBClass.connect();
 
         //isRegistered = DBCtrl.requestIsRegistered();   - Her skal vi indhente isRegistered fra DB og have en if-sætning.
@@ -42,9 +43,13 @@ public class MainApp extends Application {
 
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
-     //   CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
-     //   createAsthmaAppUserCtrl.setMainApp(this);
-     //   createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+
+
+        CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
+        createAsthmaAppUserCtrl.setMainApp(this);
+        createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+
+
         //CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
         //createAsthmaAppUserCtrl.setMainApp(this);
         //createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
@@ -61,10 +66,11 @@ public class MainApp extends Application {
         //allergyIntoleranceCtrl.setMainApp(this);
         //allergyIntoleranceCtrl.showAllergyIntolerance();
 
+        /*
         ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
         consultationMeasurementCtrl.setMainApp(this);
         consultationMeasurementCtrl.showConsultationMeasurement();
-
+         */
         //showPerson(); //Her skal vi kalde vores funktioner til at vise
 
         //}
@@ -96,7 +102,7 @@ public class MainApp extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
-            //primaryStage.
+            primaryStage.setFullScreen(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,6 +142,9 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
+    public Integer getPatientCPR() {
+        return patientCPR;
+    }
 
 }
 

@@ -25,7 +25,7 @@ public class FhirControl {
         FhirContext ctx = FhirContext.forDstu3();
 
         // TestServer adresse http://hapi.fhir.org/baseDstu3
-        String serverBase = "http://vonk.fire.ly/";
+        String serverBase = "http://hapi.fhir.org/baseDstu3";
 
         // Oprettelse af klient til tilgang af serveren (Klient tilgår server)
         IGenericClient client = ctx.newRestfulGenericClient(serverBase);
