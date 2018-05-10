@@ -2,12 +2,10 @@ package ch.db_And_FHIR;
 
 import ch.MainApp;
 import ch.controller.CreateAsthmaAppUserCtrl;
-=======
 import ch.utility.dateUtil;
 import org.hl7.fhir.dstu3.model.Patient;
 import java.util.*;
 import java.time.LocalDate;
->>>>>>> cbc8f95c20d8ad68a7de35d5084cf6219878781b
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -103,7 +101,6 @@ public class dbControl {
         }
     }
 
-<<<<<<< HEAD
     public void setAsthmaAppUser(Integer patientCPR, String choosenAppInput, Integer isRegisteredInput, Integer pastDataWantedInput) {
         Connection con = connect();
 
@@ -140,15 +137,8 @@ public class dbControl {
     }
 
 
-}
-
-
-
-
-
 
 //getConnection();
-=======
 
 
     public void getPractitionerData(int practitionerIDET) {
@@ -217,7 +207,6 @@ public class dbControl {
             System.out.println(e.getMessage());
         }
     }
->>>>>>> cbc8f95c20d8ad68a7de35d5084cf6219878781b
 
 }
 
