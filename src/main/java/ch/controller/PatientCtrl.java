@@ -1,10 +1,19 @@
 package ch.controller;
 
+import ch.MainApp;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 
 public class PatientCtrl {
+    // Reference to the main application.
+    private MainApp mainAppRef;
+
     @FXML
     private Label nameLabel;
     @FXML
@@ -34,14 +43,35 @@ public class PatientCtrl {
 
     }
 
+    public void showPatient(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(PatientCtrl.class.getResource("/ch/view/PatientView.fxml"));
+            HBox patientView = (HBox) loader.load();
+
+            // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
+            //BorderPane tempRootLayout = mainAppRef.getSidepane();
+            //tempRootLayout.setCenter(PractitionerView);
+
+            VBox tempSidepane = mainAppRef.getSidepane();
+            tempSidepane.getChildren().add(patientView);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     /**
      * Is called by the main application to give a reference back to itself.
      *
-     * @param main
+     * @param inputMain
      */
-   // public void setmain(main main) {
-     //   this.main = main;
-
-   // }
+    public void setMainApp(MainApp inputMain) {
+        this.mainAppRef = inputMain;
+    }
 
 }

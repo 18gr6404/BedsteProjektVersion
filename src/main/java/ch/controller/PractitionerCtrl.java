@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class PractitionerCtrl {
+public class PractitionerCtrl extends HBox {
 
     // Reference to the main application. 
     private MainApp mainAppRef;
@@ -22,7 +24,20 @@ public class PractitionerCtrl {
      * The constructor is called before the initialize() method.
      */
     public PractitionerCtrl() {
-    }
+        /*FXMLLoader loader = new FXMLLoader();
+        try{
+        loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
+        HBox practitionerView = (HBox) loader.load();
+
+        // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
+        VBox tempSidepane = mainAppRef.getSidepane();
+        tempSidepane.getChildren().add(practitionerView);
+
+
+    } catch(IOException e) {
+        e.printStackTrace();
+    }*/
+}
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -38,11 +53,14 @@ public class PractitionerCtrl {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
-            AnchorPane PractitionerView = (AnchorPane) loader.load();
+            HBox practitionerView = (HBox) loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            tempRootLayout.setCenter(PractitionerView);
+            // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
+            //BorderPane tempRootLayout = mainAppRef.getSidepane();
+            //tempRootLayout.setCenter(PractitionerView);
+
+            VBox tempSidepane = mainAppRef.getSidepane();
+            tempSidepane.getChildren().add(practitionerView);
 
 
         } catch (IOException e) {
@@ -50,6 +68,9 @@ public class PractitionerCtrl {
         }
 
     }
+
+
+
 
     /**
      * Is called by the main application to give a reference back to itself.
