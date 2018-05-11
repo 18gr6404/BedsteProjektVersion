@@ -59,8 +59,8 @@ public class PractitionerCtrl extends HBox {
             //BorderPane tempRootLayout = mainAppRef.getSidepane();
             //tempRootLayout.setCenter(PractitionerView);
 
-            VBox tempSidepane = mainAppRef.getSidepane();
-            tempSidepane.getChildren().add(practitionerView);
+            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            tempSidepaneLeft.getChildren().add(practitionerView);
 
 
         } catch (IOException e) {

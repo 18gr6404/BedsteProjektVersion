@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -45,11 +46,14 @@ public class MedicationCtrl {
             //Load showMedication
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MedicationCtrl.class.getResource("/ch/view/MedicationView.fxml"));
-            AnchorPane MedicationView = (AnchorPane) loader.load();
+            VBox MedicationView = (VBox) loader.load();
 
             // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            tempRootLayout.setCenter(MedicationView);
+            //BorderPane tempRootLayout = mainAppRef.getRootLayout();
+            //tempRootLayout.setCenter(MedicationView);
+
+            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            tempSidepaneLeft.getChildren().add(MedicationView);
 
 
         } catch (IOException e) {

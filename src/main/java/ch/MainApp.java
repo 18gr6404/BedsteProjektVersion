@@ -5,6 +5,7 @@ import ch.db_And_FHIR.*;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -17,11 +18,13 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
-    private VBox sidePane;
+    private VBox sidePaneLeft;
+    private VBox sidePaneRight;
+    private VBox centerView;
 
     dbControl myDBClass = new dbControl();
-    //private Integer patientCPR = 1207731450; //Marianne.
-    private Integer patientCPR = 1303803813;  //Jens
+    private Integer patientCPR = 1207731450; //Marianne.
+    //private Integer patientCPR = 1303803813;  //Jens
 
     /**
      * Constructor
@@ -47,25 +50,32 @@ public class MainApp extends Application {
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
-            //Set Practitioner i vores basis-view
+            //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
             PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
             practitionerCtrl.setMainApp(this);
             practitionerCtrl.showPractitioner();
 
-            //Set Patient i vores basis-view
+            //Sætter Patient i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
             PatientCtrl patientCtrl = new PatientCtrl();
             patientCtrl.setMainApp(this);
             patientCtrl.showPatient();
 
-            //ConditionCtrl conditionCtrl = new ConditionCtrl();
-            //conditionCtrl.setMainApp(this);
-            //conditionCtrl.showCondition();
+            //Sætter Medicine i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
+            MedicationCtrl medicationCtrl = new MedicationCtrl();
+            medicationCtrl.setMainApp(this);
+            medicationCtrl.showMedication();
 
-            //AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
-            //allergyIntoleranceCtrl.setMainApp(this);
-            //allergyIntoleranceCtrl.showAllergyIntolerance();
+            ConditionCtrl conditionCtrl = new ConditionCtrl();
+            conditionCtrl.setMainApp(this);
+            conditionCtrl.showConditionView();
 
+            AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
+            allergyIntoleranceCtrl.setMainApp(this);
+            allergyIntoleranceCtrl.showAllergyIntolerance();
 
+            OverviewCtrl overviewCtrl = new OverviewCtrl();
+            overviewCtrl.setMainApp(this);
+            overviewCtrl.showOverview(overviewCtrl);
 
         }
         else {
@@ -77,33 +87,11 @@ public class MainApp extends Application {
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
 
-
-
         /*
         ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
         consultationMeasurementCtrl.setMainApp(this);
         consultationMeasurementCtrl.showConsultationMeasurement();
          */
-
-
-        //showPerson(); //Her skal vi kalde vores funktioner til at vise
-
-        //}
-        //else{
-        //showCreateAsthmaAppUser();
-        //}
-
-       // PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        //practitionerCtrl.setMainApp(this);
-        //practitionerCtrl.showPractitioner();
-
-        //MedicationCtrl medicationCtrl = new MedicationCtrl();
-        //medicationCtrl.setMainApp(this);
-        //medicationCtrl.showMedication();
-
-//        OverviewCtrl overviewCtrl = new OverviewCtrl();
-//        overviewCtrl.setMainApp(this);
-//        overviewCtrl.showOverview();
     }
 
     /**
@@ -117,10 +105,23 @@ public class MainApp extends Application {
             loader.setLocation(MainApp.class.getResource("/ch/view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
-            VBox mySidepane = new VBox();
-            sidePane = mySidepane;
-            //rootLayout.getChildren().add(sidepane);
-            rootLayout.setLeft(sidePane);
+            VBox mySidepaneLeft = new VBox();
+            mySidepaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            mySidepaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
+            sidePaneLeft = mySidepaneLeft;
+            rootLayout.setLeft(sidePaneLeft);
+
+            VBox mySidepaneRight = new VBox();
+            mySidepaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            mySidepaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
+            sidePaneRight = mySidepaneRight;
+            rootLayout.setRight(sidePaneRight);
+
+            VBox myCenterView = new VBox();
+            myCenterView.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            myCenterView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
+            centerView = myCenterView;
+            rootLayout.setCenter(myCenterView);
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
@@ -143,9 +144,9 @@ public class MainApp extends Application {
     public BorderPane getRootLayout(){
     return rootLayout;
     }
-    public VBox getSidepane() {
-        return sidePane;
-    }
+    public VBox getSidepaneLeft() { return sidePaneLeft; }
+    public VBox getSidepaneRight() { return sidePaneRight;}
+    public VBox getCenterView() { return centerView; }
 
     public Stage getPrimaryStage() {
         return primaryStage;

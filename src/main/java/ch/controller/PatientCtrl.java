@@ -4,7 +4,7 @@ import ch.MainApp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -48,14 +48,14 @@ public class PatientCtrl {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PatientCtrl.class.getResource("/ch/view/PatientView.fxml"));
-            HBox patientView = (HBox) loader.load();
+            AnchorPane patientView = (AnchorPane) loader.load();
 
             // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
             //BorderPane tempRootLayout = mainAppRef.getSidepane();
             //tempRootLayout.setCenter(PractitionerView);
 
-            VBox tempSidepane = mainAppRef.getSidepane();
-            tempSidepane.getChildren().add(patientView);
+            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            tempSidepaneLeft.getChildren().add(patientView);
 
 
         } catch (IOException e) {
