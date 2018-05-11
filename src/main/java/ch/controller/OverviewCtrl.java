@@ -5,9 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class OverviewCtrl {
@@ -64,18 +63,34 @@ public class OverviewCtrl {
 
     }
 
-    public void showOverview(){
+    public void showOverview(OverviewCtrl overviewCtrl){
+        FXMLLoader loader = new FXMLLoader();
         try {
             // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(OverviewCtrl.class.getResource("/ch/view/OverviewView.fxml"));
+            loader.setLocation(OverviewCtrl.class.getResource("/ch/view/Overview.fxml"));
+            loader.setController(overviewCtrl);
             AnchorPane OverviewView = (AnchorPane) loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            tempRootLayout.setCenter(OverviewView);
+            VBox tempCenterView = mainAppRef.getCenterView();
+            tempCenterView.getChildren().add(OverviewView);
+            tempCenterView.setFillWidth(true);
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FXMLLoader loaderr = new FXMLLoader();
+            //Tabellen med hyppigst, der skal sættes i den højre sidebar.
+            loaderr.setLocation(OverviewCtrl.class.getResource("/ch/view/MostFrequentTable.fxml"));
+            loaderr.setController(overviewCtrl);
+            VBox mostFrequentTable = (VBox) loaderr.load();
+
+            VBox tempSidePaneRight = mainAppRef.getSidepaneRight();
+            tempSidePaneRight.getChildren().add(mostFrequentTable);
+            tempSidePaneRight.setFillWidth(true);
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
 

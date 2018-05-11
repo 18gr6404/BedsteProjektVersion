@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -40,11 +41,14 @@ public class AllergyIntoleranceCtrl{
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(AllergyIntoleranceCtrl.class.getResource("/ch/view/AllergyIntolerance.fxml"));
-            AnchorPane allergyIntoleranceView = (AnchorPane) loader.load();
+            VBox allergyIntoleranceView = (VBox) loader.load();
 
             // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            tempRootLayout.setCenter(allergyIntoleranceView);
+            //BorderPane tempRootLayout = mainAppRef.getRootLayout();
+            //tempRootLayout.setCenter(allergyIntoleranceView);
+
+            VBox tempSidepaneRight = mainAppRef.getSidepaneRight();
+            tempSidepaneRight.getChildren().add(allergyIntoleranceView);
 
 
         } catch (IOException e) {
