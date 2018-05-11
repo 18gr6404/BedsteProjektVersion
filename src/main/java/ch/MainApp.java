@@ -38,9 +38,10 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sundhedsappmodul");
 
-        myDBClass.getPractitionerData(56789);
-        myDBClass.getAllergyIntolerance(patientCPR);
-        myDBClass.getCondition(patientCPR);
+        myDBClass.buildPractitionerData(56789);
+        myDBClass.buildAllergyIntoleranceData(patientCPR);
+        myDBClass.buildConditionData(patientCPR);
+        myDBClass.buildMedicineData(patientCPR);
         myDBClass.getPatientData(patientCPR);
 
 
@@ -155,7 +156,6 @@ public class MainApp extends Application {
     public Integer getPatientCPR() {
         return patientCPR;
     }
-
 
 
 }
