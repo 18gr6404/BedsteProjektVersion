@@ -21,7 +21,7 @@ public class MainApp extends Application {
     private VBox sidePaneLeft;
     private VBox sidePaneRight;
     private VBox centerView;
-
+    FhirControl FhirClass = new FhirControl();
     dbControl myDBClass = new dbControl();
     private Integer patientCPR = 1207731450; //Marianne.
     //private Integer patientCPR = 1303803813;  //Jens
@@ -37,14 +37,13 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sundhedsappmodul");
-
-        myDBClass.buildPractitionerData(56789);
+        myDBClass.startConnection();
+      /*  myDBClass.buildPractitionerData(56789);
         myDBClass.buildAllergyIntoleranceData(patientCPR);
         myDBClass.buildConditionData(patientCPR);
         myDBClass.buildMedicineData(patientCPR);
-        myDBClass.getPatientData(patientCPR);
-
-
+        myDBClass.getPatientData(patientCPR);*/
+        myDBClass.buildFEV(patientCPR);
         initRootLayout(); //initiate root layout
 
 

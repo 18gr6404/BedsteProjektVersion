@@ -26,10 +26,23 @@ import static java.lang.Math.floor;
 
 
 public class FhirControl {
-
+    /**
+     * Fhir Control er lavet som en "SingleTon" Hvilket betyder at der kun laves én instans af klassen
+     * dvs. at hvis vi kører startCtx i main på det nyligt oprettede objekt, så behøver vi ikke køre den igen
+     * i calculated Parameters. (Det gør ikke noget at kalde den, men den gør ikke noget)
+     */
+    private static FhirControl instance;
+public static FhirControl getInstance(){
+    if (instance ==null)
+            instance = new FhirControl();
+    return instance;
+}
     private IGenericClient instansClient;
 
     public void startCtx(){
+        boolean ctxEstablished = false;
+        if(!ctxEstablished){
+
         FhirContext ctx = FhirContext.forDstu3();
 
         // TestServer adresse http://vonk.fire.ly/
@@ -39,6 +52,8 @@ public class FhirControl {
         IGenericClient client = ctx.newRestfulGenericClient(serverBase);
 
         instansClient = client;
+        ctxEstablished = true;
+        }
     }
 
     public List<Observation> getFHIRObservations(String patientIdentifer, LocalDate startDate, LocalDate endDate){
