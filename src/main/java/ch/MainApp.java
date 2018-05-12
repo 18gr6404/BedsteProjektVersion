@@ -42,7 +42,7 @@ public class MainApp extends Application {
         myDBClass.buildAllergyIntoleranceData(patientCPR);
         myDBClass.buildConditionData(patientCPR);
         myDBClass.buildMedicineData(patientCPR);
-        myDBClass.getPatientData(patientCPR);
+        myDBClass.buildPatientData(patientCPR);
 
 
         initRootLayout(); //initiate root layout
