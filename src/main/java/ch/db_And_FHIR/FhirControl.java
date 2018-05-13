@@ -32,15 +32,17 @@ public class FhirControl {
      * i calculated Parameters. (Det gør ikke noget at kalde den, men den gør ikke noget)
      */
     private static FhirControl instance;
-public static FhirControl getInstance(){
-    if (instance ==null)
-            instance = new FhirControl();
-    return instance;
-}
+
+    public static FhirControl getInstance(){
+        if (instance ==null)
+                instance = new FhirControl();
+        return instance;
+    }
+
     private IGenericClient instansClient;
+    boolean ctxEstablished = false;
 
     public void startCtx(){
-        boolean ctxEstablished = false;
         if(!ctxEstablished){
 
         FhirContext ctx = FhirContext.forDstu3();
@@ -64,7 +66,7 @@ public static FhirControl getInstance(){
         Bundle results = instansClient
                 .search()
                 .forResource(Patient.class)
-                .where(Patient.IDENTIFIER.exactly().identifier(patientIdentifer))////value(testString))
+                .where(Patient.IDENTIFIER.exactly().identifier(patientIdentifer))
                 .returnBundle(Bundle.class)
                 .execute();
 
@@ -81,12 +83,17 @@ public static FhirControl getInstance(){
             observationList.add((Observation) observationsBundle.getEntry().get(i).getResource());
         }
 
-        /**
-         * Loader næster side af bundle og lægger det ind i en array liste
-         *
-         */
+
+            /**
+     * Loader næster side af bundle og lægger det ind i en array liste
+     *
+     */
         for (int j = 0; j < floor(observationsBundle.getTotal()/20); j++){
-            instansClient.loadPage().next(observationsBundle);
+
+            observationsBundle = instansClient.loadPage().next(observationsBundle).execute();
+          /*  for(int q =0; q < observationList.size(); q++) {
+                System.out.println(observationList.get(q).getCode().getCoding().get(0).getCode());
+            }*/
             for (int i = 0; i<observationsBundle.getEntry().size(); i++){
                 if(observationList.size() < observationsBundle.getTotal()) {
                     observationList.add((Observation) observationsBundle.getEntry().get(i).getResource());
@@ -95,11 +102,15 @@ public static FhirControl getInstance(){
         }
         for (int k = 0; k<observationList.size(); k++){
             // Hvis Observations datoen IKKE er efter Startdatoen ELLER IKKE er før Slutdatoen så fjern fra listen
+            // NOTE! Ser ud til ikke at inkludere start og slutdato, hvorfor, man måske skal trække/lægge en dag til
             if (!observationList.get(k).getIssued().after(FHIRstartDate) || !observationList.get(k).getIssued().before(FHIRendDate)){
                 observationList.remove(k);
             }
         }
-
+        /*for (int m = 0; m<observationList.size(); m++){
+            System.out.println(observationList.get(m).getCode().getCoding().get(0).getCode());
+        }*/
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return observationList;
 
     }

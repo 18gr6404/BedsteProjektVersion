@@ -32,8 +32,8 @@ public class FhirUpload {
 
         // CPR Marianne: 120773-1450
         // CPR Jens: 130380-3813
-        String MarianneCPR = "1207731450";
-        String JensCPR = "1303803813";
+        String MarianneCPR = "1207731470";
+        String JensCPR = "1303803833";
 
         String startString = "10.03.2018";
         String slutString = "10.05.2018";
@@ -42,25 +42,25 @@ public class FhirUpload {
         LocalDate endDate = dateUtil.parse(slutString);
 
         //Put Marianne
-        putMarianne(client);
-        putJens(client);
+        //putMarianne(client, MarianneCPR);
+        //putJens(client, JensCPR);
 
         // Se generateObservations metoden for at ændre antallet af observationer, som uploades
-        generateObservations(MarianneCPR, client, startDate, endDate);
-        generateObservations(JensCPR, client, startDate, endDate);
+        //generateObservations(MarianneCPR, client, startDate, endDate);
+        //generateObservations(JensCPR, client, startDate, endDate);
 
 
     }
         /**
          * Metoden bruges kun til at skubbe data op til serveren, og dette skal kun gøres én gang for hver server reset
          */
-        private static void putMarianne(IGenericClient client){
+        private static void putMarianne(IGenericClient client, String patientIdentifier){
             // Skal kun kaldes såfremt der ikke er en FhirContext aktiv i det pågældende stykke kode
 
             //Mariannes detaljer
             Patient Marianne = new Patient();
-            String CPR = "1207731450"; //1207731450, har lige ændret det for test formål
-            Marianne.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(CPR);
+
+            Marianne.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(patientIdentifier);
             Marianne.addName().setFamily("Jensen").addGiven("Marianne");
             Marianne.setGender(Enumerations.AdministrativeGender.FEMALE);
             LocalDate dato = dateUtil.parse("12.07.1973");
@@ -72,7 +72,6 @@ public class FhirUpload {
             ext.setUrl("Is Registered?");
             ext.setValue(new BooleanType(true));
             Marianne.addExtension(ext);
-
             LocalDate dato1 = dateUtil.parse("04.04.2018");
 
             //Index 1
@@ -94,13 +93,12 @@ public class FhirUpload {
                     .execute();
         }
 
-    private static void putJens(IGenericClient client){
+    private static void putJens(IGenericClient client, String patientIdentifier){
         // Skal kun kaldes såfremt der ikke er en FhirContext aktiv i det pågældende stykke kode
 
         //Jens detaljer
         Patient Jens = new Patient();
-        String CPR = "1303803813"; //1207731450, har lige ændret det for test formål
-        Jens.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(CPR);
+        Jens.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(patientIdentifier);
         Jens.addName().setFamily("Hansen").addGiven("Jens");
         Jens.setGender(Enumerations.AdministrativeGender.MALE);
         LocalDate dato = dateUtil.parse("13.03.1980");
@@ -140,7 +138,7 @@ public class FhirUpload {
          * Bruges til at generere observationer
          */
         private static void generateObservations(String patientIdentifier, IGenericClient client, LocalDate startDate, LocalDate endDate){
-            //Dag symptomer
+
             Bundle results = client
                     .search()
                     .forResource(Patient.class)
@@ -148,6 +146,7 @@ public class FhirUpload {
                     .returnBundle(Bundle.class)
                     .execute();
 
+//            System.out.println(results.getEntry().get(0).getResource().getId());
             // Læs enkelt patient ind i et patient objekt (Kan kun gøres med ID, altså IKKE Identifier):
             Patient searchedPatient = client
                     .read()
@@ -161,10 +160,10 @@ public class FhirUpload {
 
 
             List<Observation> aktivitetsList =  generateAktivitetsbegraensning(searchedPatient, startDate, endDate, 10);
-            List<Observation> anfaldOgTrigger =  generateAnfaldOgTrigger(searchedPatient, startDate, endDate, 1);
-            List<Observation> dagSymptom =  generateDagSymptom(searchedPatient, startDate, endDate, 45);
-            List<Observation> natSymptom =  generateNatSymptom(searchedPatient, startDate, endDate,20);
-            List<Observation> PEF =  generatePEF(searchedPatient, startDate, endDate, 61);
+            List<Observation> anfaldOgTrigger =  generateAnfaldOgTrigger(searchedPatient, startDate, endDate, 1); //Antal Obs * 2
+            List<Observation> dagSymptom =  generateDagSymptom(searchedPatient, startDate, endDate, 45); //Antal Obs * 2 (i gennemsnit)
+            List<Observation> natSymptom =  generateNatSymptom(searchedPatient, startDate, endDate,20);  //Antal Obs * 2 (i gennemsnit)
+            List<Observation> PEF =  generatePEF(searchedPatient, startDate, endDate, 61); //Antal Obs * 2
 
             client.transaction().withResources(aktivitetsList).execute();
             client.transaction().withResources(anfaldOgTrigger).execute();
@@ -212,7 +211,6 @@ public class FhirUpload {
                 // nextInt er ikke-inklusiv sit bound, derfor + 1
                 int randomnum = ThreadLocalRandom.current().nextInt(1,3+1);
                 Random rand = new Random();
-                //Tilføjer op til 3 tilfældige datoer til en liste.
 
                 int randomIndex = rand.nextInt(dateList.size());
                 randomElements.add(dateList.get(randomIndex));
@@ -249,7 +247,7 @@ public class FhirUpload {
         }
 
         /**
-         * Genererer natsymptomer tilfældigt for en patient. Op til 3 symptomer på én dag, og spreder dem ud på tilfældige datoer i et spænd
+         * Genererer natsymptomer tilfældigt for en patient. Op til 3 symptomer på én nat, og spreder dem ud på tilfældige datoer i et spænd
          * @param searchedPatient ID på patientet, som ønskes at oprette en anfald Trigger observation
          * @param startDate Start dato for intervallet, hvori observationer skal tilfældigt spredes ud
          * @param endDate slut dato for intervallet, hvori observationer skal tilfældigt spredes ud
@@ -283,12 +281,11 @@ public class FhirUpload {
                 // nextInt er ikke-inklusiv sit bound, derfor + 1
                 int randomnum = ThreadLocalRandom.current().nextInt(1,3+1);
                 Random rand = new Random();
-                //Tilføjer op til 3 tilfældige datoer til en liste.
-                for (int l = 0; l < randomnum; l++) {
+
                     int randomIndex = rand.nextInt(dateList.size());
                     randomElements.add(dateList.get(randomIndex));
                     dateList.remove(randomIndex);
-                }
+
                 if (randomnum == 1){
                     tempObs.get(0).setValue(randomReturnType(symptomListe,randomnum).get(0));
                     tempObs.get(0).setIssued(java.sql.Date.valueOf(randomElements.get(0)));
@@ -300,7 +297,6 @@ public class FhirUpload {
                         tempObs.get(k).setValue(randomReturnType(symptomListe,randomnum).get(k));
                         tempObs.get(k).setIssued(java.sql.Date.valueOf(randomElements.get(0)));
                         natSymptom.add(tempObs.get(k));
-
                     }
                     randomElements.clear();
                     tempObs.clear();

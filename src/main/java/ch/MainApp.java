@@ -3,6 +3,7 @@ package ch;
 import ch.controller.*;
 import ch.db_And_FHIR.*;
 
+import ch.utility.dateUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -12,7 +13,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 public class MainApp extends Application {
 
@@ -21,10 +25,10 @@ public class MainApp extends Application {
     private VBox sidePaneLeft;
     private VBox sidePaneRight;
     private VBox centerView;
-    FhirControl FhirClass = new FhirControl();
-    dbControl myDBClass = new dbControl();
-    private Integer patientCPR = 1207731450; //Marianne.
-    //private Integer patientCPR = 1303803813;  //Jens
+
+
+    private Integer patientCPR = 1207731470; //Marianne.
+    //private Integer patientCPR = 1303803823;  //Jens
 
     /**
      * Constructor
@@ -37,17 +41,30 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sundhedsappmodul");
+        LocalDate startDate = dateUtil.parse("10.03.2018");
+        LocalDate endDate = dateUtil.parse("10.05.2018");
+       FhirControl FhirClass = FhirControl.getInstance();
+       FhirClass.startCtx();
+        dbControl myDBClass = dbControl.getInstance();
         myDBClass.startConnection();
-      /*  myDBClass.buildPractitionerData(56789);
+       /* myDBClass.startConnection();
+        myDBClass.buildPractitionerData(56789);
         myDBClass.buildAllergyIntoleranceData(patientCPR);
         myDBClass.buildConditionData(patientCPR);
         myDBClass.buildMedicineData(patientCPR);
         myDBClass.getPatientData(patientCPR);*/
-        myDBClass.buildFEV(patientCPR);
-        initRootLayout(); //initiate root layout
+        myDBClass.buildFEV(patientCPR-20);
+        //initRootLayout(); //initiate root layout
+        //FhirClass.startCtx();
 
 
-        boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
+
+       // List<Observation> observationList = FhirClass.getFHIRObservations(patientCPR.toString(), startDate, endDate);
+       // System.out.println(observationList.get(0).getCode().getCoding().get(0).getCode());
+
+        CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
+        calcParam.buildCalculatedParameters(patientCPR, startDate, endDate);
+       /* boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
             //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
@@ -82,7 +99,7 @@ public class MainApp extends Application {
             CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
             createAsthmaAppUserCtrl.setMainApp(this);
             createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
-        }
+        }*/
 
 
         // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
