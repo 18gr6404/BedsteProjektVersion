@@ -1,6 +1,7 @@
 package ch.controller;
 
 import ch.MainApp;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,10 +14,15 @@ import java.io.IOException;
 
 public class RootLayoutCtrl {
 
+    @FXML
     private BorderPane rootLayout;
+    @FXML
     private VBox sidePaneLeft;
+    @FXML
     private VBox sidePaneRight;
+    @FXML
     private VBox centerView;
+
     private MainApp mainAppRef;
     private VBox mostFrequentTable;
 
@@ -36,25 +42,27 @@ public class RootLayoutCtrl {
             loader.setController(this);
             rootLayout = loader.<BorderPane>load();
 
-            VBox mySidepaneLeft = new VBox();
-            mySidepaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            mySidepaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
-            sidePaneLeft = mySidepaneLeft;
+            //VBox mySidepaneLeft = new VBox();
+            sidePaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            sidePaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
+            //sidePaneLeft = mySidepaneLeft;
             rootLayout.setLeft(sidePaneLeft);
+            BorderPane.setAlignment(sidePaneLeft, Pos.TOP_LEFT);
 
-            VBox mySidepaneRight = new VBox();
-            mySidepaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            mySidepaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
-            sidePaneRight = mySidepaneRight;
+            //VBox mySidepaneRight = new VBox();
+            sidePaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            sidePaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
+            //sidePaneRight = mySidepaneRight;
             rootLayout.setRight(sidePaneRight);
+            BorderPane.setAlignment(sidePaneRight, Pos.TOP_RIGHT);
 
-            VBox myCenterView = new VBox();
-            VBox.setVgrow(myCenterView, Priority.ALWAYS);
+            //VBox myCenterView = new VBox();
+            //VBox.setVgrow(centerView, Priority.ALWAYS);
             //myCenterView.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            myCenterView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
-            centerView = myCenterView;
-            rootLayout.setCenter(myCenterView);
-            myCenterView.setAlignment(Pos.CENTER);
+            centerView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
+            //centerView = myCenterView;
+            rootLayout.setCenter(centerView);
+            centerView.setAlignment(Pos.CENTER);
 
 
             this.rootLayout = rootLayout;
@@ -171,6 +179,26 @@ public class RootLayoutCtrl {
             //this.centerView = centerView;
 
             CreateAsthmaAppUserCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setRootLayoutCtrlRef(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showSummaryView(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SummaryCtrl.class.getResource("/ch/view/Summary.fxml"));
+            AnchorPane summaryView = (AnchorPane) loader.load();
+
+            //skal laves om da der istedet skal laves en bottompane.
+            rootLayout.setBottom(summaryView);
+            BorderPane.setAlignment(summaryView, Pos.BOTTOM_CENTER);
+
+            SummaryCtrl controller = loader.getController();
             controller.setMainApp(mainAppRef);
             controller.setRootLayoutCtrlRef(this);
 

@@ -77,6 +77,11 @@ public class WeeklyOverviewCtrl {
         rootLayoutCtrlRef.showOverview();
     }
 
+    @FXML
+    private void handleSummary(){
+        rootLayoutCtrlRef.showSummaryView();
+    }
+
     /**
      * Is called to give a reference back to itself.
      *

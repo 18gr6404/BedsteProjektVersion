@@ -73,7 +73,9 @@ public class OverviewCtrl {
     }
 
     @FXML
-    private void handleSummary(){}
+    private void handleSummary(){
+        rootLayoutCtrlRef.showSummaryView();
+    }
 
 
 
