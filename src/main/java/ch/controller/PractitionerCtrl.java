@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.hl7.fhir.dstu3.model.Practitioner;
 
 import java.io.IOException;
 
@@ -16,6 +17,9 @@ public class PractitionerCtrl extends HBox {
 
     // Reference to the main application. 
     private MainApp mainAppRef;
+
+    private Practitioner practitionerObjekt;
+    private String b;
 
     @FXML
     private Label practitionerNameLabel;
@@ -26,6 +30,7 @@ public class PractitionerCtrl extends HBox {
      */
     public PractitionerCtrl() {
 
+
 }
 
     /**
@@ -35,7 +40,19 @@ public class PractitionerCtrl extends HBox {
     @FXML
     private void initialize() {
 
+        MainApp mainAppRef = new MainApp();
+        Integer id = mainAppRef.getPractitionerID();
+        dbControl dbControlOb = dbControl.getInstance();
+        prove(dbControlOb,id);
     }
+
+
+
+    public void prove(dbControl myDBClass, Integer practitionerID) {
+        practitionerObjekt = myDBClass.buildPractitionerData(practitionerID);
+        practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString() +" "+ practitionerObjekt.getName().get(0).getFamily());
+    }
+
 
 
     public VBox showPractitioner(VBox inputSidepane){
@@ -52,15 +69,19 @@ public class PractitionerCtrl extends HBox {
             //return tempSidepaneLeft;
 
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         return thistempSidepaneLeft;
     }
 
 
+    }
 
+// practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString()) + practitionerOb.getName().get(0).getFamily();
 
 
     /**

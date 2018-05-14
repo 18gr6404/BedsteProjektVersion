@@ -23,8 +23,12 @@ public class MainApp extends Application {
     private VBox centerView;
 
 
+    
+
+
     //private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
     private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
+    private Integer practitionerID = 56789; // Ole Bosen
 
 
     /**
@@ -38,6 +42,8 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sundhedsappmodul");
+
+
         LocalDate startDate = dateUtil.parse("10.03.2018");
         LocalDate endDate = dateUtil.parse("10.05.2018");
         FhirControl FhirClass = FhirControl.getInstance();
@@ -63,6 +69,13 @@ public class MainApp extends Application {
        boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
+
+            //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
+            PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
+            practitionerCtrl.setMainApp(this); // 
+            practitionerCtrl.showPractitioner(); //
+
+            
             rootLayoutCtrlRef.initBasicLayout();
 
         }
@@ -86,7 +99,12 @@ public class MainApp extends Application {
         return patientCPR;
     }
 
-    }
+
+   
+
+    public Integer getPractitionerID() { return practitionerID; }
+}
+
 
 
 
