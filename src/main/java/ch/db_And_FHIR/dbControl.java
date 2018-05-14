@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.exceptions.FHIRException;
 
 
 public class dbControl {
@@ -153,21 +155,21 @@ public class dbControl {
 //getConnection();
 
 
-    public void getPractitionerData(int practitionerIDET) {
-        Connection con = connect();
+    public void buildPractitionerData(Integer practitionerIDET) {
+        Connection con = connect(); //Burde vi ikke kun connecte i main?
 
         Statement stmnt = null;
         String query = "SELECT firstName, lastName, practitionerID FROM Practitioner WHERE practitionerID=" + practitionerIDET;
-
+     //   String practitionerID = practitionerIDET.toString();
         try {
             stmnt = con.createStatement();
             ResultSet rs = stmnt.executeQuery(query);
             while (rs.next()) {
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
-                int practitionerID = rs.getInt("practitionerID");
-                /*System.out.println(firstName + ", " + lastName +
-                        ", "+ practitionerID); */
+                Practitioner practitioner = new Practitioner();
+                practitioner.addIdentifier().setValue(String.valueOf(rs.getInt("practitionerID")));
+                practitioner.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
+
+            //    System.out.println(practitioner.getName().get(0).getFamily() + practitioner.getName().get(0).getGivenAsSingleString() + practitioner.getIdentifier().get(0).getValue() );
 
             }
 
@@ -176,19 +178,66 @@ public class dbControl {
         }
     }
 
-    public void getAllergyIntolerance(int patientCPR) {
+    public void buildAllergyIntoleranceData(int patientCPR) {
+        Connection con = connect(); // Burde vi ikke kun connecte i main?
+
+        Statement stmntA = null;
+        Statement stmntI = null;
+        String queryA = "SELECT name FROM Allergy WHERE cpr=" + patientCPR;
+        String queryI = "SELECT name FROM Intolerance WHERE cpr=" + patientCPR;
+        try {
+            stmntA = con.createStatement();
+            stmntI = con.createStatement();
+            ResultSet rsA = stmntA.executeQuery(queryA);
+            ResultSet rsI = stmntI.executeQuery(queryI);
+            while (rsA.next()) {
+
+                AllergyIntolerance allergy = new AllergyIntolerance();
+                allergy.setType(AllergyIntolerance.AllergyIntoleranceType.ALLERGY);
+                allergy.getCode().addCoding()
+                        .setCode(rsA.getString("name")) // Normalt er det en talkode
+                        .setDisplay(rsA.getString("name")); // Her vises talkoden som den tekst man ønsker at vise i stedet
+
+//                String name = rs.getString("name");
+//                int cpr = rs.getInt("cpr");
+                //System.out.println(name + ", "+ cpr);
+
+              //  System.out.println(allergy.getCode().getCoding().get(0).getCode());
+            }
+
+            while (rsI.next()) {
+                AllergyIntolerance intolerance = new AllergyIntolerance();
+                intolerance.setType(AllergyIntolerance.AllergyIntoleranceType.INTOLERANCE);
+                intolerance.getCode().addCoding()
+                        .setCode(rsI.getString("name"))
+                        .setDisplay(rsI.getString("name"));
+
+               // System.out.println(intolerance.getCode().getCoding().get(0).getCode());
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
+    public void buildConditionData(int patientCPR) {
         Connection con = connect();
 
         Statement stmnt = null;
-        String query = "SELECT cpr, name FROM Allergy WHERE cpr=" + patientCPR;
+        String query = "SELECT name FROM Diagnosis WHERE cpr=" + patientCPR;
 
         try {
             stmnt = con.createStatement();
             ResultSet rs = stmnt.executeQuery(query);
             while (rs.next()) {
-                String name = rs.getString("name");
-                int cpr = rs.getInt("cpr");
-                //System.out.println(name + ", "+ cpr);
+                Condition condition = new Condition();
+                condition.getCode().addCoding()
+                        .setCode(rs.getString("name"))
+                        .setDisplay(rs.getString("name"));
+
+              //  System.out.println(condition.getCode().getCoding().get(0).getCode());
 
             }
 
@@ -197,28 +246,30 @@ public class dbControl {
         }
     }
 
-
-
-    public void getCondition(int patientCPR) {
-        Connection con = connect();
+    public void buildMedicineData(int patientCPR) {
+        Connection con = connect(); //Burde dette ikke ske i main?
 
         Statement stmnt = null;
-        String query = "SELECT cpr, name FROM Diagnosis WHERE cpr=" + patientCPR;
+        String query = "SELECT type, dosage, dateTime FROM Medication WHERE cpr=" + patientCPR;
 
         try {
             stmnt = con.createStatement();
             ResultSet rs = stmnt.executeQuery(query);
             while (rs.next()) {
-                String name = rs.getString("name");
-                int cpr = rs.getInt("cpr");
-                //System.out.println(name + ", "+ cpr);
+                MedicationRequest medicationRequest = new MedicationRequest();
+                medicationRequest.setMedication(new StringType(rs.getString("type")));
+                medicationRequest.addDosageInstruction().setDose(new StringType(rs.getString("dosage")));
+                medicationRequest.setAuthoredOn(rs.getDate("dateTime"));
 
+                System.out.println(medicationRequest.getMedication() +","+ medicationRequest.getDosageInstruction().get(0).getDose()+","+ medicationRequest.getAuthoredOn());
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
+
 
 }
 

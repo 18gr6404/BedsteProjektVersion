@@ -32,7 +32,8 @@ public class FhirUpload {
 
         // CPR Marianne: 120773-1450
         // CPR Jens: 130380-3813
-        String patientIdentifier = "1207731444";
+        String MarianneCPR = "1207731450";
+        String JensCPR = "1303803813";
 
         String startString = "10.03.2018";
         String slutString = "10.05.2018";
@@ -42,9 +43,12 @@ public class FhirUpload {
 
         //Put Marianne
         putMarianne(client);
+        putJens(client);
 
         // Se generateObservations metoden for at ændre antallet af observationer, som uploades
-        generateObservations(patientIdentifier, client, startDate, endDate);
+        generateObservations(MarianneCPR, client, startDate, endDate);
+        generateObservations(JensCPR, client, startDate, endDate);
+
 
     }
         /**
@@ -55,7 +59,7 @@ public class FhirUpload {
 
             //Mariannes detaljer
             Patient Marianne = new Patient();
-            String CPR = "1207731444"; //1207731450, har lige ændret det for test formål
+            String CPR = "1207731450"; //1207731450, har lige ændret det for test formål
             Marianne.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(CPR);
             Marianne.addName().setFamily("Jensen").addGiven("Marianne");
             Marianne.setGender(Enumerations.AdministrativeGender.FEMALE);
@@ -89,6 +93,48 @@ public class FhirUpload {
                     .encodedJson()
                     .execute();
         }
+
+    private static void putJens(IGenericClient client){
+        // Skal kun kaldes såfremt der ikke er en FhirContext aktiv i det pågældende stykke kode
+
+        //Jens detaljer
+        Patient Jens = new Patient();
+        String CPR = "1303803813"; //1207731450, har lige ændret det for test formål
+        Jens.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(CPR);
+        Jens.addName().setFamily("Hansen").addGiven("Jens");
+        Jens.setGender(Enumerations.AdministrativeGender.MALE);
+        LocalDate dato = dateUtil.parse("13.03.1980");
+        Jens.setBirthDate(java.sql.Date.valueOf(dato));
+
+        Jens.getName().get(0).getGiven();
+        //Index 0, Følgende kode får fat i en extension Marianne.getExtension().getId(Index)
+        Extension ext = new Extension();
+        ext.setUrl("Is Registered?");
+        ext.setValue(new BooleanType(false));
+        Jens.addExtension(ext);
+
+        LocalDate dato1 = dateUtil.parse("04.04.2018");
+
+        //Index 1
+        /**
+         * Not Applicable to Jens
+        Extension ext1 = new Extension();
+        ext1.setUrl("Creation Date");
+        ext1.setValue(new DateType(java.sql.Date.valueOf(dato1)));
+        Jens.addExtension(ext1);
+        */
+        //Index 2
+        Extension ext2 = new Extension();
+        ext2.setUrl("Chosen App");
+        ext2.setValue(new StringType("Astma App"));
+        Jens.addExtension(ext2);
+
+        MethodOutcome outcome1 = client.create()
+                .resource(Jens)
+                .prettyPrint()
+                .encodedJson()
+                .execute();
+    }
 
         /**
          * Bruges til at generere observationer
@@ -435,7 +481,7 @@ public class FhirUpload {
             }
 
             tempObs.get(0).setValue(randomPEF.get(0));
-            tempObs.get(0).setIssued(java.sql.Date.valueOf(randomElements.get(0)));
+            tempObs.get(0).setIssued((java.sql.Date.valueOf(randomElements.get(0))));
             PEF.add(tempObs.get(0));
             tempObs.get(1).setValue(randomPEF.get(1));
             tempObs.get(1).setIssued(java.sql.Date.valueOf(randomElements.get(0)));
