@@ -10,9 +10,12 @@ import ch.controller.CreateAsthmaAppUserCtrl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sun.plugin.javascript.navig.Anchor;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -86,6 +89,11 @@ public class MainApp extends Application {
 
             rootLayoutCtrlRef.initBasicLayout();
 
+            showWeeklyOverview(rootLayoutCtrlRef);
+
+
+
+
         }
         else {
 
@@ -107,8 +115,23 @@ public class MainApp extends Application {
         return patientCPR;
     }
 
+    public void showWeeklyOverview(RootLayoutCtrl rootLayoutCtrlRef) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            //Tabellen med hyppigst, der skal sættes i den højre sidebar.
+            loader.setLocation(WeeklyOverviewCtrl.class.getResource("/ch/view/WeeklyOverviewView.fxml"));
+            //loader.setController(WeeklyOverviewCtrl);
+            AnchorPane weeklyOverview = loader.load();
 
-   
+            centerView = rootLayoutCtrlRef.getCenterView();
+            centerView.getChildren().add(weeklyOverview);
+            //centerView.setFillWidth(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public Integer getPractitionerID() { return practitionerID; }
 }
