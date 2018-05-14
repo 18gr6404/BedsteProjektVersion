@@ -23,9 +23,8 @@ public class MainApp extends Application {
     private VBox centerView;
 
 
-
-    private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
-    //private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
+    //private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
+    private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
 
 
     /**
@@ -41,12 +40,12 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Sundhedsappmodul");
         LocalDate startDate = dateUtil.parse("10.03.2018");
         LocalDate endDate = dateUtil.parse("10.05.2018");
-       FhirControl FhirClass = FhirControl.getInstance();
-       FhirClass.startCtx();
-        
-       dbControl myDBClass = dbControl.getInstance();
-       myDBClass.startConnection();        
-       myDBClass.buildFEV(patientCPR);
+        FhirControl FhirClass = FhirControl.getInstance();
+        FhirClass.startCtx();
+
+        dbControl myDBClass = dbControl.getInstance();
+        myDBClass.startConnection();
+        myDBClass.buildFEV(patientCPR);
        /* 
         myDBClass.buildPractitionerData(56789);
         myDBClass.buildAllergyIntoleranceData(patientCPR);
@@ -61,7 +60,7 @@ public class MainApp extends Application {
 
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         calcParam.buildCalculatedParameters(1207731470, startDate, endDate); // Marianne CPR på FHIR Server = 1207731470
-       /* boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
+       boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
             rootLayoutCtrlRef.initBasicLayout();
@@ -70,12 +69,10 @@ public class MainApp extends Application {
         else {
 
             CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
-
             createAsthmaAppUserCtrl.showCreateAsthmaAppUser(this.centerView);
 
 
         }
-
 
         ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
         consultationMeasurementCtrl.setMainApp(this);
@@ -83,66 +80,13 @@ public class MainApp extends Application {
 
     }
 
-    /**
-     * Initializes the root layout.
-     */
-    private BorderPane initRootLayout() {
-        FXMLLoader loader = new FXMLLoader();
-
-        try {
-            // Load root layout from fxml file.
-            loader.setLocation(MainApp.class.getResource("/ch/view/RootLayout.fxml"));
-            rootLayout = loader.<BorderPane>load();
-
-            VBox mySidepaneLeft = new VBox();
-            mySidepaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            mySidepaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
-            sidePaneLeft = mySidepaneLeft;
-            rootLayout.setLeft(sidePaneLeft);
-
-            VBox mySidepaneRight = new VBox();
-            mySidepaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            mySidepaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
-            sidePaneRight = mySidepaneRight;
-            rootLayout.setRight(sidePaneRight);
-
-            VBox myCenterView = new VBox();
-            myCenterView.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            myCenterView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
-            centerView = myCenterView;
-            rootLayout.setCenter(myCenterView);
-
-            return rootLayout;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return rootLayout;
-    }
-
-
-
-    /**
-     * Returnerer vores rootLayout så vi kan hente det fra de andre controlleres og de kan sætte deres respektive view heri. Se showCreateAsthmaAppUser() i CreateAsthmaAppUserCtrl for et eksempel.
-     * @return
-     */
-    public BorderPane getRootLayout(){
-    return rootLayout;
-    }
-    public VBox getSidepaneLeft() { return sidePaneLeft; }
-    public VBox getSidepaneRight() { return sidePaneRight;}
-    public VBox getCenterView() { return centerView; }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
+    public VBox getSidepaneRight(){return sidePaneRight;}
+    public VBox getCenterView(){return centerView;}
     public Integer getPatientCPR() {
         return patientCPR;
     }
 
-
-}
+    }
 
 
 
