@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="738.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="738.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button layoutX="209.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="111.0" text="Ugeoversigt" />
       <Button layoutX="329.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="111.0" text="Indtast måling" textAlignment="CENTER" />

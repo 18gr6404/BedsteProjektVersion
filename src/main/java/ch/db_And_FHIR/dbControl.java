@@ -1,18 +1,10 @@
 package ch.db_And_FHIR;
 
-import ch.MainApp;
-import ch.controller.CreateAsthmaAppUserCtrl;
-import ch.utility.dateUtil;
-import org.hl7.fhir.dstu3.model.Patient;
-import java.util.*;
-import java.time.LocalDate;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import org.hl7.fhir.dstu3.model.*;
-
 
 
 public class dbControl {

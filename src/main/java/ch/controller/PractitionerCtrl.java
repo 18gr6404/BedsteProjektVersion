@@ -1,6 +1,7 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -24,19 +25,7 @@ public class PractitionerCtrl extends HBox {
      * The constructor is called before the initialize() method.
      */
     public PractitionerCtrl() {
-        /*FXMLLoader loader = new FXMLLoader();
-        try{
-        loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
-        HBox practitionerView = (HBox) loader.load();
 
-        // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
-        VBox tempSidepane = mainAppRef.getSidepane();
-        tempSidepane.getChildren().add(practitionerView);
-
-
-    } catch(IOException e) {
-        e.printStackTrace();
-    }*/
 }
 
     /**
@@ -48,26 +37,28 @@ public class PractitionerCtrl extends HBox {
 
     }
 
-    public void showPractitioner(){
+
+    public VBox showPractitioner(VBox inputSidepane){
+        VBox thistempSidepaneLeft = new VBox();
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
             HBox practitionerView = (HBox) loader.load();
 
-            // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getSidepane();
-            //tempRootLayout.setCenter(PractitionerView);
 
-            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            VBox tempSidepaneLeft = inputSidepane;
             tempSidepaneLeft.getChildren().add(practitionerView);
+            thistempSidepaneLeft = tempSidepaneLeft;
+            //return tempSidepaneLeft;
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return thistempSidepaneLeft;
     }
+
 
 
 
