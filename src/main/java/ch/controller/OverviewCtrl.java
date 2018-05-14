@@ -3,9 +3,14 @@ package ch.controller;
 import ch.MainApp;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -13,37 +18,33 @@ public class OverviewCtrl {
 
     // Reference to the main application.
     private MainApp mainAppRef;
+    // Reference til Rootlayout
+    private RootLayoutCtrl rootLayoutCtrlRef;
+
+
 
     @FXML
-    private javafx.scene.control.Button weeklyOverviewBtn;
+    private Button weeklyOverviewBtn;
+    @FXML
+    private Button consultationMeasurementBtn;
+    @FXML
+    private Button summaryBtn;
+    @FXML
+    private Button sinceLastConBtn;
+    @FXML
+    private Button twoWeeksBtn;
+    @FXML
+    private Button fourWeeksBtn;
 
     @FXML
-    private javafx.scene.control.Button consultationMeasurementBtn;
+    private TextField fromTextfield;
+    @FXML
+    private TextField toTextfield;
 
     @FXML
-    private javafx.scene.control.Button summaryBtn;
-
+    private Label mostFreqDaySymptomLabel;
     @FXML
-    private javafx.scene.control.Button sinceLastConBtn;
-
-    @FXML
-    private javafx.scene.control.Button twoWeeksBtn;
-
-    @FXML
-    private javafx.scene.control.Button fourWeeksBtn;
-
-    @FXML
-    private javafx.scene.control.TextField fromTextfield;
-
-    @FXML
-    private javafx.scene.control.TextField toTextfield;
-
-    @FXML
-    private javafx.scene.control.Label mostFreqDaySymptomLabel;
-
-    @FXML
-    private javafx.scene.control.Label mostFreqNigthSymptomLabel;
-
+    private Label mostFreqNigthSymptomLabel;
     @FXML
     private Label triggerLabel;
 
@@ -59,42 +60,24 @@ public class OverviewCtrl {
      * after the fxml file has been loaded.
      */
     @FXML
-    private void initialize() {
+    private void initialize() { }
 
+    @FXML
+    private void handleConsultationMeasurement(){
+        ConsultationMeasurementCtrl.showConsultationMeasurementView();
     }
 
-    public void showOverview(OverviewCtrl overviewCtrl){
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            // Load person overview.
-            loader.setLocation(OverviewCtrl.class.getResource("/ch/view/Overview.fxml"));
-            loader.setController(overviewCtrl);
-            AnchorPane OverviewView = (AnchorPane) loader.load();
-
-            VBox tempCenterView = mainAppRef.getCenterView();
-            tempCenterView.getChildren().add(OverviewView);
-            tempCenterView.setFillWidth(true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            FXMLLoader loaderr = new FXMLLoader();
-            //Tabellen med hyppigst, der skal sættes i den højre sidebar.
-            loaderr.setLocation(OverviewCtrl.class.getResource("/ch/view/MostFrequentTable.fxml"));
-            loaderr.setController(overviewCtrl);
-            VBox mostFrequentTable = (VBox) loaderr.load();
-
-            VBox tempSidePaneRight = mainAppRef.getSidepaneRight();
-            tempSidePaneRight.getChildren().add(mostFrequentTable);
-            tempSidePaneRight.setFillWidth(true);
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
+    @FXML
+    private void handleWeeklyOverview(){
+        rootLayoutCtrlRef.showWeeklyOverview();
     }
+
+    @FXML
+    private void handleSummary(){}
+
+
+
+
 
     /**
      * Is called by the main application to give a reference back to itself.
@@ -103,6 +86,15 @@ public class OverviewCtrl {
      */
     public void setMainApp(MainApp inputMain) {
         this.mainAppRef = inputMain;
+    }
+
+    /**
+     * Is called to give a reference back to itself.
+     *
+     * @param inputRootLayoutCtrl
+     */
+    public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
+        this.rootLayoutCtrlRef = inputRootLayoutCtrl;
     }
 
 }

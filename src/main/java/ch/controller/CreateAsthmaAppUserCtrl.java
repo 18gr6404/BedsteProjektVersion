@@ -81,14 +81,15 @@ public class CreateAsthmaAppUserCtrl {
         //RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
         //rootLayoutCtrlRef.initRootLayout(window);
 
-        //mainAppRef.showOverview();
         rootLayoutCtrlRef.initBasicLayout();
 
+        //HVis showOverview er i rootlayout.
+        rootLayoutCtrlRef.showOverview();
     }
 
 
     /**
-     * Is called by the main application to give a reference back to itself.
+     * Is called to give a reference back to itself.
      *
      * @param inputRootLayoutCtrl
      */

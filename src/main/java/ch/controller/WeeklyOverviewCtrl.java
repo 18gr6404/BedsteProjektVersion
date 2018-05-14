@@ -9,22 +9,24 @@ import javafx.scene.control.Label;
 public class WeeklyOverviewCtrl {
 
     @FXML
-    private Button OversigtButton;
+    private Button overViewBtn;
     @FXML
-    private Button IndtastMaalingButton;
+    private Button consultationMeasurementBtn;
     @FXML
-    private Button UdfyldNotatButton;
+    private Button summaryBtn;
     @FXML
-    private Button SidenSidstButton;
+    private Button sinceLastConBtn;
     @FXML
-    private Button FireUgerButton;
+    private Button twoWeeksBtn;
     @FXML
-    private Button ToUgerButton;
+    private Button fourWeeksBtn;
+
     @FXML
     private DatePicker StartDatePicker;
     @FXML
     private DatePicker SlutDatePicker;
     @FXML
+
     private Label HvaesenLabel;
     @FXML
     private Label HosteLabel;
@@ -51,6 +53,9 @@ public class WeeklyOverviewCtrl {
     @FXML
     private BarChart AstmaAppBarChart;
 
+    // REference til Rootlayout
+    private RootLayoutCtrl rootLayoutCtrlRef;
+
     public WeeklyOverviewCtrl() {
     }
 
@@ -59,6 +64,26 @@ public class WeeklyOverviewCtrl {
      * after the fxml file has been loaded.
      */
     private void initialize() {
+    }
+
+    @FXML
+    private void handleConsultationMeasurement(){
+
+        ConsultationMeasurementCtrl.showConsultationMeasurementView();
+    }
+
+    @FXML
+    private void handleOverview(){
+        rootLayoutCtrlRef.showOverview();
+    }
+
+    /**
+     * Is called to give a reference back to itself.
+     *
+     * @param inputRootLayoutCtrl
+     */
+    public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
+        this.rootLayoutCtrlRef = inputRootLayoutCtrl;
     }
 
 }

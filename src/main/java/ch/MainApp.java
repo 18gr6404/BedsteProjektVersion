@@ -23,15 +23,6 @@ import java.util.List;
 public class MainApp extends Application {
 
     private Stage primaryStage;
-    private BorderPane rootLayout;
-    private VBox sidePaneLeft;
-    private VBox sidePaneRight;
-    private VBox centerView;
-
-
-    
-
-
     //private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
     private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
     private Integer practitionerID = 56789; // Ole Bosen
@@ -62,7 +53,7 @@ public class MainApp extends Application {
         myDBClass.buildPatientData(patientCPR);
 
         RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl(this);
-        centerView = rootLayoutCtrlRef.initRootLayout(this.primaryStage);
+        rootLayoutCtrlRef.initRootLayout(this.primaryStage);
 
 
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
@@ -74,78 +65,25 @@ public class MainApp extends Application {
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
-
-
-            //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
-            //PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-            //practitionerCtrl.setMainApp(this); //
-            //practitionerCtrl.showPractitioner(); //
-
-
             rootLayoutCtrlRef.initBasicLayout();
-
-            showWeeklyOverview(rootLayoutCtrlRef);
-
-
+            rootLayoutCtrlRef.showWeeklyOverview();
 
 
         }
         else {
-            showCreateAsthmaAppUserView(rootLayoutCtrlRef);
-            //denne sætter basicLayout og overviewView når patienten er oprettet
+            //denne sætter basicLayout og overviewView efter patienten er oprettet
+            rootLayoutCtrlRef.showCreateAsthmaAppUserView();
+
         }
 
-       /* ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
-        consultationMeasurementCtrl.setMainApp(this);
-        consultationMeasurementCtrl.showConsultationMeasurement(); */
-
-    }
-
-    private void showCreateAsthmaAppUserView(RootLayoutCtrl rootLayoutCtrlRef){
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
-            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
-
-            centerView.getChildren().add(createAstmaAppUserView);
-            //this.centerView = centerView;
-
-            CreateAsthmaAppUserCtrl controller = loader.getController();
-            controller.setMainApp(this);
-            controller.setRootLayoutCtrlRef(rootLayoutCtrlRef);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public VBox getSidepaneRight(){return sidePaneRight;}
-    public VBox getCenterView(){return centerView;}
-    public Integer getPatientCPR() {
-        return patientCPR;
-    }
-
-    public void showWeeklyOverview(RootLayoutCtrl rootLayoutCtrlRef) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            //Tabellen med hyppigst, der skal sættes i den højre sidebar.
-            loader.setLocation(WeeklyOverviewCtrl.class.getResource("/ch/view/WeeklyOverviewView.fxml"));
-            //loader.setController(WeeklyOverviewCtrl);
-            AnchorPane weeklyOverview = loader.load();
-
-            centerView = rootLayoutCtrlRef.getCenterView();
-            centerView.getChildren().add(weeklyOverview);
-            //centerView.setFillWidth(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
 
+
+    public Integer getPatientCPR() {return patientCPR; }
     public Integer getPractitionerID() { return practitionerID; }
+
 }
 
 
