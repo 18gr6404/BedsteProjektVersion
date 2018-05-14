@@ -15,18 +15,29 @@ import org.hl7.fhir.exceptions.FHIRException;
 
 public class dbControl {
 
+
     //Opretter forbindelse til vores database
 
     //?autoReconnect=true
     static String dbAdress = "jdbc:mysql://db.course.hst.aau.dk:3306/hst_2018_18gr6404?&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     static String dbUsername = "hst_2018_18gr6404";         // UNI-NET DETALJER
     static String dbPassword = "eenuathaiheugohxahmo";
+    private Connection con;
+    /**
+     * db Control er lavet som en "SingleTon" Hvilket betyder at der kun laves én instans af klassen
+     * dvs. at hvis vi kører startCon i main på det nyligt oprettede objekt, så behøver vi ikke køre den igen
+     * i calculated Parameters. (Det gør ikke noget at kalde den, men den gør ikke noget)
+     */
+    private static dbControl instance;
+    public static dbControl getInstance(){
+        if (instance ==null)
+            instance = new dbControl();
+        return instance;
+    }
 
 
+    public void startConnection() {
 
-
-    public static Connection connect() {
-        Connection connection = null;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -36,17 +47,15 @@ public class dbControl {
         }
 
         try {
-            connection = DriverManager.getConnection(dbAdress, dbUsername, dbPassword);
+            con = DriverManager.getConnection(dbAdress, dbUsername, dbPassword);
             System.out.println("Connection established");
-            return connection;
         } catch (SQLException sqlEx) {
             System.out.println(sqlEx.getMessage());
-            return null;
         }
     }
 
     public void getPatientData(int patientCPR) {
-        Connection con = connect();
+
 
         Statement stmnt = null;
         String query = "SELECT cpr, firstName, lastName, age, gender, practitionerID FROM Patient WHERE cpr=" + patientCPR;
@@ -100,7 +109,6 @@ public class dbControl {
     }
 
     public void setAsthmaAppUser(Integer patientCPR, String choosenAppInput, Integer isRegisteredInput, Integer pastDataWantedInput) {
-        Connection con = connect();
 
           try{
 
@@ -122,7 +130,7 @@ public class dbControl {
     }
 
     public boolean requestIsRegistered(Integer patienCPR){
-        Connection con = connect();
+
 
         int requestedIsRegistered= 0;
 
@@ -156,11 +164,9 @@ public class dbControl {
 
 
 
-//getConnection();
 
 
     public void buildPractitionerData(Integer practitionerIDET) {
-        Connection con = connect(); //Burde vi ikke kun connecte i main?
 
         Statement stmnt = null;
         String query = "SELECT firstName, lastName, practitionerID FROM Practitioner WHERE practitionerID=" + practitionerIDET;
@@ -183,7 +189,6 @@ public class dbControl {
     }
 
     public void buildAllergyIntoleranceData(int patientCPR) {
-        Connection con = connect(); // Burde vi ikke kun connecte i main?
 
         Statement stmntA = null;
         Statement stmntI = null;
@@ -227,7 +232,6 @@ public class dbControl {
 
 
     public void buildConditionData(int patientCPR) {
-        Connection con = connect();
 
         Statement stmnt = null;
         String query = "SELECT name FROM Diagnosis WHERE cpr=" + patientCPR;
@@ -308,7 +312,6 @@ public class dbControl {
     }
 
     public void buildMedicineData(int patientCPR) {
-        Connection con = connect(); //Burde dette ikke ske i main?
 
         Statement stmnt = null;
         String query = "SELECT type, dosage, dateTime FROM Medication WHERE cpr=" + patientCPR;
@@ -330,7 +333,32 @@ public class dbControl {
         }
     }
 
+    public List<Observation> buildFEV(int patientCPR) {
 
+        Statement stmnt = null;
+        String query = "SELECT value, dateTime FROM Fev1 WHERE cpr=" + patientCPR;
+List<Observation> fev1List = new ArrayList<>();
+        try {
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(query);
+            while (rs.next()) {
+                Observation Fev1 = new Observation();
+                Fev1.setValue((new Quantity(rs.getFloat("value"))));
+                Fev1.setIssued(rs.getDate("dateTime"));
+
+                fev1List.add(Fev1);
+                try{
+                    System.out.println(Fev1.getValueQuantity().getValue() + "," +  "," + Fev1.getIssued());
+                }catch(FHIRException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return fev1List;
+    }
 
 }
 
