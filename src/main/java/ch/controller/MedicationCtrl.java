@@ -29,8 +29,7 @@ public class MedicationCtrl {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public MedicationCtrl() {
-    }
+    public MedicationCtrl() { }
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -41,25 +40,24 @@ public class MedicationCtrl {
 
     }
 
-    public void showMedication() {
+
+    public VBox showMedication(VBox inputSidepane) {
+        VBox thistempSidepaneLeft = new VBox();
         try {
             //Load showMedication
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MedicationCtrl.class.getResource("/ch/view/MedicationView.fxml"));
             VBox MedicationView = (VBox) loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            //tempRootLayout.setCenter(MedicationView);
 
-            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            VBox tempSidepaneLeft = inputSidepane;
             tempSidepaneLeft.getChildren().add(MedicationView);
-
+            thistempSidepaneLeft = tempSidepaneLeft;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return thistempSidepaneLeft;
     }
 
     /**
