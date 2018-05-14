@@ -29,20 +29,9 @@ public class PractitionerCtrl extends HBox {
      * The constructor is called before the initialize() method.
      */
     public PractitionerCtrl() {
-        /*FXMLLoader loader = new FXMLLoader();
-        try{
-        loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
-        HBox practitionerView = (HBox) loader.load();
-
-        // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
-        VBox tempSidepane = mainAppRef.getSidepane();
-        tempSidepane.getChildren().add(practitionerView);
 
 
-        } catch(IOException e) {
-        e.printStackTrace();
-        }*/
-    }
+}
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -53,7 +42,7 @@ public class PractitionerCtrl extends HBox {
 
         MainApp mainAppRef = new MainApp();
         Integer id = mainAppRef.getPractitionerID();
-        dbControl dbControlOb = mainAppRef.getMyDBClass();
+        dbControl dbControlOb = dbControl.getInstance();
         prove(dbControlOb,id);
     }
 
@@ -65,19 +54,19 @@ public class PractitionerCtrl extends HBox {
     }
 
 
-    public void showPractitioner(){
+
+    public VBox showPractitioner(VBox inputSidepane){
+        VBox thistempSidepaneLeft = new VBox();
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
             HBox practitionerView = (HBox) loader.load();
 
-            // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getSidepane();
-            //tempRootLayout.setCenter(PractitionerView);
 
-            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            VBox tempSidepaneLeft = inputSidepane;
             tempSidepaneLeft.getChildren().add(practitionerView);
+            thistempSidepaneLeft = tempSidepaneLeft;
+            //return tempSidepaneLeft;
 
 
 
@@ -86,9 +75,14 @@ public class PractitionerCtrl extends HBox {
         }
 
 
+        return thistempSidepaneLeft;
+    }
+
+
     }
 
 // practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString()) + practitionerOb.getName().get(0).getFamily();
+
 
     /**
      * Is called by the main application to give a reference back to itself.
