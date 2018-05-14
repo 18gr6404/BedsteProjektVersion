@@ -20,8 +20,7 @@ public class ConditionCtrl {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public ConditionCtrl() {
-    }
+    public ConditionCtrl() { }
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -32,25 +31,23 @@ public class ConditionCtrl {
 
     }
 
-    public void showConditionView(){
+
+    public VBox showConditionView(VBox inputSidepane){
+        VBox thistempSidepaneRight = new VBox();
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(AllergyIntoleranceCtrl.class.getResource("/ch/view/ConditionView.fxml"));
             VBox conditionView = (VBox) loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            //tempRootLayout.setCenter(allergyIntoleranceView);
-
-            VBox tempSidepaneRight = mainAppRef.getSidepaneRight();
+            VBox tempSidepaneRight = inputSidepane;
             tempSidepaneRight.getChildren().add(conditionView);
-
+            thistempSidepaneRight = tempSidepaneRight;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return thistempSidepaneRight;
     }
 
 

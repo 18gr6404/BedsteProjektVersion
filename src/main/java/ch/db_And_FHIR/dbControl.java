@@ -1,14 +1,9 @@
 package ch.db_And_FHIR;
 
+
 import ch.MainApp;
 import ch.controller.CreateAsthmaAppUserCtrl;
 import ch.utility.dateUtil;
-import com.sun.xml.internal.bind.v2.util.TypeCast;
-import org.hl7.fhir.dstu3.model.Patient;
-
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.time.LocalDate;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

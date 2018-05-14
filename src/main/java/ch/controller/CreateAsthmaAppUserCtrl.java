@@ -1,17 +1,22 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.controller.RootLayoutCtrl;
 import ch.db_And_FHIR.dbControl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javafx.event.ActionEvent;
 import java.io.IOException;
 
 
@@ -22,8 +27,7 @@ public class CreateAsthmaAppUserCtrl {
     @FXML
     private CheckBox pastDataWantedCheckbox;
 
-
-    private Stage tempPrimaryStage;
+    private VBox centerView;
 
     // Reference to the main application.
     private MainApp mainAppRef;
@@ -36,35 +40,24 @@ public class CreateAsthmaAppUserCtrl {
     public CreateAsthmaAppUserCtrl() {
     }
 
-    /**
+    /*
      * Initializes the ch.controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
     @FXML
     private void initialize() {
-
     }
 
-    public void showCreateAsthmaAppUser(){
+
+    public void showCreateAsthmaAppUser(VBox centerView){
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
-            loader.setController(this);
             AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            //tempRootLayout.setCenter(createAstmaAppUserView);
-
-            Scene createAsthmaAppScene = new Scene(createAstmaAppUserView);
-            tempPrimaryStage = mainAppRef.getPrimaryStage();
-            tempPrimaryStage.setScene(createAsthmaAppScene);
-            tempPrimaryStage.show();
-
-
-
-
+            centerView.getChildren().add(createAstmaAppUserView);
+            this.centerView = centerView;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,27 +71,31 @@ public class CreateAsthmaAppUserCtrl {
         else return 0;
     }
 
-
     /**
      * Kaldes når brugeren klikker på "Bekræft" i CreateAsthmaAppUserView.
      */
+
     @FXML
-    private void handleOk (){
+    private void handleOk (ActionEvent event) throws IOException {
         dbControl DBControlRef = new dbControl();
 
         String choosenAppInput = "AstmaApp";
         int isRegisteredInput = 1;
         int pastDataWantedInput = getPastDataWantedCheckBox();
 
+
         MainApp mainAppRef = new MainApp();
         Integer patientCPR = mainAppRef.getPatientCPR();
 
-        //Integer patientCPR = 1207731450;
-        System.out.print("CPR i handle metode" + patientCPR);
+        //skal indkommenteres hvis vi vil sætte isRegistered i DB. Det er dog træls når man tester
+        //DBControlRef.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
 
-        DBControlRef.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
+        //Henter den stage som actionevent'et (altså knap-trykket) kommer fra.
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
+        rootLayoutCtrlRef.initRootLayout(window);
+        rootLayoutCtrlRef.initBasicLayout();
 
-        //tempPrimaryStage.close(); Giver en null pointer exception.
     }
 
 
@@ -108,9 +105,7 @@ public class CreateAsthmaAppUserCtrl {
      * @param inputMain
      */
     public void setMainApp(MainApp inputMain) {
-        this.mainAppRef = inputMain;
+        //this.mainAppRef = inputMain;
     }
-
-
 
 }

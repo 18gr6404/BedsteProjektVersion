@@ -24,15 +24,12 @@ public class PatientCtrl {
     private Label genderLabel;
 
 
-    // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
-     // private main main;
-
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PatientCtrl() {
-    }
+    public PatientCtrl() {}
+
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -43,25 +40,24 @@ public class PatientCtrl {
 
     }
 
-    public void showPatient(){
+    public VBox showPatient(VBox inputSidepane){
+        VBox thistempSidepaneLeft = new VBox();
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PatientCtrl.class.getResource("/ch/view/PatientView.fxml"));
             AnchorPane patientView = (AnchorPane) loader.load();
 
-            // Laver et midlertidigt instans af vores sidepane for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getSidepane();
-            //tempRootLayout.setCenter(PractitionerView);
 
-            VBox tempSidepaneLeft = mainAppRef.getSidepaneLeft();
+            VBox tempSidepaneLeft = inputSidepane;
             tempSidepaneLeft.getChildren().add(patientView);
-
+            thistempSidepaneLeft = tempSidepaneLeft;
+            return tempSidepaneLeft;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return thistempSidepaneLeft;
     }
 
 

@@ -36,27 +36,24 @@ public class AllergyIntoleranceCtrl{
 
     }
 
-    public void showAllergyIntolerance(){
+
+    public VBox showAllergyIntolerance(VBox inputSidepane){
+        VBox thistempSidepaneRight = new VBox();
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(AllergyIntoleranceCtrl.class.getResource("/ch/view/AllergyIntolerance.fxml"));
             VBox allergyIntoleranceView = (VBox) loader.load();
 
-            // Laver et midlertidigt instans af vores rootLayout for at vi kan sætte viewet heri.
-            //BorderPane tempRootLayout = mainAppRef.getRootLayout();
-            //tempRootLayout.setCenter(allergyIntoleranceView);
-
-            VBox tempSidepaneRight = mainAppRef.getSidepaneRight();
+            VBox tempSidepaneRight = inputSidepane;
             tempSidepaneRight.getChildren().add(allergyIntoleranceView);
-
+            thistempSidepaneRight = tempSidepaneRight;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return thistempSidepaneRight;
     }
-
 
 
     /**

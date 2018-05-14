@@ -2,16 +2,13 @@ package ch;
 
 import ch.controller.*;
 import ch.db_And_FHIR.*;
-
+import ch.controller.CreateAsthmaAppUserCtrl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class MainApp extends Application {
@@ -23,8 +20,8 @@ public class MainApp extends Application {
     private VBox centerView;
 
     dbControl myDBClass = new dbControl();
-    private Integer patientCPR = 1207731450; //Marianne.
-    //private Integer patientCPR = 1303803813;  //Jens
+    //private Integer patientCPR = 1207731450; //Marianne.
+    private Integer patientCPR = 1303803813;  //Jens
 
     /**
      * Constructor
@@ -44,45 +41,20 @@ public class MainApp extends Application {
         myDBClass.buildMedicineData(patientCPR);
         myDBClass.buildPatientData(patientCPR);
 
-
-        initRootLayout(); //initiate root layout
-
+        RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
+        centerView = rootLayoutCtrlRef.initRootLayout(this.primaryStage);
 
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
-            //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
-            PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-            practitionerCtrl.setMainApp(this);
-            practitionerCtrl.showPractitioner();
-
-            //Sætter Patient i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
-            PatientCtrl patientCtrl = new PatientCtrl();
-            patientCtrl.setMainApp(this);
-            patientCtrl.showPatient();
-
-            //Sætter Medicine i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
-            MedicationCtrl medicationCtrl = new MedicationCtrl();
-            medicationCtrl.setMainApp(this);
-            medicationCtrl.showMedication();
-
-            ConditionCtrl conditionCtrl = new ConditionCtrl();
-            conditionCtrl.setMainApp(this);
-            conditionCtrl.showConditionView();
-
-            AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
-            allergyIntoleranceCtrl.setMainApp(this);
-            allergyIntoleranceCtrl.showAllergyIntolerance();
-
-            OverviewCtrl overviewCtrl = new OverviewCtrl();
-            overviewCtrl.setMainApp(this);
-            overviewCtrl.showOverview(overviewCtrl);
+            rootLayoutCtrlRef.initBasicLayout();
 
         }
         else {
+
             CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
-            createAsthmaAppUserCtrl.setMainApp(this);
-            createAsthmaAppUserCtrl.showCreateAsthmaAppUser();
+            createAsthmaAppUserCtrl.showCreateAsthmaAppUser(this.centerView);
+
         }
 
 
@@ -95,13 +67,13 @@ public class MainApp extends Application {
     /**
      * Initializes the root layout.
      */
-    private void initRootLayout() {
+    private BorderPane initRootLayout() {
         FXMLLoader loader = new FXMLLoader();
 
         try {
             // Load root layout from fxml file.
             loader.setLocation(MainApp.class.getResource("/ch/view/RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
+            rootLayout = loader.<BorderPane>load();
 
             VBox mySidepaneLeft = new VBox();
             mySidepaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
@@ -121,16 +93,12 @@ public class MainApp extends Application {
             centerView = myCenterView;
             rootLayout.setCenter(myCenterView);
 
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-            primaryStage.setFullScreen(false);
-
+            return rootLayout;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return rootLayout;
     }
 
 
