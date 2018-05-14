@@ -25,6 +25,7 @@ public class MainApp extends Application {
     dbControl myDBClass = new dbControl();
     private Integer patientCPR = 1207731450; //Marianne.
     //private Integer patientCPR = 1303803813;  //Jens
+    private Integer practitionerID = 56789; // Ole Bosen
 
     /**
      * Constructor
@@ -38,12 +39,11 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Sundhedsappmodul");
 
-        myDBClass.buildPractitionerData(56789);
-        myDBClass.buildAllergyIntoleranceData(patientCPR);
-        myDBClass.buildConditionData(patientCPR);
-        myDBClass.buildMedicineData(patientCPR);
-        myDBClass.getPatientData(patientCPR);
-
+    //    myDBClass.buildPractitionerData(56789); Sat ned i isRegistered efter instans af PractitionerCtrl
+//        myDBClass.buildAllergyIntoleranceData(patientCPR);
+//        myDBClass.buildConditionData(patientCPR);
+//        myDBClass.buildMedicineData(patientCPR);
+//        myDBClass.getPatientData(patientCPR);
 
         initRootLayout(); //initiate root layout
 
@@ -53,8 +53,8 @@ public class MainApp extends Application {
         if(isRegistered) {
             //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
             PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-            practitionerCtrl.setMainApp(this);
-            practitionerCtrl.showPractitioner();
+            practitionerCtrl.setMainApp(this); // 
+           practitionerCtrl.showPractitioner(); //
 
             //Sætter Patient i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
             PatientCtrl patientCtrl = new PatientCtrl();
@@ -157,7 +157,9 @@ public class MainApp extends Application {
         return patientCPR;
     }
 
+    public dbControl getMyDBClass() { return myDBClass;}
 
+    public Integer getPractitionerID() { return practitionerID; }
 }
 
 

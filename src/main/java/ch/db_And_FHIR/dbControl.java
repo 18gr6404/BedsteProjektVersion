@@ -161,11 +161,12 @@ public class dbControl {
 //getConnection();
 
 
-    public void buildPractitionerData(Integer practitionerIDET) {
+    public Practitioner buildPractitionerData(Integer practitionerID) {
         Connection con = connect(); //Burde vi ikke kun connecte i main?
 
         Statement stmnt = null;
-        String query = "SELECT firstName, lastName, practitionerID FROM Practitioner WHERE practitionerID=" + practitionerIDET;
+        Practitioner p = null;
+        String query = "SELECT firstName, lastName, practitionerID FROM Practitioner WHERE practitionerID=" + practitionerID;
      //   String practitionerID = practitionerIDET.toString();
         try {
             stmnt = con.createStatement();
@@ -174,14 +175,15 @@ public class dbControl {
                 Practitioner practitioner = new Practitioner();
                 practitioner.addIdentifier().setValue(String.valueOf(rs.getInt("practitionerID")));
                 practitioner.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
-
+                p = practitioner;
             //    System.out.println(practitioner.getName().get(0).getFamily() + practitioner.getName().get(0).getGivenAsSingleString() + practitioner.getIdentifier().get(0).getValue() );
-
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+
         }
+        return p;
     }
 
     public void buildAllergyIntoleranceData(int patientCPR) {

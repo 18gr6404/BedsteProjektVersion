@@ -1,6 +1,7 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -8,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.hl7.fhir.dstu3.model.Practitioner;
 
 import java.io.IOException;
 
@@ -15,6 +17,9 @@ public class PractitionerCtrl extends HBox {
 
     // Reference to the main application. 
     private MainApp mainAppRef;
+
+    private Practitioner practitionerObjekt;
+    private String b;
 
     @FXML
     private Label practitionerNameLabel;
@@ -34,10 +39,10 @@ public class PractitionerCtrl extends HBox {
         tempSidepane.getChildren().add(practitionerView);
 
 
-    } catch(IOException e) {
+        } catch(IOException e) {
         e.printStackTrace();
-    }*/
-}
+        }*/
+    }
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -46,7 +51,19 @@ public class PractitionerCtrl extends HBox {
     @FXML
     private void initialize() {
 
+        MainApp mainAppRef = new MainApp();
+        Integer id = mainAppRef.getPractitionerID();
+        dbControl dbControlOb = mainAppRef.getMyDBClass();
+        prove(dbControlOb,id);
     }
+
+
+
+    public void prove(dbControl myDBClass, Integer practitionerID) {
+        practitionerObjekt = myDBClass.buildPractitionerData(practitionerID);
+        practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString() +" "+ practitionerObjekt.getName().get(0).getFamily());
+    }
+
 
     public void showPractitioner(){
         try {
@@ -63,14 +80,15 @@ public class PractitionerCtrl extends HBox {
             tempSidepaneLeft.getChildren().add(practitionerView);
 
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
     }
 
-
-
+// practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString()) + practitionerOb.getName().get(0).getFamily();
 
     /**
      * Is called by the main application to give a reference back to itself.
