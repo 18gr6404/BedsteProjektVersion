@@ -86,13 +86,10 @@ public class MainApp extends Application {
         }
 
 
-        // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
-
-        /*
         ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
         consultationMeasurementCtrl.setMainApp(this);
         consultationMeasurementCtrl.showConsultationMeasurement();
-         */
+
     }
 
     /**
