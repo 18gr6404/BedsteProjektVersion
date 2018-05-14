@@ -10,6 +10,7 @@ import ch.controller.CreateAsthmaAppUserCtrl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -29,8 +30,8 @@ public class MainApp extends Application {
     
 
 
-    private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
-    //private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
+    //private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
+    private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
     private Integer practitionerID = 56789; // Ole Bosen
 
 
@@ -55,11 +56,6 @@ public class MainApp extends Application {
         dbControl myDBClass = dbControl.getInstance();
         myDBClass.startConnection();
         myDBClass.buildFEV(patientCPR);
-       /* 
-        myDBClass.buildPractitionerData(56789);
-        myDBClass.buildAllergyIntoleranceData(patientCPR);
-        myDBClass.buildConditionData(patientCPR);
-        myDBClass.buildMedicineData(patientCPR);*/
 
         myDBClass.buildPatientData(patientCPR);
 
@@ -79,27 +75,45 @@ public class MainApp extends Application {
 
 
             //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
-            PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-            practitionerCtrl.setMainApp(this); // 
+            //PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
+            //practitionerCtrl.setMainApp(this); //
             //practitionerCtrl.showPractitioner(); //
 
 
             rootLayoutCtrlRef.initBasicLayout();
 
+
         }
         else {
-
-            CreateAsthmaAppUserCtrl createAsthmaAppUserCtrl = new CreateAsthmaAppUserCtrl();
-            createAsthmaAppUserCtrl.showCreateAsthmaAppUser(this.centerView);
-
-
+            showCreateAsthmaAppUserView(rootLayoutCtrlRef);
+            //denne sætter basicLayout og overviewView når patienten er oprettet
         }
 
-        ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
+       /* ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
         consultationMeasurementCtrl.setMainApp(this);
-        consultationMeasurementCtrl.showConsultationMeasurement();
+        consultationMeasurementCtrl.showConsultationMeasurement(); */
 
     }
+
+    private void showCreateAsthmaAppUserView(RootLayoutCtrl rootLayoutCtrlRef){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
+            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
+
+            centerView.getChildren().add(createAstmaAppUserView);
+            //this.centerView = centerView;
+
+            CreateAsthmaAppUserCtrl controller = loader.getController();
+            controller.setMainApp(this);
+            controller.setRootLayoutCtrlRef(rootLayoutCtrlRef);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public VBox getSidepaneRight(){return sidePaneRight;}
     public VBox getCenterView(){return centerView;}

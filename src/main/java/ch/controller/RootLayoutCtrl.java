@@ -69,9 +69,7 @@ public class RootLayoutCtrl {
     }
 
     public void initBasicLayout(){
-        /*
-        PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        this.sidePaneLeft = practitionerCtrl.showPractitioner(sidePaneLeft);*/
+
 
                  try {
                 FXMLLoader loader = new FXMLLoader();

@@ -31,6 +31,7 @@ public class CreateAsthmaAppUserCtrl {
 
     // Reference to the main application.
     private MainApp mainAppRef;
+    private RootLayoutCtrl rootLayoutCtrlRef;
 
 
     /**
@@ -49,21 +50,6 @@ public class CreateAsthmaAppUserCtrl {
     }
 
 
-    public void showCreateAsthmaAppUser(VBox centerView){
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
-            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
-
-            centerView.getChildren().add(createAstmaAppUserView);
-            this.centerView = centerView;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public int getPastDataWantedCheckBox (){
         if (pastDataWantedCheckbox.isSelected()){
             return 1;
@@ -77,25 +63,26 @@ public class CreateAsthmaAppUserCtrl {
 
     @FXML
     private void handleOk (ActionEvent event) throws IOException {
-        dbControl DBControlRef = new dbControl();
+        dbControl dbControlOb = dbControl.getInstance();
 
         String choosenAppInput = "AstmaApp";
         int isRegisteredInput = 1;
         int pastDataWantedInput = getPastDataWantedCheckBox();
 
 
-        MainApp mainAppRef = new MainApp();
         Integer patientCPR = mainAppRef.getPatientCPR();
 
         //skal indkommenteres hvis vi vil sætte isRegistered i DB. Det er dog træls når man tester
-        //DBControlRef.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
+        //dbControlOb.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
 
         //Henter den stage som actionevent'et (altså knap-trykket) kommer fra.
-        /*
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
-        rootLayoutCtrlRef.initRootLayout(window);
-        rootLayoutCtrlRef.initBasicLayout(); */
+
+        //Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        //RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
+        //rootLayoutCtrlRef.initRootLayout(window);
+
+        //mainAppRef.showOverview();
+        rootLayoutCtrlRef.initBasicLayout();
 
     }
 
@@ -103,10 +90,20 @@ public class CreateAsthmaAppUserCtrl {
     /**
      * Is called by the main application to give a reference back to itself.
      *
+     * @param inputRootLayoutCtrl
+     */
+    public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
+        this.rootLayoutCtrlRef = inputRootLayoutCtrl;
+    }
+
+    /**
+     * Is called by the main application to give a reference back to itself.
+     *
      * @param inputMain
      */
     public void setMainApp(MainApp inputMain) {
-        //this.mainAppRef = inputMain;
+        this.mainAppRef = inputMain;
     }
+
 
 }
