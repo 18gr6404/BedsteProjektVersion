@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeeklyParameters {
-    private List<List<Integer>> ugeListeDagSymptomer;
-    private List<List<Integer>> ugeListeNatSymptomer;
+    private List<Integer> ugeListeDagSymptomer;
+    private List<Integer> ugeListeNatSymptomer;
     private List<Integer> ugeListeAktivitet;
     private List<Integer> ugeListeAnfaldsMed;
     private List<List<Double>> pctListeDagSymptomer;
@@ -13,19 +13,19 @@ public class WeeklyParameters {
     private List<Double> pctPeriodeDagSymptom;
     private List<Double> pctPeriodeNatSymptom;
 
-    public List<List<Integer>> getUgeListeDagSymptomer() {
+    public List<Integer> getUgeListeDagSymptomer() {
         return ugeListeDagSymptomer;
     }
 
-    public void setUgeListeDagSymptomer(List<List<Integer>> ugeListeDagSymptomer) {
+    public void setUgeListeDagSymptomer(List<Integer> ugeListeDagSymptomer) {
         this.ugeListeDagSymptomer = ugeListeDagSymptomer;
     }
 
-    public List<List<Integer>> getUgeListeNatSymptomer() {
+    public List<Integer> getUgeListeNatSymptomer() {
         return ugeListeNatSymptomer;
     }
 
-    public void setUgeListeNatSymptomer(List<List<Integer>> ugeListeNatSymptomer) {
+    public void setUgeListeNatSymptomer(List<Integer> ugeListeNatSymptomer) {
         this.ugeListeNatSymptomer = ugeListeNatSymptomer;
     }
 

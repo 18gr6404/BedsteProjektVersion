@@ -27,7 +27,7 @@ public class dbControl {
     private Connection con;
     /**
      * db Control er lavet som en "SingleTon" Hvilket betyder at der kun laves én instans af klassen
-     * dvs. at hvis vi kører startCtx i main på det nyligt oprettede objekt, så behøver vi ikke køre den igen
+     * dvs. at hvis vi kører startCon i main på det nyligt oprettede objekt, så behøver vi ikke køre den igen
      * i calculated Parameters. (Det gør ikke noget at kalde den, men den gør ikke noget)
      */
     private static dbControl instance;
