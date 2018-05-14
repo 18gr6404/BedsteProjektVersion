@@ -1,11 +1,13 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import org.hl7.fhir.dstu3.model.Patient;
 
 import java.io.IOException;
 
@@ -13,6 +15,7 @@ import java.io.IOException;
 public class PatientCtrl {
     // Reference to the main application.
     private MainApp mainAppRef;
+    private Patient patientObject;
 
     @FXML
     private Label nameLabel;
@@ -40,24 +43,17 @@ public class PatientCtrl {
 
     }
 
-    public VBox showPatient(VBox inputSidepane){
-        VBox thistempSidepaneLeft = new VBox();
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(PatientCtrl.class.getResource("/ch/view/PatientView.fxml"));
-            AnchorPane patientView = (AnchorPane) loader.load();
+    public void setPatient(){
 
+        dbControl dbControlOb = dbControl.getInstance();
 
-            VBox tempSidepaneLeft = inputSidepane;
-            tempSidepaneLeft.getChildren().add(patientView);
-            thistempSidepaneLeft = tempSidepaneLeft;
-            return tempSidepaneLeft;
+        patientObject = dbControlOb.buildPatientData(mainAppRef.getPatientCPR());
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return thistempSidepaneLeft;
+        nameLabel.setText(patientObject.getName().get(0).getGivenAsSingleString() +" "+ patientObject.getName().get(0).getFamily());
+        cprLabel.setText(patientObject.getIdentifier().get(0).getValue());
+       // ageLabel.setText(patientObject; //Vender tilbage hertil
+        genderLabel.setText(String.valueOf(patientObject.getGender()));
+
     }
 
 

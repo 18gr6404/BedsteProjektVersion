@@ -5,10 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance;
 
 import java.io.IOException;
 
@@ -69,11 +71,8 @@ public class RootLayoutCtrl {
     }
 
     public void initBasicLayout(){
-        /*
-        PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        this.sidePaneLeft = practitionerCtrl.showPractitioner(sidePaneLeft);*/
 
-                 try {
+        try {   //Practitioner
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
                 HBox practitionerView = (HBox) loader.load();
@@ -90,17 +89,69 @@ public class RootLayoutCtrl {
             }
 
 
-        PatientCtrl patientCtrl = new PatientCtrl();
-        this.sidePaneLeft = patientCtrl.showPatient(sidePaneLeft);
+        try {  //Patient
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(PatientCtrl.class.getResource("/ch/view/PatientView.fxml"));
+            AnchorPane patientView = (AnchorPane) loader.load();
 
-        MedicationCtrl medicationCtrl = new MedicationCtrl();
-        this.sidePaneLeft = medicationCtrl.showMedication(sidePaneLeft);
+            sidePaneLeft.getChildren().add(patientView);
 
-        ConditionCtrl conditionCtrl = new ConditionCtrl();
-        this.sidePaneRight = conditionCtrl.showConditionView(sidePaneRight);
+            PatientCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setPatient();
 
-        AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
-        this.sidePaneRight = allergyIntoleranceCtrl.showAllergyIntolerance(sidePaneRight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {  //Medication
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MedicationCtrl.class.getResource("/ch/view/MedicationView.fxml"));
+            VBox MedicationView = (VBox) loader.load();
+
+            sidePaneLeft.getChildren().add(MedicationView);
+
+            MedicationCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setMedication();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {  //Condition
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(ConditionCtrl.class.getResource("/ch/view/ConditionView.fxml"));
+            VBox conditionView = (VBox) loader.load();
+
+            sidePaneRight.getChildren().add(conditionView);
+
+            ConditionCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setCondition();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {  //AllergyIntolerance
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(AllergyIntoleranceCtrl.class.getResource("/ch/view/AllergyIntoleranceView.fxml"));
+            VBox allergyIntoleranceView = (VBox) loader.load();
+
+            sidePaneRight.getChildren().add(allergyIntoleranceView);
+
+            AllergyIntoleranceCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setAllergyIntolerance();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+      //  AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
+      //  this.sidePaneRight = allergyIntoleranceCtrl.showAllergyIntolerance(sidePaneRight);
     }
 
     public VBox getSidepaneLeft(){

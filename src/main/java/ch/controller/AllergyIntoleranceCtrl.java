@@ -1,24 +1,33 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import org.hl7.fhir.dstu3.model.AllergyIntolerance;
+import org.hl7.fhir.dstu3.model.Type;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AllergyIntoleranceCtrl{
 
     @FXML
-    private ListView AllergyList;
+    private ListView<String> allergyListView;
     @FXML
-    private ListView IntoleranceList;
+    private ListView<String> intoleranceListView;
 
-    // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
+    // Reference to the main application.
     private MainApp mainAppRef;
+    private List<List<AllergyIntolerance>> allergyIntoleranceList;
+    private ObservableList allergyList = FXCollections.observableArrayList();
+    private ObservableList intoleranceList = FXCollections.observableArrayList();
 
     /**
      * The constructor.
@@ -33,28 +42,27 @@ public class AllergyIntoleranceCtrl{
      */
 
     private void initialize() {
-
     }
 
+    public void setAllergyIntolerance(){
 
-    public VBox showAllergyIntolerance(VBox inputSidepane){
-        VBox thistempSidepaneRight = new VBox();
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(AllergyIntoleranceCtrl.class.getResource("/ch/view/AllergyIntolerance.fxml"));
-            VBox allergyIntoleranceView = (VBox) loader.load();
+        dbControl dbControlOb = dbControl.getInstance();
 
-            VBox tempSidepaneRight = inputSidepane;
-            tempSidepaneRight.getChildren().add(allergyIntoleranceView);
-            thistempSidepaneRight = tempSidepaneRight;
+        allergyIntoleranceList = dbControlOb.buildAllergyIntoleranceData(mainAppRef.getPatientCPR());
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        AllergyIntolerance.AllergyIntoleranceType a = AllergyIntolerance.AllergyIntoleranceType.ALLERGY;
+        AllergyIntolerance.AllergyIntoleranceType b = AllergyIntolerance.AllergyIntoleranceType.INTOLERANCE;
+
+        for (int i = 0; i<allergyIntoleranceList.size(); i++) {
+            if (allergyIntoleranceList.get(i).get(0).getType().equals(a)){
+                allergyList.add(allergyIntoleranceList.get(i).get(0).getCode().getCoding().get(0).getCode());
+            } else if (allergyIntoleranceList.get(i).get(0).getType().equals(b)) {
+                intoleranceList.add(allergyIntoleranceList.get(i).get(0).getCode().getCoding().get(0).getCode());
+            }
         }
-        return thistempSidepaneRight;
+            allergyListView.setItems(allergyList);
+            intoleranceListView.setItems(intoleranceList);
     }
-
 
     /**
      * Is called by the main application to give a reference back to itself.
