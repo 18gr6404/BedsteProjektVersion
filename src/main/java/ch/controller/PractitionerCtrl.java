@@ -40,21 +40,26 @@ public class PractitionerCtrl extends HBox {
     @FXML
     private void initialize() {
 
-        MainApp mainAppRef = new MainApp();
-        Integer id = mainAppRef.getPractitionerID();
+        //MainApp mainAppRef = new MainApp();
+
+    }
+
+
+    public void setPractitioner(){
+
         dbControl dbControlOb = dbControl.getInstance();
-        prove(dbControlOb,id);
-    }
 
-
-
-    public void prove(dbControl myDBClass, Integer practitionerID) {
-        practitionerObjekt = myDBClass.buildPractitionerData(practitionerID);
+        practitionerObjekt = dbControlOb.buildPractitionerData(mainAppRef.getPractitionerID());
         practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString() +" "+ practitionerObjekt.getName().get(0).getFamily());
+
     }
 
+/*
+    public void prove(dbControl myDBClass, Integer practitionerID) {
 
 
+
+/*
     public VBox showPractitioner(VBox inputSidepane){
         VBox thistempSidepaneLeft = new VBox();
         try {
@@ -76,10 +81,10 @@ public class PractitionerCtrl extends HBox {
 
 
         return thistempSidepaneLeft;
-    }
+    } */
 
 
-    }
+
 
 // practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString()) + practitionerOb.getName().get(0).getFamily();
 
@@ -92,5 +97,6 @@ public class PractitionerCtrl extends HBox {
     public void setMainApp(MainApp inputMain) {
         this.mainAppRef = inputMain;
     }
+
 
 }

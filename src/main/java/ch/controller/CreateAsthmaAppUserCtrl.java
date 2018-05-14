@@ -91,10 +91,11 @@ public class CreateAsthmaAppUserCtrl {
         //DBControlRef.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
 
         //Henter den stage som actionevent'et (altså knap-trykket) kommer fra.
+        /*
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
         rootLayoutCtrlRef.initRootLayout(window);
-        rootLayoutCtrlRef.initBasicLayout();
+        rootLayoutCtrlRef.initBasicLayout(); */
 
     }
 

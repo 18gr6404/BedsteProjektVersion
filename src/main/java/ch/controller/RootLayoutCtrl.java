@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -17,12 +18,13 @@ public class RootLayoutCtrl {
     private VBox sidePaneLeft;
     private VBox sidePaneRight;
     private VBox centerView;
+    private MainApp mainAppRef;
 
     /**
      * Constructor
      */
-    public RootLayoutCtrl()
-    {}
+    public RootLayoutCtrl(MainApp inputMainAppRef)
+    {this.mainAppRef = inputMainAppRef; }
 
 
     public VBox initRootLayout(Stage inputPrimaryStage) {
@@ -67,8 +69,26 @@ public class RootLayoutCtrl {
     }
 
     public void initBasicLayout(){
+        /*
         PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
-        this.sidePaneLeft = practitionerCtrl.showPractitioner(sidePaneLeft);
+        this.sidePaneLeft = practitionerCtrl.showPractitioner(sidePaneLeft);*/
+
+                 try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
+                HBox practitionerView = (HBox) loader.load();
+
+                sidePaneLeft.getChildren().add(practitionerView);
+
+                PractitionerCtrl controller = loader.getController();
+                controller.setMainApp(mainAppRef);
+                controller.setPractitioner();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
         PatientCtrl patientCtrl = new PatientCtrl();
         this.sidePaneLeft = patientCtrl.showPatient(sidePaneLeft);
