@@ -1,5 +1,9 @@
 package ch.db_And_FHIR;
 
+
+import ch.MainApp;
+import ch.controller.CreateAsthmaAppUserCtrl;
+import ch.utility.dateUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -246,6 +250,63 @@ public class dbControl {
         }
     }
 
+    public void buildPatientData(int patientCPR) {
+        Connection con = connect();
+
+        Statement stmnt = null;
+        String query = "SELECT cpr, firstName, lastName, age, gender FROM Patient WHERE cpr=" + patientCPR;
+
+        try {
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(query);
+            while (rs.next()) {
+                Patient patient = new Patient();
+
+//                LocalDate birthDate = LocalDate.parse("04.04.2018");
+//                LocalDate today = LocalDate.now();
+//                long age1 = ChronoUnit.YEARS.between(today, birthDate);
+
+                //Ny extension
+                Extension ext3 = new Extension();
+                ext3.setUrl("age");
+                ext3.setValue(new Quantity(rs.getInt("age")));
+                patient.addExtension(ext3);
+
+                patient.addIdentifier().setValue(String.valueOf(rs.getInt("cpr")));
+                patient.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
+               if (rs.getString("gender") == "K") {
+                   patient.setGender(Enumerations.AdministrativeGender.FEMALE);
+               }
+               else {
+                   patient.setGender(Enumerations.AdministrativeGender.MALE);
+               }
+               patient.addExtension(ext3);
+
+               System.out.println((patient.getExtension().get(0).getValue()));
+
+
+
+
+
+//                Condition condition = new Condition();
+//                condition.getCode().addCoding()
+//                        .setCode(rs.getString("name"))
+//                        .setDisplay(rs.getString("name"));
+
+//                practitioner.addIdentifier().setValue(String.valueOf(rs.getInt("practitionerID")));
+//                practitioner.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
+                //System.out.println(practitioner.getName().get(0).getFamily() + practitioner.getName().get(0).getGivenAsSingleString() + practitioner.getIdentifier().get(0).getValue() );
+
+                System.out.println(patient.getGender());
+                //System.out.println(patient.getIdentifier().get(0).getValue() + "," + patient.getName().get(0).getGivenAsSingleString() + " " + patient.getName().get(0).getFamily());
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void buildMedicineData(int patientCPR) {
         Connection con = connect(); //Burde dette ikke ske i main?
 
@@ -261,7 +322,7 @@ public class dbControl {
                 medicationRequest.addDosageInstruction().setDose(new StringType(rs.getString("dosage")));
                 medicationRequest.setAuthoredOn(rs.getDate("dateTime"));
 
-                System.out.println(medicationRequest.getMedication() +","+ medicationRequest.getDosageInstruction().get(0).getDose()+","+ medicationRequest.getAuthoredOn());
+               //System.out.println(medicationRequest.getMedication() +","+ medicationRequest.getDosageInstruction().get(0).getDose()+","+ medicationRequest.getAuthoredOn());
             }
 
         } catch (SQLException e) {

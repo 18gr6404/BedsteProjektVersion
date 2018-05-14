@@ -3,15 +3,17 @@ package ch.utility;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import com.mysql.cj.result.LocalDateValueFactory;
 import org.hl7.fhir.dstu3.model.*;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.Year;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -75,6 +77,7 @@ public class FhirUpload {
 
             LocalDate dato1 = dateUtil.parse("04.04.2018");
 
+
             //Index 1
             Extension ext1 = new Extension();
             ext1.setUrl("Creation Date");
@@ -86,6 +89,8 @@ public class FhirUpload {
             ext2.setUrl("Chosen App");
             ext2.setValue(new StringType("Astma App"));
             Marianne.addExtension(ext2);
+
+
 
             MethodOutcome outcome1 = client.create()
                     .resource(Marianne)

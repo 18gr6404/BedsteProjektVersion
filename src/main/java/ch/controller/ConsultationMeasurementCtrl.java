@@ -1,9 +1,11 @@
 package ch.controller;
 
 import ch.MainApp;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -17,7 +19,7 @@ public class ConsultationMeasurementCtrl {
     @FXML
     private Label FEV1Label;
     @FXML
-    private TextField ConsultationMeasurementsTextField;
+    private TextField ConsultationMeasurementTextField;
     @FXML
     private Button OKButton;
     @FXML
@@ -55,6 +57,7 @@ public class ConsultationMeasurementCtrl {
             Stage consultationMeasurementStage = new Stage();
             consultationMeasurementStage.setTitle("Indtast konsultationsmålinger");
             consultationMeasurementStage.initModality(Modality.WINDOW_MODAL);
+            this.consultationMeasurementStage = consultationMeasurementStage;
             // consultationMeasurementStage.initOwner();
             Scene consultationmeasurementscene = new Scene(page);
             consultationMeasurementStage.setScene(consultationmeasurementscene);
@@ -86,27 +89,6 @@ public class ConsultationMeasurementCtrl {
         this.mainAppRef = inputMain;
     }
 
-
-
-    public boolean isOkClicked() {
-        return okClicked;
-    }
-
-    @FXML
-    private void handleOK() {
-        if (isInputValid()) {
-            //person.setFirstName(firstNameField.getText());
-
-            okClicked = true;
-            consultationMeasurementStage.close();
-        }
-    }
-
-@FXML
-private void handleCancel() {
-    consultationMeasurementStage.close();
-}
-
     /**
      * Validates the user input in the text fields.
      *
@@ -122,6 +104,38 @@ private void handleCancel() {
         } else {
             return false;}
     }
+
+    private boolean isOkClicked() {
+        return okClicked;
+    }
+
+    /**
+     * Håndterer OK knappen
+     */
+    @FXML
+    private void handleOK(ActionEvent event) {
+        if (isInputValid()) {
+
+
+
+//            person.setFirstName(firstNameField.getText());
+
+            okClicked = true;
+            Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+            window.close();
+        }
+    }
+
+    /**
+     * Håndterer Cancel knappen.
+     */
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        window.close();
+    }
+
+
 
 }
 

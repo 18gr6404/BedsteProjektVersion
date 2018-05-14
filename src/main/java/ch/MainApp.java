@@ -39,7 +39,7 @@ public class MainApp extends Application {
         myDBClass.buildAllergyIntoleranceData(patientCPR);
         myDBClass.buildConditionData(patientCPR);
         myDBClass.buildMedicineData(patientCPR);
-        myDBClass.getPatientData(patientCPR);
+        myDBClass.buildPatientData(patientCPR);
 
         RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
         centerView = rootLayoutCtrlRef.initRootLayout(this.primaryStage);
@@ -58,13 +58,10 @@ public class MainApp extends Application {
         }
 
 
-        // buildPatient();  //Her skal vi kalde vores funktioner til at bygge vores modeller
-
-        /*
         ConsultationMeasurementCtrl consultationMeasurementCtrl = new ConsultationMeasurementCtrl();
         consultationMeasurementCtrl.setMainApp(this);
         consultationMeasurementCtrl.showConsultationMeasurement();
-         */
+
     }
 
     /**
