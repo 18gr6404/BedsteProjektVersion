@@ -3,6 +3,7 @@ package ch.controller;
 import ch.MainApp;
 import ch.db_And_FHIR.FhirControl;
 import ch.db_And_FHIR.dbControl;
+import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
 import org.hl7.fhir.dstu3.model.Observation;
@@ -24,7 +25,7 @@ public class CalculatedParametersCtrl {
 
     //FhirControl FhirClass = FhirControl.getInstance();
 
-    public void buildCalculatedParameters(Integer patientIdentifier, LocalDate startDate, LocalDate endDate){
+    public EncapsulatedParameters buildCalculatedParameters(Integer patientIdentifier, LocalDate startDate, LocalDate endDate){
         List<Observation> FhirObservations;// = new ArrayList<>();
         List<Observation> fev1Liste = new ArrayList<>();
         List<Observation> dagSymptomListe = new ArrayList<>();
@@ -50,13 +51,14 @@ public class CalculatedParametersCtrl {
         // Sætter de to instans variable til null, da vi aldrig skal bibeholde noget data hvis denne metode kaldes igen.
 
         WeeklyParameters WeekParam = new WeeklyParameters();
+        EncapsulatedParameters encapsulatedParameters = new EncapsulatedParameters();
         //OVParam = null;
         //WeekParam = null;
 
 
         Long avgWeekRounder = (ChronoUnit.DAYS.between(startDate, endDate))/7;
         Integer avgWeekRounderInt = Math.round(avgWeekRounder.intValue());
-        System.out.println(avgWeekRounderInt);
+        //System.out.println(avgWeekRounderInt);
         // Henter instansen af FhirControl, dette er IKKE at lave et nyt objekt.
         FhirControl FhirClass = FhirControl.getInstance();
 
@@ -107,7 +109,7 @@ public class CalculatedParametersCtrl {
                 FhirObservations.remove(0);
             }
         }
-        System.out.println("DagsSymptom size = " + dagSymptomListe.size());
+        //System.out.println("DagsSymptom size = " + dagSymptomListe.size());
         OverviewParameters OVParam;
 
         /**
@@ -156,11 +158,11 @@ public class CalculatedParametersCtrl {
                 dagSAande.add(dagSymptomListe.get(j));
             }
         }
-        System.out.println("Hvaesen Size = " + dagSHvaesen.size());
+        /*System.out.println("Hvaesen Size = " + dagSHvaesen.size());
         System.out.println("Hoste Size = " + dagSHoste.size());
         System.out.println("Aandenød Size = " + dagSAande.size());
         System.out.println("Slim Size = " + dagSSlim.size());
-        System.out.println("Tryk Size = " + dagSTryk.size());
+        System.out.println("Tryk Size = " + dagSTryk.size());*/
 
         /**
          * Afgør hvilket symptom er forekommet mest.
@@ -220,9 +222,9 @@ public class CalculatedParametersCtrl {
         ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSSlim));
         ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSTryk));
 
-        for (int i = 0; i<ugeListeDagSymptomer.size(); i++){
+       /* for (int i = 0; i<ugeListeDagSymptomer.size(); i++){
             System.out.println(ugeListeDagSymptomer.get(0).get(i));
-        }
+        }*/
         List<Integer> ugeListeTotalDagSymptom = new ArrayList<>();
         Integer sum = 0;
         for (int j = 0; j <ugeListeDagSymptomer.get(0).size(); j++) {
@@ -234,7 +236,7 @@ public class CalculatedParametersCtrl {
         }
 
 
-        System.out.println(ugeListeTotalDagSymptom);
+        //System.out.println(ugeListeTotalDagSymptom);
         // Nat Symptomer
         List<List<Integer>> ugeListeNatSymptomer = new ArrayList<>();
         ugeListeNatSymptomer.add(symptomListe(calendarWeeks, weekNumber, natSHoste));
@@ -246,10 +248,9 @@ public class CalculatedParametersCtrl {
          * Laver uge Listen med én værdi for
          */
         List<Integer> ugeListeTotalNatSymptom = new ArrayList<>();
-        for (int j = 0; j <ugeListeNatSymptomer.size(); j++) {
-
-            for (int i = 0; i < ugeListeNatSymptomer.get(0).size(); i++) {
-                sum += ugeListeNatSymptomer.get(j).get(i);
+        for (int j = 0; j <ugeListeNatSymptomer.get(0).size(); j++) {
+            for (int i = 0; i < ugeListeNatSymptomer.size() ; i++) {
+                sum += ugeListeNatSymptomer.get(i).get(j);
             }
             ugeListeTotalNatSymptom.add(sum);
             sum = 0;
@@ -300,6 +301,11 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctListeNatSymptomer(pctListeNatSymptomer);
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
+
+        encapsulatedParameters.setOverviewParameters(OVParam);
+        encapsulatedParameters.setWeeklyParameters(WeekParam);
+
+        return encapsulatedParameters;
     }
 
     private List<Integer> symptomListe(Integer antalKalenderUger, Integer foersteUge, List<Observation> liste){
@@ -307,15 +313,15 @@ public class CalculatedParametersCtrl {
         //AtomicInteger zero = new AtomicInteger(0);
         List<Integer> ugeListe = new ArrayList<>();
         int value = 0;
-        for(int k = 0; k<antalKalenderUger; k++){
+        for(int k = 0; k<antalKalenderUger+1; k++){
             ugeListe.add(0);
         }
 
         //for (int i = 0; i < antalKalenderUger; i++){
             for (int j = 0; j <liste.size(); j++){
                 Integer weekNr = liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().get(woy);
-                for (int i = 0; i <antalKalenderUger; i++) {
-                    if (weekNr.equals(foersteUge + i) && weekNr <= foersteUge + antalKalenderUger) {
+                for (int i = 0; i <antalKalenderUger + 1; i++) {
+                    if (weekNr.equals(foersteUge + i) && weekNr < foersteUge + antalKalenderUger + 1) {
                         ugeListe.set(i, ugeListe.get(i) + 1);// += ugeListe
                         break;
                     }

@@ -2,6 +2,9 @@ package ch;
 
 import ch.controller.*;
 import ch.db_And_FHIR.*;
+import ch.model.EncapsulatedParameters;
+import ch.model.OverviewParameters;
+import ch.model.WeeklyParameters;
 import ch.utility.dateUtil;
 import ch.controller.CreateAsthmaAppUserCtrl;
 import javafx.application.Application;
@@ -65,15 +68,19 @@ public class MainApp extends Application {
 
 
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
-        calcParam.buildCalculatedParameters(1207731470, startDate, endDate); // Marianne CPR på FHIR Server = 1207731470
-       boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
+        // HER HENTER JEG DE UDREGNEDE PARAMETRE
+        EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(1207731470, startDate, endDate); // Marianne CPR på FHIR Server = 1207731470
+        OverviewParameters OverviewParam = beggeParam.getOverviewParameters();
+        WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
+        System.out.println(OverviewParam.getAvgFEV1());
+        boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {
 
             //Sætter Practitioner i vores basis-view v. at lave en ny instans af controlleren, lave en referece til MainApp og kalde show-metoden
             PractitionerCtrl practitionerCtrl = new PractitionerCtrl();
             practitionerCtrl.setMainApp(this); // 
-            practitionerCtrl.showPractitioner(); //
+            //practitionerCtrl.showPractitioner(); //
 
             
             rootLayoutCtrlRef.initBasicLayout();
