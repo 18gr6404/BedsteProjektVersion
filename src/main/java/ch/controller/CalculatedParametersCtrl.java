@@ -301,6 +301,7 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctListeNatSymptomer(pctListeNatSymptomer);
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
+        WeekParam.setFoersteUge(weekNumber);
 
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);

@@ -12,6 +12,9 @@ public class WeeklyParameters {
     private List<List<Double>> pctListeNatSymptomer;
     private List<Double> pctPeriodeDagSymptom;
     private List<Double> pctPeriodeNatSymptom;
+    private Integer FoersteUge;
+
+
 
     public List<Integer> getUgeListeDagSymptomer() {
         return ugeListeDagSymptomer;
@@ -75,5 +78,13 @@ public class WeeklyParameters {
 
     public void setPctPeriodeNatSymptom(List<Double> pctPeriodeNatSympmtom) {
         this.pctPeriodeNatSymptom = pctPeriodeNatSympmtom;
+    }
+
+    public Integer getFoersteUge() {
+        return FoersteUge;
+    }
+
+    public void setFoersteUge(Integer foersteUge) {
+        FoersteUge = foersteUge;
     }
 }
