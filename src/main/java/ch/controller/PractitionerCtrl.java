@@ -17,9 +17,7 @@ public class PractitionerCtrl extends HBox {
 
     // Reference to the main application. 
     private MainApp mainAppRef;
-
-    private Practitioner practitionerObjekt;
-    private String b;
+    private Practitioner practitionerObject;
 
     @FXML
     private Label practitionerNameLabel;
@@ -30,8 +28,7 @@ public class PractitionerCtrl extends HBox {
      */
     public PractitionerCtrl() {
 
-
-}
+    }
 
     /**
      * Initializes the ch.controller class. This method is automatically called
@@ -43,12 +40,11 @@ public class PractitionerCtrl extends HBox {
 
 
     public void setPractitioner(){
-
         dbControl dbControlOb = dbControl.getInstance();
 
-        practitionerObjekt = dbControlOb.buildPractitionerData(mainAppRef.getPractitionerID());
-        practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString() +" "+ practitionerObjekt.getName().get(0).getFamily());
+        practitionerObject = dbControlOb.buildPractitionerData(mainAppRef.getPractitionerID());
 
+        practitionerNameLabel.setText(practitionerObject.getName().get(0).getGivenAsSingleString() +" "+ practitionerObject.getName().get(0).getFamily());
     }
 
 

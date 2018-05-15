@@ -82,6 +82,31 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+            <Label fx:id="HvaesenLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="HosteLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="HosteSlimLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="TrykkenBrystLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="AandenoedLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
          </children>
       </GridPane>
       <GridPane gridLinesVisible="true" layoutY="224.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="122.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
@@ -127,6 +152,21 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+            </Label>
+            <Label fx:id="NathosteLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="OpvaagningLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="TraethedLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
             </Label>
          </children>
       </GridPane>
@@ -179,6 +219,26 @@
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+            </Label>
+            <Label fx:id="AktivitetLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="AllergiLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="StoevLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
+            </Label>
+            <Label fx:id="UkendtLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <padding>
+                  <Insets left="7.0" />
+               </padding>
             </Label>
          </children>
       </GridPane>
