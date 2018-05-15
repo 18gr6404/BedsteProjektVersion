@@ -10,9 +10,9 @@ public class WeeklyParameters {
     private List<Integer> ugeListeNatSymptomer;
     private List<Integer> ugeListeAktivitet;
     private List<Integer> ugeListeAnfaldsMed;
-    private List<Observation> morgenPEF;
-    private List<Observation> aftenPEF;
-    private List<Observation> fev1;
+    private List<Double> morgenPEF;
+    private List<Double> aftenPEF;
+    private List<Double> fev1;
     private List<List<Double>> pctListeDagSymptomer;
     private List<List<Double>> pctListeNatSymptomer;
     private List<Double> pctPeriodeDagSymptom;
@@ -93,27 +93,27 @@ public class WeeklyParameters {
         FoersteUge = foersteUge;
     }
 
-    public List<Observation> getMorgenPEF() {
+    public List<Double> getMorgenPEF() {
         return morgenPEF;
     }
 
-    public void setMorgenPEF(List<Observation> morgenPEF) {
+    public void setMorgenPEF(List<Double> morgenPEF) {
         this.morgenPEF = morgenPEF;
     }
 
-    public List<Observation> getAftenPEF() {
+    public List<Double> getAftenPEF() {
         return aftenPEF;
     }
 
-    public void setAftenPEF(List<Observation> aftenPEF) {
+    public void setAftenPEF(List<Double> aftenPEF) {
         this.aftenPEF = aftenPEF;
     }
 
-    public List<Observation> getFev1() {
+    public List<Double> getFev1() {
         return fev1;
     }
 
-    public void setFev1(List<Observation> fev1) {
+    public void setFev1(List<Double> fev1) {
         this.fev1 = fev1;
     }
 }
