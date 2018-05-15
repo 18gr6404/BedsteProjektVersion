@@ -16,7 +16,7 @@ import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
 
 
-public class dbControl {
+public class    dbControl {
 
 
     //Opretter forbindelse til vores database
