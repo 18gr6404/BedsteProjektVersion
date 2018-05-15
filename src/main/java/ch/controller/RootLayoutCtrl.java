@@ -164,8 +164,6 @@ public class RootLayoutCtrl {
 
             centerView.getChildren().setAll(overview);
 
-            OverviewCtrl controller = loader.getController();
-            controller.setRootLayoutCtrlRef(this);
 
             //centerView.setFillWidth(true);
         } catch (IOException e) {
@@ -184,9 +182,11 @@ public class RootLayoutCtrl {
                 //Da man skifte frem og tilbage ml. weekly og overview sørger vi her for at mostFrequent-tabellen ikke tilføjes
                 // igen hver gang så der kommer flere end én.
 
-                //if(!sidePaneRight.getChildren().contains(mostFrequentTable)){
                 sidePaneRight.getChildren().add(mostFrequentTable);
-                //}
+
+                OverviewCtrl controller = loader.getController();
+                controller.setRootLayoutCtrlRef(this);
+                controller.showData();
 
 
             } catch (IOException e) {
@@ -206,7 +206,7 @@ public class RootLayoutCtrl {
 
             WeeklyOverviewCtrl controller = loader.getController();
             controller.setRootLayoutCtrlRef(this);
-            controller.showData();
+          //  controller.showData();
 
         } catch (IOException e) {
             e.printStackTrace();
