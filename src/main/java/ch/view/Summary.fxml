@@ -27,6 +27,7 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Button fx:id="okBtn" mnemonicParsing="false" onAction="#handleOk" prefHeight="35.0" prefWidth="160.0" text="Bekræft" />
+
                         <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="160.0" text="Afbryd" />
                         <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" text="Indsæt valgt data" />
                      </children>

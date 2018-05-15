@@ -56,20 +56,19 @@ public class SummaryCtrl {
 
             summary.setDate(dateOut);
 
-          //  Date in = new Date();
-          //  LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
-          //  Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        
 
             dbControl dbControlOb = dbControl.getInstance();
-            //LocalDateTime nydatotime = Instant.ofEpochMilli(summary.getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-            //System.out.println(nydatotime);
+            
             dbControlOb.insertSummary(summary, cpr, practitionerID);
-        }
+       
+            rootLayoutCtrlRef.getRootLayout().setBottom(null);
+
     }
 
     @FXML
     private void handleCancel(){
-   // rootLayoutCtrlRef.getRootLayo
+        rootLayoutCtrlRef.getRootLayout().setBottom(null);
     }
 
     @FXML

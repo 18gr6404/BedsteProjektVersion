@@ -60,6 +60,15 @@ public class FhirControl {
 
     public List<Observation> getFHIRObservations(String patientIdentifer, LocalDate startDate, LocalDate endDate){
         List<Observation> observationList = new ArrayList<Observation>();
+
+        double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        // % er resten efter division med tallet efter %
+        long extraDays = (long) (numOfDaysBetween % 7);
+        startDate = startDate.plusDays(extraDays-1);
+        endDate = endDate.plusDays(1);
+
+        System.out.println(ChronoUnit.DAYS.between(startDate, endDate));
+
         Date FHIRstartDate = java.sql.Date.valueOf(startDate);
         Date FHIRendDate = java.sql.Date.valueOf(endDate);
 

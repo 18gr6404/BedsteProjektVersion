@@ -1,5 +1,7 @@
 package ch.model;
 
+import org.hl7.fhir.dstu3.model.Observation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,9 @@ public class WeeklyParameters {
     private List<Integer> ugeListeNatSymptomer;
     private List<Integer> ugeListeAktivitet;
     private List<Integer> ugeListeAnfaldsMed;
+    private List<Observation> morgenPEF;
+    private List<Observation> aftenPEF;
+    private List<Observation> fev1;
     private List<List<Double>> pctListeDagSymptomer;
     private List<List<Double>> pctListeNatSymptomer;
     private List<Double> pctPeriodeDagSymptom;
@@ -86,5 +91,29 @@ public class WeeklyParameters {
 
     public void setFoersteUge(Integer foersteUge) {
         FoersteUge = foersteUge;
+    }
+
+    public List<Observation> getMorgenPEF() {
+        return morgenPEF;
+    }
+
+    public void setMorgenPEF(List<Observation> morgenPEF) {
+        this.morgenPEF = morgenPEF;
+    }
+
+    public List<Observation> getAftenPEF() {
+        return aftenPEF;
+    }
+
+    public void setAftenPEF(List<Observation> aftenPEF) {
+        this.aftenPEF = aftenPEF;
+    }
+
+    public List<Observation> getFev1() {
+        return fev1;
+    }
+
+    public void setFev1(List<Observation> fev1) {
+        this.fev1 = fev1;
     }
 }
