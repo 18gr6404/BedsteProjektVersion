@@ -206,6 +206,7 @@ public class RootLayoutCtrl {
 
             WeeklyOverviewCtrl controller = loader.getController();
             controller.setRootLayoutCtrlRef(this);
+            controller.showData();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -259,5 +260,7 @@ public class RootLayoutCtrl {
     public VBox getCenterView(){
         return this.centerView;
     }
+    public BorderPane getRootLayout(){return rootLayout;}
+    public MainApp getMainAppRef(){return this.mainAppRef;}
 
 }

@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="200.0" prefHeight="200.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.controller.SummaryCtrl">
    <children>
       <SplitPane dividerPositions="0.830550918196995" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -27,7 +26,7 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" text="Bekræft" />
+                        <Button mnemonicParsing="false" onAction="#handleOk" prefHeight="35.0" prefWidth="160.0" text="Bekræft" />
                         <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="160.0" text="Afbryd" />
                         <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="160.0" text="Indsæt valgt data" />
                      </children>

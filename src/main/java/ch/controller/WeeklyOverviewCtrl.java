@@ -1,5 +1,6 @@
 package ch.controller;
 
+import ch.MainApp;
 import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.WeeklyParameters;
@@ -72,10 +73,12 @@ public class WeeklyOverviewCtrl implements Initializable {
     @FXML
     private NumberAxis Antal;
 
+    private Integer patientCPR;
+    private LocalDate startDate; //Start dato for FHIR-søgningen ´. Dette er den ældste dato
+    private LocalDate endDate; //Slutdato for FHIR-søgningen ´. Dette er den nyeste dato
 
-
+    private MainApp mainAppRef;
     dbControl dbControlOB = dbControl.getInstance();
-
     // REference til Rootlayout
     private RootLayoutCtrl rootLayoutCtrlRef;
 
@@ -88,12 +91,94 @@ public class WeeklyOverviewCtrl implements Initializable {
      */
 
     public void initialize(URL url, ResourceBundle resourceBundle){
-        LocalDate startDate = dateUtil.parse("10.03.2018");
-        LocalDate endDate = dateUtil.parse("10.05.2018");
+        //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
+        startDate = LocalDate.now().minusDays(14);
+        endDate = LocalDate.now();
+
+
+        //mainAppRef = rootLayoutCtrlRef.getMainAppRef();
+        //patientCPR = (Integer) mainAppRef.getPatientCPR();
+
+        //showData(patientCPR, defaultStart, defaultEnd);
+    }
+
+
+    @FXML
+    private void handleConsultationMeasurement(){
+
+        ConsultationMeasurementCtrl.showConsultationMeasurementView();
+    }
+
+    @FXML
+    private void handleOverview(){
+        rootLayoutCtrlRef.showOverview();
+    }
+
+    @FXML
+    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
+
+    @FXML
+    private void handleTwoWeeks(){
+        endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(14);
+
+        showData();
+    }
+
+    @FXML
+    private void handleFourWeeks(){
+        endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(28);
+
+        showData();
+    }
+
+    @FXML
+    private void handleCustomDate(){
+        /* I start pickereren vælger lægen hvilken dato han vil se fra, dette vil typisk være den nyeste dato derfor sættes denne som slutningen
+        på FHIR-søgningen. Ligeledes omvendt.
+        */
+        LocalDate tempEndDate = startPicker.getValue();
+        LocalDate tempStartDate = endPicker.getValue();
+        //Sørger for at den nyeste dato sættes som endDate:
+        if (endDate.isAfter(startDate)){
+            endDate = tempEndDate;
+            startDate = tempStartDate;
+        }
+        else{
+            endDate = tempStartDate;
+            startDate = tempEndDate;
+        }
+
+        System.out.print(endDate);
+        showData();
+    }
+
+    @FXML
+    private void handleSinceLastConsultation(){
+        endDate = LocalDate.now();
+
+        //LocalDate endDate = mainAppRef.getLastConsultationDate();
+    }
+
+
+    public void showData(){
+        if(mainAppRef == null) {
+            mainAppRef = rootLayoutCtrlRef.getMainAppRef();
+        }
+        patientCPR = (Integer) mainAppRef.getPatientCPR();
+        if (patientCPR == 1207731450){
+            patientCPR = 1207731470;
+        }
+        else if (patientCPR == 1303803813){
+            patientCPR = 1303803823;
+        }
+
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
-        EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(1207731470, startDate, endDate);
+        EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(patientCPR, startDate, endDate);
         WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
-        
+        System.out.println(WeeklyOverviewParam.getUgeListeDagSymptomer().size());
+
 
         for (int i = 0; i<WeeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
             int weeknumber = (WeeklyOverviewParam.getFoersteUge())+i;
@@ -122,51 +207,8 @@ public class WeeklyOverviewCtrl implements Initializable {
             AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
 
         }
-        System.out.println(WeeklyOverviewParam.getUgeListeAktivitet().get(1));
-        System.out.println(WeeklyOverviewParam.getUgeListeDagSymptomer().get(1));
+
     }
-
-
-    @FXML
-    private void handleConsultationMeasurement(){
-
-        ConsultationMeasurementCtrl.showConsultationMeasurementView();
-    }
-
-    @FXML
-    private void handleOverview(){
-        rootLayoutCtrlRef.showOverview();
-    }
-
-    @FXML
-    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
-
-    @FXML
-    private void handleTwoWeeks(){
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().minusDays(14);
-    }
-
-    @FXML
-    private void handleFourWeeks(){
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().minusDays(28);
-    }
-
-    @FXML
-    private void handleCustomDate(){
-        LocalDate startDate = startPicker.getValue();
-        LocalDate endDate = endPicker.getValue();
-    }
-
-    @FXML
-    private void handleSinceLastConsultation(){
-        LocalDate startDate = LocalDate.now();
-
-        //LocalDate endDate = mainAppRef.getLastConsultationDate();
-    }
-
-
 
 
 
