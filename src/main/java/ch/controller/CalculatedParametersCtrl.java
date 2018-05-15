@@ -361,8 +361,7 @@ public class CalculatedParametersCtrl {
         for (int j = 0; j <liste.size(); j++) {
             for (int i = 1; i < numberOfWeeks + 1; i++) {
                 if (liste.get(j).getIssued().toInstant().atZone(
-                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i*7)) && !liste.get(j).getIssued().toInstant().atZone(
-                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate)){
+                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i*7))){
                     ugeListe.set(i-1, ugeListe.get(i-1) + 1);
                     break;
                 }
@@ -389,18 +388,16 @@ public class CalculatedParametersCtrl {
         for (int i = 0; i <sumPrUgeListe.size(); i++){
             pctListe.add(new ArrayList<>());
         }
-        for (int j = 0; j <sumPrUgeListe.get(0).size(); j++){
+        for (int j = 0; j <sumPrUgeListe.size(); j++){
             for (int i = 0; i <sumPrUgeListe.size(); i++){
                 sum += sumPrUgeListe.get(i).get(j);
             }
-
-                for (int k = 0; k < sumPrUgeListe.size(); k++) {
-                    if (sum != 0 && j<sumPrUgeListe.get(0).size())
-                        pctListe.get(k).add(sumPrUgeListe.get(k).get(j) / sum);
-                    else if(j<sumPrUgeListe.get(0).size())
-                        pctListe.get(k).add(zero);
-                }
-
+            for (int k = 0; k <sumPrUgeListe.size();k++){
+                if (sum != 0)
+                pctListe.get(k).add(sumPrUgeListe.get(k).get(j)/sum);
+                else
+                    pctListe.get(k).add(zero);
+            }
             sum = 0;
         }
         return pctListe;
