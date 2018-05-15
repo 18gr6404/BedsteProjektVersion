@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -91,15 +92,11 @@ public class WeeklyOverviewCtrl implements Initializable {
      */
 
     public void initialize(URL url, ResourceBundle resourceBundle){
+
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
         startDate = LocalDate.now().minusDays(14);
         endDate = LocalDate.now();
 
-
-        //mainAppRef = rootLayoutCtrlRef.getMainAppRef();
-        //patientCPR = (Integer) mainAppRef.getPatientCPR();
-
-        //showData(patientCPR, defaultStart, defaultEnd);
     }
 
 

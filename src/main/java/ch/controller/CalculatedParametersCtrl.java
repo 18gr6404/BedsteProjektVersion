@@ -12,6 +12,7 @@ import org.hl7.fhir.exceptions.FHIRException;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
@@ -53,6 +54,7 @@ public class CalculatedParametersCtrl {
 
         // Sætter de to instans variable til null, da vi aldrig skal bibeholde noget data hvis denne metode kaldes igen.
 
+        // INDDEL listerne i intervaller af 7 dage IKKE kalender uger.
         WeeklyParameters WeekParam = new WeeklyParameters();
         EncapsulatedParameters encapsulatedParameters = new EncapsulatedParameters();
         //OVParam = null;
@@ -161,11 +163,11 @@ public class CalculatedParametersCtrl {
                 dagSAande.add(dagSymptomListe.get(j));
             }
         }
-        /*System.out.println("Hvaesen Size = " + dagSHvaesen.size());
+        System.out.println("Hvaesen Size = " + dagSHvaesen.size());
         System.out.println("Hoste Size = " + dagSHoste.size());
         System.out.println("Aandenød Size = " + dagSAande.size());
         System.out.println("Slim Size = " + dagSSlim.size());
-        System.out.println("Tryk Size = " + dagSTryk.size());*/
+        System.out.println("Tryk Size = " + dagSTryk.size());
 
         /**
          * Afgør hvilket symptom er forekommet mest.
@@ -219,11 +221,11 @@ public class CalculatedParametersCtrl {
          * Det samme er gældende for de efterfølgende lister
          */
         List<List<Integer>> ugeListeDagSymptomer = new ArrayList<>();
-        ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSAande));
-        ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSHoste));
-        ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSHvaesen));
-        ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSSlim));
-        ugeListeDagSymptomer.add(symptomListe(calendarWeeks, weekNumber, dagSTryk));
+        ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSAande));
+        ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSHoste));
+        ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSHvaesen));
+        ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSSlim));
+        ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSTryk));
 
        /* for (int i = 0; i<ugeListeDagSymptomer.size(); i++){
             System.out.println(ugeListeDagSymptomer.get(0).get(i));
@@ -242,9 +244,9 @@ public class CalculatedParametersCtrl {
         //System.out.println(ugeListeTotalDagSymptom);
         // Nat Symptomer
         List<List<Integer>> ugeListeNatSymptomer = new ArrayList<>();
-        ugeListeNatSymptomer.add(symptomListe(calendarWeeks, weekNumber, natSHoste));
-        ugeListeNatSymptomer.add(symptomListe(calendarWeeks, weekNumber, natSTraethed));
-        ugeListeNatSymptomer.add(symptomListe(calendarWeeks, weekNumber, natSOpvaagning));
+        ugeListeNatSymptomer.add(symptomListe(startDate, endDate, natSHoste));
+        ugeListeNatSymptomer.add(symptomListe(startDate, endDate, natSTraethed));
+        ugeListeNatSymptomer.add(symptomListe(startDate, endDate, natSOpvaagning));
 
 
         /**
@@ -261,10 +263,10 @@ public class CalculatedParametersCtrl {
 
 
         // Aktivitet, kun én liste
-        List<Integer> ugeListeAktivitet = symptomListe(calendarWeeks, weekNumber, aktivitetsListe);
+        List<Integer> ugeListeAktivitet = symptomListe(startDate, endDate, aktivitetsListe);
 
         //Anfaldsmedicin, kun én liste
-        List<Integer> ugeListeAnfaldsMed = symptomListe(calendarWeeks, weekNumber, anfaldsMedListe);
+        List<Integer> ugeListeAnfaldsMed = symptomListe(startDate, endDate, anfaldsMedListe);
 
         /**
          * pctLister for alle uger
@@ -305,16 +307,19 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
         WeekParam.setFoersteUge(weekNumber);
-
+        WeekParam.setMorgenPEF(pefMorgenListe);
+        WeekParam.setMorgenPEF(pefAftenListe);
+        WeekParam.setMorgenPEF(fev1Liste);
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);
 
         return encapsulatedParameters;
     }
 
-    private List<Integer> symptomListe(Integer antalKalenderUger, Integer foersteUge, List<Observation> liste){
+    /*private List<Integer> symptomListe(Integer antalKalenderUger, Integer foersteUge, List<Observation> liste){
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-        //AtomicInteger zero = new AtomicInteger(0);
+
+        long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         List<Integer> ugeListe = new ArrayList<>();
         int value = 0;
         for(int k = 0; k<antalKalenderUger+1; k++){
@@ -331,6 +336,48 @@ public class CalculatedParametersCtrl {
                     }
                 }
             }
+            return ugeListe;
+    }*/
+    private List<Integer> symptomListe(LocalDate startDate, LocalDate endDate, List<Observation> liste){
+        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        // % er resten efter division med tallet efter %
+        long extraDays = (long) (numOfDaysBetween % 7);
+        double numberOfWeeks = Math.floor(numOfDaysBetween/7);
+        startDate = startDate.plusDays(extraDays);
+        endDate = endDate.plusDays(1);
+
+
+        //System.out.println(ChronoUnit.DAYS.between(startDate, endDate) + 1);
+        //long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        //System.out.println(numOfDaysBetween);
+        List<Integer> ugeListe = new ArrayList<>();
+        int value = 0;
+        for(int k = 0; k< numberOfWeeks; k++){
+            ugeListe.add(0);
+        }
+        //System.out.println(ugeListe.size());
+
+        for (int j = 0; j <liste.size(); j++) {
+            for (int i = 1; i < numberOfWeeks + 1; i++) {
+                if (liste.get(j).getIssued().toInstant().atZone(
+                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i*7))){
+                    ugeListe.set(i-1, ugeListe.get(i-1) + 1);
+                    break;
+                }
+
+            }
+        }
+        //for (int i = 0; i < antalKalenderUger; i++){
+            /*for (int j = 0; j <liste.size(); j++){
+                Integer weekNr = liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().get(woy);
+                for (int i = 0; i <Math.ceil(numOfDaysBetween/7); i++) {
+                    if (weekNr.equals(foersteUge + i) && weekNr < foersteUge + antalKalenderUger + 1) {
+                        ugeListe.set(i, ugeListe.get(i) + 1);// += ugeListe
+                        break;
+                    }
+                }
+            }*/
             return ugeListe;
     }
 
