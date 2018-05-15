@@ -12,8 +12,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Quantity;
+import org.hl7.fhir.dstu3.model.StringType;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class ConsultationMeasurementCtrl {
 
@@ -21,7 +27,7 @@ public class ConsultationMeasurementCtrl {
     @FXML
     private TextField ConsultationMeasurementTextField;
 
-    // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
+    // Reference to the main application.
     private MainApp mainAppRef;
     private Stage consultationMeasurementStage;
     private boolean okClicked = false;
@@ -42,8 +48,6 @@ public class ConsultationMeasurementCtrl {
 
     }
 
-
-
     /**
      * Håndterer OK knappen
      */
@@ -51,16 +55,22 @@ public class ConsultationMeasurementCtrl {
     private void handleOK() {
         if (isInputValid()) {
 
-            ///////////////// HER SKAL DER BRUGES CPR OG PRACTITIONER ID FRA MAIN /////////////////////////
-            // Laver mine egne kopier
-            int CPRkopi = 1207731450;   //mainAppRef.getCPR();
-            int PracIDkopi = 56789;     //mainAppRef.getPractiotionerID();
-            String fev1String = ConsultationMeasurementTextField.getText();
-            Integer fev1Int = Integer.parseInt(fev1String);
-            dbControl dbControlOb = dbControl.getInstance();
-            //dbControlOb.insertfev1(fev1Int, CPRkopi, PracIDkopi);
+            Integer cpr = 1207731450; //mainAppRef.getPatientCPR();
+            Integer practitionerID = 56789;//mainAppRef.getPractitionerID();
+            Observation fev1 = new Observation();
 
-//          Hvad skal vi gøre med FEV1 målingen??
+            fev1.setValue(new StringType(ConsultationMeasurementTextField.getText()));
+          //  System.out.println(fev1.getValue());
+
+            Date dateIn = new Date();
+            LocalDateTime ldt = LocalDateTime.ofInstant(dateIn.toInstant(), ZoneId.systemDefault());
+            Date dateOut = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+
+            fev1.setIssued(dateOut);
+
+            dbControl dbControlOb = dbControl.getInstance();
+            dbControlOb.insertfev1(fev1, cpr, practitionerID);
+
 
             okClicked = true;
             consultationMeasurementStage.close();
@@ -85,13 +95,13 @@ public class ConsultationMeasurementCtrl {
 
         // || !StringUtils.isStrictlyNumeric(ConsultationMeasurementTextField.getText())
         if (ConsultationMeasurementTextField.getText() == null ||ConsultationMeasurementTextField.getText().length() == 0) {
-            errorMessage += "Invalid input!!\n"; }
+            errorMessage += "Ugyldig indtastning\n"; }
         else {
             // try to parse the postal code into an int.
             try {
                 Integer.parseInt(ConsultationMeasurementTextField.getText());
             } catch (NumberFormatException e) {
-                errorMessage += "Invalid input (must be an integer)!\n";
+                errorMessage += "Ugyldig indtastning.\n Indtastningen skal bestå af et tal.";
             }
         }
         if (errorMessage.length() == 0) {
@@ -99,8 +109,8 @@ public class ConsultationMeasurementCtrl {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(consultationMeasurementStage);
-            alert.setTitle("Invalid Fields");
-            alert.setHeaderText("Please correct invalid fields");
+            alert.setTitle("Ugyldig indtastning");
+            alert.setHeaderText("Indtast konsultationsmåling for at bekræfte");
             alert.setContentText(errorMessage);
             alert.showAndWait();
 
