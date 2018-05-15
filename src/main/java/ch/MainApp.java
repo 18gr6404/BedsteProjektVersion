@@ -59,8 +59,13 @@ public class MainApp extends Application {
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         // HER HENTER JEG DE UDREGNEDE PARAMETRE
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(1207731470, startDate, endDate); // Marianne CPR på FHIR Server = 1207731470
+
         OverviewParameters OverviewParam = beggeParam.getOverviewParameters();
+
         WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
+        WeeklyOverviewParam.getUgeListeDagSymptomer().get(0);
+
+
         System.out.println(OverviewParam.getAvgFEV1());
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
