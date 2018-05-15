@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import org.hl7.fhir.dstu3.model.Patient;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 
 public class PatientCtrl {
@@ -48,12 +50,26 @@ public class PatientCtrl {
         dbControl dbControlOb = dbControl.getInstance();
 
         patientObject = dbControlOb.buildPatientData(mainAppRef.getPatientCPR());
-
+     //   LocalDate birthDate = LocalDate.parse("04.04.2018");
+     //   LocalDate today = LocalDate.now();
+     //   long age1 = ChronoUnit.YEARS.between(today, birthDate);
         nameLabel.setText(patientObject.getName().get(0).getGivenAsSingleString() +" "+ patientObject.getName().get(0).getFamily());
         cprLabel.setText(patientObject.getIdentifier().get(0).getValue());
-       // ageLabel.setText(patientObject; //Vender tilbage hertil
-        genderLabel.setText(String.valueOf(patientObject.getGender()));
+        ageLabel.setText((patientObject.getIdentifier().get(0).getValue()).substring(0,6));
 
+        String birthdate = (patientObject.getIdentifier().get(0).getValue()).substring(0,6);
+       // LocalDate birthdaten = LocalDate.parse(birthdate);
+       // LocalDate today = LocalDate.now();
+       // long age1 = ChronoUnit.YEARS.between(today, birthdaten);
+      //  String cpr = patientObject.getIdentifier().get(0).getValue();
+
+        if (String.valueOf(patientObject.getGender()).equals("FEMALE")) {
+            // ageLabel.setText(patientObject; //Vender tilbage hertil
+            genderLabel.setText("K");
+        }
+        else if (String.valueOf(patientObject.getGender()).equals("MALE")) {
+            genderLabel.setText("M");
+        }
     }
 
 

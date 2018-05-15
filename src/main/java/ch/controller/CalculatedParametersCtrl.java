@@ -6,7 +6,9 @@ import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
+import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.exceptions.FHIRException;
 
 import java.math.BigDecimal;
@@ -74,7 +76,8 @@ public class CalculatedParametersCtrl {
          */
         dbControl dbClass = dbControl.getInstance();
         fev1Liste = dbClass.buildFEV(patientIdentifier-20);
-
+        List<Observation> pctFev = new ArrayList<>();
+        pctFev = pctAfPEV1(fev1Liste);
 
         Double avgFev = gnmsnit(fev1Liste);
 
@@ -292,7 +295,7 @@ public class CalculatedParametersCtrl {
 
 
         /**
-         * Laver uge Listen med én værdi for
+         * Laver uge Listen med én værdi for hvert symptom pr. uge
          */
         List<Integer> ugeListeTotalNatSymptom = new ArrayList<>();
         for (int j = 0; j <ugeListeNatSymptomer.get(0).size(); j++) {
@@ -303,6 +306,20 @@ public class CalculatedParametersCtrl {
             sum = 0;
         }
 
+
+
+        List<List<Integer>> ugeListeTriggers = new ArrayList<>();
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAktiv));
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAllergi));
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerStoev));
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerUkendt));
+
+        List<Double> pctPeriodeTrigger = new ArrayList<>();
+        double triggerSize = triggerListe.size();
+        pctPeriodeTrigger.add(triggerAktiv.size()/triggerSize);
+        pctPeriodeTrigger.add(triggerAllergi.size()/triggerSize);
+        pctPeriodeTrigger.add(triggerStoev.size()/triggerSize);
+        pctPeriodeTrigger.add(triggerUkendt.size()/triggerSize);
 
         // Aktivitet, kun én liste
         List<Integer> ugeListeAktivitet = symptomListe(startDate, endDate, aktivitetsListe);
@@ -315,6 +332,8 @@ public class CalculatedParametersCtrl {
          */
         List<List<Double>> pctListeDagSymptomer = udregnPCT(ugeListeDagSymptomer);
         List<List<Double>> pctListeNatSymptomer = udregnPCT(ugeListeNatSymptomer);
+        List<Observation> pctMorgenPEF = pctAfPEV1(pefMorgenListe);
+        List<Observation> pctAftenPEF = pctAfPEV1(pefAftenListe);
 
         /**
          * Laver pctPerioden for dagSymptom
@@ -337,6 +356,7 @@ public class CalculatedParametersCtrl {
         pctPeriodeNatSymptom.add(natSHoste.size()/natSymptomSize);
 
 
+
         /**
          * Sætter Weekly Parametre
          */
@@ -348,10 +368,11 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctListeNatSymptomer(pctListeNatSymptomer);
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
+        WeekParam.setPctPeriodeTriggers(pctPeriodeTrigger);
         WeekParam.setFoersteUge(weekNumber);
-        WeekParam.setMorgenPEF(pefMorgenListe);
-        WeekParam.setAftenPEF(pefAftenListe);
-        WeekParam.setFev1(fev1Liste);
+        WeekParam.setMorgenPEF(pctMorgenPEF);
+        WeekParam.setAftenPEF(pctAftenPEF);
+        WeekParam.setFev1(pctFev);
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);
 
@@ -381,6 +402,8 @@ public class CalculatedParametersCtrl {
             }
             return ugeListe;
     }*/
+
+
     private List<Integer> symptomListe(LocalDate startDate, LocalDate endDate, List<Observation> liste){
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
@@ -389,7 +412,6 @@ public class CalculatedParametersCtrl {
         double numberOfWeeks = Math.floor(numOfDaysBetween/7);
         startDate = startDate.plusDays(extraDays);
         endDate = endDate.plusDays(1);
-
 
         //System.out.println(ChronoUnit.DAYS.between(startDate, endDate) + 1);
         //long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
@@ -461,5 +483,34 @@ public class CalculatedParametersCtrl {
 
     }
 
+    public List<Observation> pctAfPEV1(List<Observation> liste){
+        Double max = new Double(0);
+        Double test = new Double(0);
+        for (int i = 0; i < liste.size(); i++) {
+            try {
+                test = liste.get(i).getValueQuantity().getValue().doubleValue();
+            } catch (FHIRException e) {
+                System.out.println(e.getMessage());
+            }
+            if (max < test) {
+                    max = test;
+            }
+        }
+        for (int j = 0; j<liste.size();j++){
+            try{
+                double temp = ((liste.get(j).getValueQuantity().getValue().doubleValue())/max)*100;
+                liste.get(j).setValue(new Quantity(temp));
+                //tempObs.get(1).setValue(randomPEF.get(1));
+            }catch (FHIRException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        try{
+            System.out.println(liste.get(0).getValueQuantity().getValue());
+        }catch (FHIRException e){
+            e.getMessage();
+        }
+        return liste;
+    }
 
 }
