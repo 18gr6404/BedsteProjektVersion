@@ -115,9 +115,12 @@ public class OverviewParameters {
         this.mostFrequentSymptom.set(mostFrequentSymptom);
     }
 
-    public DoubleProperty getAvgFEV1() {
+    public DoubleProperty getAvgFEV1Property() {
         return avgFEV1;
     }
+
+    public Double getAvgFEV1(){return
+            avgEveningPEF.get();}
 
     public void setAvgFEV1(Double avgFEV1) {
         this.avgFEV1.set(avgFEV1);
