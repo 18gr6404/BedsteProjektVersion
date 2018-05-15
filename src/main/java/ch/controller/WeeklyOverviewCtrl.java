@@ -15,9 +15,15 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.exceptions.FHIRException;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class WeeklyOverviewCtrl implements Initializable {
@@ -73,6 +79,8 @@ public class WeeklyOverviewCtrl implements Initializable {
     private CategoryAxis UgeNr;
     @FXML
     private NumberAxis Antal;
+    @FXML
+    private LineChart LineChart;
 
     private Integer patientCPR;
     private LocalDate startDate; //Start dato for FHIR-søgningen ´. Dette er den ældste dato
@@ -94,8 +102,10 @@ public class WeeklyOverviewCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle){
 
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
-        startDate = LocalDate.now().minusDays(14);
-        endDate = LocalDate.now();
+        //startDate = LocalDate.now().minusDays(28);
+        //endDate = LocalDate.now();
+        startDate = LocalDate.parse("2018-03-10");
+        endDate = LocalDate.parse("2018-05-10");
 
     }
 
@@ -158,7 +168,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
-/*
+
     public void showData(){
         if(mainAppRef == null) {
             mainAppRef = rootLayoutCtrlRef.getMainAppRef();
@@ -170,42 +180,84 @@ public class WeeklyOverviewCtrl implements Initializable {
         else if (patientCPR == 1303803813){
             patientCPR = 1303803823;
         }
-
+        //Dette hører til BarChart
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(patientCPR, startDate, endDate);
         WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
-        System.out.println(WeeklyOverviewParam.getUgeListeDagSymptomer().size());
 
+        //Dette hører til LineChart:FEV1
+        List<Observation> FEVListe = WeeklyOverviewParam.getFev1();
 
+        //Dette hører til LineChart:PEF
+        List<Observation> PEFMorgen = WeeklyOverviewParam.getMorgenPEF();
+        List<Observation> PEFAften = WeeklyOverviewParam.getAftenPEF();
+
+        //BarChart
+        XYChart.Series dagSymptomer = new XYChart.Series<>();
+        dagSymptomer.setName("Dagsymptomer");
+
+        XYChart.Series natSymptomer = new XYChart.Series<>();
+        natSymptomer.setName("Natsymptomer");
+
+        XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
+        aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
+
+        XYChart.Series anfald = new XYChart.Series<>();
+        anfald.setName("Anfaldsmedicin");
+
+        //LineChart
+        XYChart.Series FEV1 = new XYChart.Series<>();
+        FEV1.setName("FEV1");
+
+        XYChart.Series pefmorgen = new XYChart.Series<>();
+        pefmorgen.setName("Morgen PEF");
+
+        XYChart.Series pefaften = new XYChart.Series<>();
+        pefaften.setName("Aften PEF");
+
+        //Add data to LineChart:FEV1
+        for (int i = 0; i<FEVListe.size(); i++){
+            try{
+                FEV1.getData().add(new XYChart.Data("" + FEVListe.get(i).getIssued(), FEVListe.get(i).getValueQuantity().getValue()));
+            }catch(FHIRException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        //Add data to LineChart:PEF
+       for (int i = 0; i<PEFMorgen.size(); i++){
+           try{
+               pefmorgen.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFMorgen.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), PEFMorgen.get(i).getValueQuantity().getValue()));
+               pefaften.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFAften.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), PEFAften.get(i).getValueQuantity().getValue()));
+           }catch(FHIRException e){
+               System.out.println(e.getMessage());
+           }
+
+       }
+        //Add data to BarChart
         for (int i = 0; i<WeeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
             int weeknumber = (WeeklyOverviewParam.getFoersteUge())+i;
 
             //Dagsymptomer
-            XYChart.Series dagSymptomer = new XYChart.Series<>();
-            dagSymptomer.setName("Dagsymptomer");
             dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
 
             //Natsymptomer
-            XYChart.Series natSymptomer = new XYChart.Series<>();
-            natSymptomer.setName("Natsymptomer");
             natSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeNatSymptomer().get(i)));
 
             //Aktivitetsbegrænsning
-            XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
-            aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
             aktivitetsBegraensning.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAktivitet().get(i)));
 
             //Anfaldsmedicin
-            XYChart.Series anfald = new XYChart.Series<>();
-            anfald.setName("Anfaldsmedicin");
             anfald.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAnfaldsMed().get(i)));
 
-
-            AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
-
         }
+        //Add data and legend to BarChart
+        AstmaAppBarChart.setLegendSide(Side.RIGHT);
+        AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
 
-    }*/
+        //Add data and legend to LineChart
+        LineChart.setLegendSide(Side.RIGHT);
+        LineChart.getData().addAll(FEV1, pefaften, pefmorgen);
+    }
 
 
 
