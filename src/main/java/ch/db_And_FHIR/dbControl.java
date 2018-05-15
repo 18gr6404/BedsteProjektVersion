@@ -1,9 +1,6 @@
 package ch.db_And_FHIR;
 
 
-import ch.MainApp;
-import ch.controller.CreateAsthmaAppUserCtrl;
-import ch.utility.dateUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
 
@@ -113,12 +111,9 @@ public class dbControl {
 
     }
 
-
     public Practitioner buildPractitionerData(Integer practitionerID) {
-        
-
-
         Statement stmnt = null;
+
         Practitioner p = null;
         String query = "SELECT firstName, lastName, practitionerID FROM Practitioner WHERE practitionerID=" + practitionerID;
      //   String practitionerID = practitionerIDET.toString();
@@ -140,10 +135,14 @@ public class dbControl {
         return p;
     }
 
-    public void buildAllergyIntoleranceData(int patientCPR) {
+    public List<List<AllergyIntolerance>> buildAllergyIntoleranceData(int patientCPR) {
 
         Statement stmntA = null;
         Statement stmntI = null;
+        List<AllergyIntolerance> allergyList = new ArrayList<>();
+        List<AllergyIntolerance> intoleranceList = new ArrayList<>();
+        List<List<AllergyIntolerance>> allergyintoleranceList = new ArrayList<>();
+
         String queryA = "SELECT name FROM Allergy WHERE cpr=" + patientCPR;
         String queryI = "SELECT name FROM Intolerance WHERE cpr=" + patientCPR;
         try {
@@ -158,6 +157,7 @@ public class dbControl {
                 allergy.getCode().addCoding()
                         .setCode(rsA.getString("name")) // Normalt er det en talkode
                         .setDisplay(rsA.getString("name")); // Her vises talkoden som den tekst man ønsker at vise i stedet
+                allergyList.add(allergy);
 
 //                String name = rs.getString("name");
 //                int cpr = rs.getInt("cpr");
@@ -172,6 +172,7 @@ public class dbControl {
                 intolerance.getCode().addCoding()
                         .setCode(rsI.getString("name"))
                         .setDisplay(rsI.getString("name"));
+                intoleranceList.add(intolerance);
 
                // System.out.println(intolerance.getCode().getCoding().get(0).getCode());
             }
@@ -179,13 +180,19 @@ public class dbControl {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        if (!allergyList.isEmpty())
+            allergyintoleranceList.add(allergyList);
+        if (!intoleranceList.isEmpty())
+            allergyintoleranceList.add(intoleranceList);
+        return allergyintoleranceList;
     }
 
 
 
-    public void buildConditionData(int patientCPR) {
+    public List<Condition> buildConditionData(int patientCPR) {
 
         Statement stmnt = null;
+        List<Condition> conditionList = new ArrayList<>();
         String query = "SELECT name FROM Diagnosis WHERE cpr=" + patientCPR;
 
         try {
@@ -196,6 +203,7 @@ public class dbControl {
                 condition.getCode().addCoding()
                         .setCode(rs.getString("name"))
                         .setDisplay(rs.getString("name"));
+                conditionList.add(condition);
 
               //  System.out.println(condition.getCode().getCoding().get(0).getCode());
 
@@ -204,12 +212,13 @@ public class dbControl {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return conditionList;
     }
 
-    public void buildPatientData(int patientCPR) {
-
+    public Patient buildPatientData(int patientCPR) {
 
         Statement stmnt = null;
+        Patient p = null;
         String query = "SELECT cpr, firstName, lastName, age, gender FROM Patient WHERE cpr=" + patientCPR;
 
         try {
@@ -222,7 +231,7 @@ public class dbControl {
 //                LocalDate today = LocalDate.now();
 //                long age1 = ChronoUnit.YEARS.between(today, birthDate);
 
-                //Ny extension
+                //Ny extension til alder
                 Extension ext3 = new Extension();
                 ext3.setUrl("age");
                 ext3.setValue(new Quantity(rs.getInt("age")));
@@ -230,30 +239,16 @@ public class dbControl {
 
                 patient.addIdentifier().setValue(String.valueOf(rs.getInt("cpr")));
                 patient.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
-               if (rs.getString("gender") == "K") {
+               if (rs.getString("gender").equals("K")) {
                    patient.setGender(Enumerations.AdministrativeGender.FEMALE);
                }
                else {
                    patient.setGender(Enumerations.AdministrativeGender.MALE);
                }
-               patient.addExtension(ext3);
+               p = patient;
+             //  System.out.println(patient.getExtension().get(0).getExtensionFirstRep().
 
-               System.out.println((patient.getExtension().get(0).getValue()));
-
-
-
-
-
-//                Condition condition = new Condition();
-//                condition.getCode().addCoding()
-//                        .setCode(rs.getString("name"))
-//                        .setDisplay(rs.getString("name"));
-
-//                practitioner.addIdentifier().setValue(String.valueOf(rs.getInt("practitionerID")));
-//                practitioner.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
-                //System.out.println(practitioner.getName().get(0).getFamily() + practitioner.getName().get(0).getGivenAsSingleString() + practitioner.getIdentifier().get(0).getValue() );
-
-                System.out.println(patient.getGender());
+              //  System.out.println(patient.getGender());
                 //System.out.println(patient.getIdentifier().get(0).getValue() + "," + patient.getName().get(0).getGivenAsSingleString() + " " + patient.getName().get(0).getFamily());
 
             }
@@ -261,11 +256,13 @@ public class dbControl {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return p;
     }
 
-    public void buildMedicineData(int patientCPR) {
+    public List<MedicationRequest> buildMedicineData(int patientCPR) {
 
         Statement stmnt = null;
+        List<MedicationRequest> medicationRequestList = new ArrayList<>();
         String query = "SELECT type, dosage, dateTime FROM Medication WHERE cpr=" + patientCPR;
 
         try {
@@ -276,6 +273,7 @@ public class dbControl {
                 medicationRequest.setMedication(new StringType(rs.getString("type")));
                 medicationRequest.addDosageInstruction().setDose(new StringType(rs.getString("dosage")));
                 medicationRequest.setAuthoredOn(rs.getDate("dateTime"));
+                medicationRequestList.add(medicationRequest);
 
                //System.out.println(medicationRequest.getMedication() +","+ medicationRequest.getDosageInstruction().get(0).getDose()+","+ medicationRequest.getAuthoredOn());
             }
@@ -283,13 +281,14 @@ public class dbControl {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return medicationRequestList;
     }
 
     public List<Observation> buildFEV(int patientCPR) {
 
         Statement stmnt = null;
         String query = "SELECT value, dateTime FROM Fev1 WHERE cpr=" + patientCPR;
-List<Observation> fev1List = new ArrayList<>();
+        List<Observation> fev1List = new ArrayList<>();
         try {
             stmnt = con.createStatement();
             ResultSet rs = stmnt.executeQuery(query);

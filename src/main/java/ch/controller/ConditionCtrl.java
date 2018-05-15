@@ -1,20 +1,28 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.ObjectUtils;
+import org.hl7.fhir.dstu3.model.Condition;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ConditionCtrl {
     @FXML
-    private ListView komorbiditetList;
+    private ListView<String> conditionListView;
 
-    // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
+    // Reference to the main application.
     private MainApp mainAppRef;
+    private List<Condition> conditionList;
+    private ObservableList comorbidityNameList = FXCollections.observableArrayList();
 
     /**
      * The constructor.
@@ -31,26 +39,17 @@ public class ConditionCtrl {
 
     }
 
+    public void setCondition(){
 
-    public VBox showConditionView(VBox inputSidepane){
-        VBox thistempSidepaneRight = new VBox();
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(AllergyIntoleranceCtrl.class.getResource("/ch/view/ConditionView.fxml"));
-            VBox conditionView = (VBox) loader.load();
+        dbControl dbControlOb = dbControl.getInstance();
 
-            VBox tempSidepaneRight = inputSidepane;
-            tempSidepaneRight.getChildren().add(conditionView);
-            thistempSidepaneRight = tempSidepaneRight;
+        conditionList = dbControlOb.buildConditionData(mainAppRef.getPatientCPR());
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 0; i<conditionList.size(); i++){
+            comorbidityNameList.add(String.valueOf(conditionList.get(i).getCode().getCoding().get(0).getCode()));
         }
-        return thistempSidepaneRight;
+        conditionListView.setItems(comorbidityNameList);
     }
-
-
 
     /**
      * Is called by the main application to give a reference back to itself.
@@ -60,6 +59,5 @@ public class ConditionCtrl {
     public void setMainApp(MainApp inputMain) {
         this.mainAppRef = inputMain;
     }
-
 
 }
