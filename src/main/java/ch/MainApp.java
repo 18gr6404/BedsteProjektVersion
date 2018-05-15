@@ -25,8 +25,8 @@ public class MainApp extends Application {
     private Stage primaryStage;
   
 
-    //private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
-    private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
+    private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
+    //private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
     private Integer practitionerID = 56789; // Ole Bosen
 
 
@@ -43,8 +43,6 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Sundhedsappmodul");
 
 
-        LocalDate startDate = dateUtil.parse("10.03.2018");
-        LocalDate endDate = dateUtil.parse("10.05.2018");
         FhirControl FhirClass = FhirControl.getInstance();
         FhirClass.startCtx();
 
@@ -58,6 +56,7 @@ public class MainApp extends Application {
         rootLayoutCtrlRef.initRootLayout(this.primaryStage);
 
 
+        /*
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         // HER HENTER JEG DE UDREGNEDE PARAMETRE
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(1207731470, startDate, endDate); // Marianne CPR på FHIR Server = 1207731470
@@ -68,7 +67,8 @@ public class MainApp extends Application {
         WeeklyOverviewParam.getUgeListeDagSymptomer().get(0);
 
 
-        System.out.println(OverviewParam.getAvgFEV1());
+        System.out.println(OverviewParam.getAvgFEV1()); */
+
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
 
         if(isRegistered) {

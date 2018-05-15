@@ -34,11 +34,15 @@ public class SummaryCtrl {
     @FXML
     private void handleOk(){
 
+        //Her et SQL-kald der gemmer i dB
+
+
+        rootLayoutCtrlRef.getRootLayout().setBottom(null);
     }
 
     @FXML
     private void handleCancel(){
-
+        rootLayoutCtrlRef.getRootLayout().setBottom(null);
     }
 
     @FXML

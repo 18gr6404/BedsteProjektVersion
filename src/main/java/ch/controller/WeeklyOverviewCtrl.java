@@ -1,5 +1,6 @@
 package ch.controller;
 
+import ch.MainApp;
 import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.WeeklyParameters;
@@ -78,10 +79,12 @@ public class WeeklyOverviewCtrl implements Initializable {
     @FXML
     private LineChart PEFFEVChart;
 
+    private Integer patientCPR;
+    private LocalDate startDate; //Start dato for FHIR-søgningen ´. Dette er den ældste dato
+    private LocalDate endDate; //Slutdato for FHIR-søgningen ´. Dette er den nyeste dato
 
-
+    private MainApp mainAppRef;
     dbControl dbControlOB = dbControl.getInstance();
-
     // REference til Rootlayout
     private RootLayoutCtrl rootLayoutCtrlRef;
 
@@ -94,6 +97,7 @@ public class WeeklyOverviewCtrl implements Initializable {
      */
 
     public void initialize(URL url, ResourceBundle resourceBundle){
+
         LocalDate startDate = dateUtil.parse("10.03.2018");
         LocalDate endDate = dateUtil.parse("10.05.2018");
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
@@ -115,32 +119,11 @@ public class WeeklyOverviewCtrl implements Initializable {
         XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
         aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
 
-        XYChart.Series anfald = new XYChart.Series<>();
-        anfald.setName("Anfaldsmedicin");
 
-        for (int i = 0; i<4; i++) {
-            int weeknumber = (WeeklyOverviewParam.getFoersteUge())+i;
+        //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
+        startDate = LocalDate.now().minusDays(14);
+        endDate = LocalDate.now();
 
-            //Dagsymptomer
-            dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber,  WeeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
-
-            //Natsymptomer
-            natSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeNatSymptomer().get(i)));
-
-            //Aktivitetsbegrænsning
-            aktivitetsBegraensning.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAktivitet().get(i)));
-
-            //Anfaldsmedicin
-            anfald.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAnfaldsMed().get(i)));
-
-        }
-
-        AstmaAppBarChart.setLegendSide(Side.RIGHT);
-        AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
-
-
-        System.out.println(WeeklyOverviewParam.getUgeListeAktivitet().get(1));
-        System.out.println(WeeklyOverviewParam.getUgeListeDagSymptomer().get(1));
     }
 
 
@@ -160,30 +143,96 @@ public class WeeklyOverviewCtrl implements Initializable {
 
     @FXML
     private void handleTwoWeeks(){
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().minusDays(14);
+        endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(14);
+
+        //showData();
     }
 
     @FXML
     private void handleFourWeeks(){
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().minusDays(28);
+        endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(28);
+
+       // showData();
     }
 
     @FXML
     private void handleCustomDate(){
-        LocalDate startDate = startPicker.getValue();
-        LocalDate endDate = endPicker.getValue();
+        /* I start pickereren vælger lægen hvilken dato han vil se fra, dette vil typisk være den nyeste dato derfor sættes denne som slutningen
+        på FHIR-søgningen. Ligeledes omvendt.
+        */
+        LocalDate tempEndDate = startPicker.getValue();
+        LocalDate tempStartDate = endPicker.getValue();
+        //Sørger for at den nyeste dato sættes som endDate:
+        if (endDate.isAfter(startDate)){
+            endDate = tempEndDate;
+            startDate = tempStartDate;
+        }
+        else{
+            endDate = tempStartDate;
+            startDate = tempEndDate;
+        }
+
+        System.out.print(endDate);
+        //showData();
     }
 
     @FXML
     private void handleSinceLastConsultation(){
-        LocalDate startDate = LocalDate.now();
+        endDate = LocalDate.now();
 
         //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
+/*
+    public void showData(){
+        if(mainAppRef == null) {
+            mainAppRef = rootLayoutCtrlRef.getMainAppRef();
+        }
+        patientCPR = (Integer) mainAppRef.getPatientCPR();
+        if (patientCPR == 1207731450){
+            patientCPR = 1207731470;
+        }
+        else if (patientCPR == 1303803813){
+            patientCPR = 1303803823;
+        }
 
+        CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
+        EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(patientCPR, startDate, endDate);
+        WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
+        System.out.println(WeeklyOverviewParam.getUgeListeDagSymptomer().size());
+
+
+        for (int i = 0; i<WeeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
+            int weeknumber = (WeeklyOverviewParam.getFoersteUge())+i;
+
+            //Dagsymptomer
+            XYChart.Series dagSymptomer = new XYChart.Series<>();
+            dagSymptomer.setName("Dagsymptomer");
+            dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
+
+            //Natsymptomer
+            XYChart.Series natSymptomer = new XYChart.Series<>();
+            natSymptomer.setName("Natsymptomer");
+            natSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeNatSymptomer().get(i)));
+
+            //Aktivitetsbegrænsning
+            XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
+            aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
+            aktivitetsBegraensning.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAktivitet().get(i)));
+
+            //Anfaldsmedicin
+            XYChart.Series anfald = new XYChart.Series<>();
+            anfald.setName("Anfaldsmedicin");
+            anfald.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAnfaldsMed().get(i)));
+
+
+            AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
+
+        }
+
+    }*/
 
 
 
