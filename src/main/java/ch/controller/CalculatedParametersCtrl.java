@@ -6,7 +6,9 @@ import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
+import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.exceptions.FHIRException;
 
 import java.math.BigDecimal;
@@ -74,7 +76,8 @@ public class CalculatedParametersCtrl {
          */
         dbControl dbClass = dbControl.getInstance();
         fev1Liste = dbClass.buildFEV(patientIdentifier-20);
-
+        List<Double> pctFev = new ArrayList<>();
+        pctFev = pctAfPEV1(fev1Liste);
 
         Double avgFev = gnmsnit(fev1Liste);
 
@@ -273,7 +276,8 @@ public class CalculatedParametersCtrl {
          */
         List<List<Double>> pctListeDagSymptomer = udregnPCT(ugeListeDagSymptomer);
         List<List<Double>> pctListeNatSymptomer = udregnPCT(ugeListeNatSymptomer);
-
+        List<Double> pctMorgenPEF = pctAfPEV1(pefMorgenListe);
+        List<Double> pctAftenPEF = pctAfPEV1(pefAftenListe);
         /**
          * Laver pctPerioden for dagSymptom
          */
@@ -295,6 +299,7 @@ public class CalculatedParametersCtrl {
         pctPeriodeNatSymptom.add(natSHoste.size()/natSymptomSize);
 
 
+
         /**
          * Sætter Weekly Parametre
          */
@@ -307,9 +312,9 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
         WeekParam.setFoersteUge(weekNumber);
-        WeekParam.setMorgenPEF(pefMorgenListe);
-        WeekParam.setAftenPEF(pefAftenListe);
-        WeekParam.setFev1(fev1Liste);
+        WeekParam.setMorgenPEF(pctMorgenPEF);
+        WeekParam.setAftenPEF(pctAftenPEF);
+        WeekParam.setFev1(pctFev);
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);
 
@@ -419,5 +424,31 @@ public class CalculatedParametersCtrl {
 
     }
 
+    public List<Double> pctAfPEV1(List<Observation> liste){
+        List<Double> pctListe = new ArrayList<>();
+        Double max = new Double(0);
+        Double test = new Double(0);
+        for (int i = 0; i < liste.size(); i++) {
+            try {
+                test = liste.get(i).getValueQuantity().getValue().doubleValue();
+            } catch (FHIRException e) {
+                System.out.println(e.getMessage());
+            }
+            if (max < test) {
+                    max = test;
+            }
+        }
+        for (int j = 0; j<liste.size();j++){
+            try{
+
+                pctListe.add((((liste.get(j).getValueQuantity().getValue().doubleValue())/max)*100));
+                //tempObs.get(1).setValue(randomPEF.get(1));
+            }catch (FHIRException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        System.out.println(liste.get(0).getValue().toString());
+        return pctListe;
+    }
 
 }
