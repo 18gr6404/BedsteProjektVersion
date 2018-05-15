@@ -36,20 +36,15 @@ public class PractitionerCtrl extends HBox {
      */
     @FXML
     private void initialize() {
-
-        //MainApp mainAppRef = new MainApp();
-
     }
 
 
     public void setPractitioner(){
-
         dbControl dbControlOb = dbControl.getInstance();
 
         practitionerObject = dbControlOb.buildPractitionerData(mainAppRef.getPractitionerID());
 
         practitionerNameLabel.setText(practitionerObject.getName().get(0).getGivenAsSingleString() +" "+ practitionerObject.getName().get(0).getFamily());
-
     }
 
 

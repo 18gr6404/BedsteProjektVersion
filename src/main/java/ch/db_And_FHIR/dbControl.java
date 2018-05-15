@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,60 +54,6 @@ public class dbControl {
             System.out.println("Connection established");
         } catch (SQLException sqlEx) {
             System.out.println(sqlEx.getMessage());
-        }
-    }
-
-    public void getPatientData(int patientCPR) {
-
-
-        Statement stmnt = null;
-        String query = "SELECT cpr, firstName, lastName, age, gender, practitionerID FROM Patient WHERE cpr=" + patientCPR;
-
-        try {
-            stmnt = con.createStatement();
-            //I vores ResultSet(statement objekter generere ResultSet objektet, som er en tabel af data som repræsentere en DB resultset)
-            //sætter vi den til at execute en forespørgelse, "executeQuery" er en metode der returnere ResultSet objektet, vi vil gerne
-            //returneret vores query og derfor sættes den som argument.
-
-            ResultSet rs = stmnt.executeQuery(query);
-
-            //Næste metode (rs.next) i objektet rs flytter cursoren (en pointer der peger på 1 række i data i ResultSet objektet).
-
-            while (rs.next()) {
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
-                int age = rs.getInt("age");
-                String gender = rs.getString("gender");
-                int practitionerID = rs.getInt("practitionerID");
-                int cpr = rs.getInt("cpr");
-                /*System.out.println(firstName + ", " + lastName +
-                        ", " + age + ", " + gender+
-                        ", " + cpr + ", " + practitionerID);*/
-
-            }
-            /* Patient firstName = new Patient();
-            String cpr = cpr;
-            firstName.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(cpr);
-            firstName.addName().setFamily(lastName).addGiven(firstName);
-            firstName.setGender(Enumerations.AdministrativeGender.gender);
-            LocalDate dato = dateUtil.parse("");
-            firstName.setBirthDate(java.sql.Date.valueOf(dato));
-            Extension ext = new Extension();
-            ext.setUrl("Is Registered?");
-            ext.setValue(new BooleanType(true));
-            firstName.addExtension(ext);
-            LocalDate dato1 = dateUtil.parse("");
-            Extension ext1 = new Extension();
-            ext1.setUrl("Creation Date");
-            ext1.setValue(new DateType(java.sql.Date.valueOf(dato1)));
-            firstName.addExtension(ext1);
-            Extension ext2 = new Extension();
-            ext2.setUrl("Chosen App");
-            ext2.setValue(new StringType("Astma App"));
-            firstName.addExtension(ext2); */
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
     }
 
@@ -361,6 +309,28 @@ public class dbControl {
             System.out.println(e.getMessage());
         }
         return fev1List;
+    }
+
+    public void insertfev1(int Fev1, int patientCPR, int practitionerID){
+        Statement stmnt = null;
+        String query = "INSERT INTO Fev1(cpr, dateTime, value, practitionerID) values ("
+                + "'" + patientCPR + "',"
+                + "'" + LocalDateTime.now() + "',"
+                + "'" + Fev1 + "',"
+                + "'" + practitionerID + "')"
+                ;
+
+
+        try {
+            int rows = con.createStatement().executeUpdate(query, 1);
+            /*if (rows>0)
+                //System.out.println("Succes!");
+            else
+                throw new RuntimeException();*/
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

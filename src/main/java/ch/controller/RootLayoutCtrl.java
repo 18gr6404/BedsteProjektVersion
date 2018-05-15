@@ -1,26 +1,29 @@
 package ch.controller;
 
 import ch.MainApp;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.hl7.fhir.dstu3.model.AllergyIntolerance;
-
 import java.io.IOException;
 
 public class RootLayoutCtrl {
 
+    @FXML
     private BorderPane rootLayout;
+    @FXML
     private VBox sidePaneLeft;
+    @FXML
     private VBox sidePaneRight;
+    @FXML
     private VBox centerView;
+
     private MainApp mainAppRef;
+    private VBox mostFrequentTable;
 
     /**
      * Constructor
@@ -29,7 +32,7 @@ public class RootLayoutCtrl {
     {this.mainAppRef = inputMainAppRef; }
 
 
-    public VBox initRootLayout(Stage inputPrimaryStage) {
+    public void initRootLayout(Stage inputPrimaryStage) {
         FXMLLoader loader = new FXMLLoader();
 
         try {
@@ -38,23 +41,21 @@ public class RootLayoutCtrl {
             loader.setController(this);
             rootLayout = loader.<BorderPane>load();
 
-            VBox mySidepaneLeft = new VBox();
-            mySidepaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            mySidepaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
-            sidePaneLeft = mySidepaneLeft;
+
+            sidePaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            sidePaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
             rootLayout.setLeft(sidePaneLeft);
 
-            VBox mySidepaneRight = new VBox();
-            mySidepaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            mySidepaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
-            sidePaneRight = mySidepaneRight;
+
+
+            sidePaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+            sidePaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
             rootLayout.setRight(sidePaneRight);
 
-            VBox myCenterView = new VBox();
-            myCenterView.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
-            myCenterView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
-            centerView = myCenterView;
-            rootLayout.setCenter(myCenterView);
+
+            centerView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
+            rootLayout.setCenter(centerView);
+
 
             this.rootLayout = rootLayout;
 
@@ -66,8 +67,6 @@ public class RootLayoutCtrl {
         inputPrimaryStage.setScene(scene);
         inputPrimaryStage.show();
         inputPrimaryStage.setFullScreen(false);
-
-        return centerView;
     }
 
     public void initBasicLayout(){
@@ -153,6 +152,103 @@ public class RootLayoutCtrl {
       //  AllergyIntoleranceCtrl allergyIntoleranceCtrl = new AllergyIntoleranceCtrl();
       //  this.sidePaneRight = allergyIntoleranceCtrl.showAllergyIntolerance(sidePaneRight);
     }
+
+    public void showOverview() {
+        OverviewCtrl overviewCtrl = new OverviewCtrl();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            //Tabellen med hyppigst, der skal sættes i den højre sidebar.
+            loader.setLocation(getClass().getResource("/ch/view/OverviewView.fxml"));
+            loader.setController(overviewCtrl);
+            AnchorPane overview = loader.load();
+
+            centerView.getChildren().setAll(overview);
+
+            OverviewCtrl controller = loader.getController();
+            controller.setRootLayoutCtrlRef(this);
+
+            //centerView.setFillWidth(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!sidePaneRight.getChildren().contains(mostFrequentTable)) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                //Tabellen med hyppigst, der skal sættes i den højre sidebar.
+                loader.setLocation(getClass().getResource("/ch/view/MostFrequentTable.fxml"));
+                //OBS: Her sætter vi selv ctrl da vi ikke kan sætte det i FMLX-filen, da denne controller styrer 2 FMXML-filer
+                loader.setController(overviewCtrl);
+                mostFrequentTable = (VBox) loader.load();
+
+                //Da man skifte frem og tilbage ml. weekly og overview sørger vi her for at mostFrequent-tabellen ikke tilføjes
+                // igen hver gang så der kommer flere end én.
+
+                //if(!sidePaneRight.getChildren().contains(mostFrequentTable)){
+                sidePaneRight.getChildren().add(mostFrequentTable);
+                //}
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void showWeeklyOverview() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/ch/view/WeeklyOverviewView.fxml"));
+            //loader.setController(WeeklyOverviewCtrl);
+            AnchorPane weeklyOverview = loader.load();
+
+            centerView.getChildren().setAll(weeklyOverview);
+
+            WeeklyOverviewCtrl controller = loader.getController();
+            controller.setRootLayoutCtrlRef(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showCreateAsthmaAppUserView(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
+            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
+
+            centerView.getChildren().setAll(createAstmaAppUserView);
+
+            CreateAsthmaAppUserCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setRootLayoutCtrlRef(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showSummaryView(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SummaryCtrl.class.getResource("/ch/view/Summary.fxml"));
+            AnchorPane summaryView = (AnchorPane) loader.load();
+
+            //skal laves om da der istedet skal laves en bottompane.
+            rootLayout.setBottom(summaryView);
+            BorderPane.setAlignment(summaryView, Pos.BOTTOM_CENTER);
+
+            SummaryCtrl controller = loader.getController();
+            controller.setMainApp(mainAppRef);
+            controller.setRootLayoutCtrlRef(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public VBox getSidepaneLeft(){
         return this.sidePaneLeft;

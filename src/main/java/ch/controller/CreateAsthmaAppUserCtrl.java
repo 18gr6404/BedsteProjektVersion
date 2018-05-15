@@ -3,6 +3,7 @@ package ch.controller;
 import ch.MainApp;
 import ch.controller.RootLayoutCtrl;
 import ch.db_And_FHIR.dbControl;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,13 +25,13 @@ public class CreateAsthmaAppUserCtrl {
 
     @FXML
     private ChoiceBox chosenAppDropdown;
+
     @FXML
     private CheckBox pastDataWantedCheckbox;
 
-    private VBox centerView;
-
     // Reference to the main application.
     private MainApp mainAppRef;
+    private RootLayoutCtrl rootLayoutCtrlRef;
 
 
     /**
@@ -46,23 +47,11 @@ public class CreateAsthmaAppUserCtrl {
      */
     @FXML
     private void initialize() {
+        chosenAppDropdown.setValue("AstmaApp");
+        //Nedenfor tilføjes muligheder i dropdown-listen. - Vi har kun AstmaApp.
+        chosenAppDropdown.setItems(FXCollections.observableArrayList("AstmaApp"));
     }
 
-
-    public void showCreateAsthmaAppUser(VBox centerView){
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
-            AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
-
-            centerView.getChildren().add(createAstmaAppUserView);
-            this.centerView = centerView;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public int getPastDataWantedCheckBox (){
         if (pastDataWantedCheckbox.isSelected()){
@@ -77,28 +66,39 @@ public class CreateAsthmaAppUserCtrl {
 
     @FXML
     private void handleOk (ActionEvent event) throws IOException {
-        dbControl DBControlRef = new dbControl();
+        dbControl dbControlOb = dbControl.getInstance();
 
-        String choosenAppInput = "AstmaApp";
+        String choosenAppInput = (String) chosenAppDropdown.getValue();
         int isRegisteredInput = 1;
         int pastDataWantedInput = getPastDataWantedCheckBox();
 
 
-        MainApp mainAppRef = new MainApp();
         Integer patientCPR = mainAppRef.getPatientCPR();
 
         //skal indkommenteres hvis vi vil sætte isRegistered i DB. Det er dog træls når man tester
-        //DBControlRef.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
+        //dbControlOb.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
 
         //Henter den stage som actionevent'et (altså knap-trykket) kommer fra.
-        /*
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
-        rootLayoutCtrlRef.initRootLayout(window);
-        rootLayoutCtrlRef.initBasicLayout(); */
 
+        //Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        //RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl();
+        //rootLayoutCtrlRef.initRootLayout(window);
+
+        rootLayoutCtrlRef.initBasicLayout();
+
+        //HVis showOverview er i rootlayout.
+        rootLayoutCtrlRef.showOverview();
     }
 
+
+    /**
+     * Is called to give a reference back to itself.
+     *
+     * @param inputRootLayoutCtrl
+     */
+    public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
+        this.rootLayoutCtrlRef = inputRootLayoutCtrl;
+    }
 
     /**
      * Is called by the main application to give a reference back to itself.
@@ -106,7 +106,8 @@ public class CreateAsthmaAppUserCtrl {
      * @param inputMain
      */
     public void setMainApp(MainApp inputMain) {
-        //this.mainAppRef = inputMain;
+        this.mainAppRef = inputMain;
     }
+
 
 }

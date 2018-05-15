@@ -20,6 +20,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CalculatedParametersCtrl {
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 
 
@@ -301,6 +303,7 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctListeNatSymptomer(pctListeNatSymptomer);
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
+        WeekParam.setFoersteUge(weekNumber);
 
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);
@@ -365,4 +368,11 @@ public class CalculatedParametersCtrl {
         return avg;
 
     }
+
+
+     //Til at sætte instansvariablerne startDate og endDate
+
+    public void setStartDate(LocalDate inputStartDate) { this.startDate = inputStartDate; }
+
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
 }
