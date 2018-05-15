@@ -206,7 +206,7 @@ public class RootLayoutCtrl {
 
             WeeklyOverviewCtrl controller = loader.getController();
             controller.setRootLayoutCtrlRef(this);
-          //  controller.showData();
+            controller.showData();
 
         } catch (IOException e) {
             e.printStackTrace();

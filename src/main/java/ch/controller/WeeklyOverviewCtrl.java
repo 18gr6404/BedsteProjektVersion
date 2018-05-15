@@ -19,6 +19,7 @@ import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.exceptions.FHIRException;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,6 +29,7 @@ import java.util.ResourceBundle;
 
 public class WeeklyOverviewCtrl implements Initializable {
 
+    private WeeklyParameters weeklyOverviewParam;
 
     @FXML
     private Button overViewBtn;
@@ -183,14 +185,14 @@ public class WeeklyOverviewCtrl implements Initializable {
         //Dette hører til BarChart
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(patientCPR, startDate, endDate);
-        WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
+        weeklyOverviewParam = beggeParam.getWeeklyParameters();
 
         //Dette hører til LineChart:FEV1
-        List<Observation> FEVListe = WeeklyOverviewParam.getFev1();
+        List<Observation> FEVListe = weeklyOverviewParam.getFev1();
 
         //Dette hører til LineChart:PEF
-        List<Observation> PEFMorgen = WeeklyOverviewParam.getMorgenPEF();
-        List<Observation> PEFAften = WeeklyOverviewParam.getAftenPEF();
+        List<Observation> PEFMorgen = weeklyOverviewParam.getMorgenPEF();
+        List<Observation> PEFAften = weeklyOverviewParam.getAftenPEF();
 
         //BarChart
         XYChart.Series dagSymptomer = new XYChart.Series<>();
@@ -234,20 +236,20 @@ public class WeeklyOverviewCtrl implements Initializable {
 
        }
         //Add data to BarChart
-        for (int i = 0; i<WeeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
-            int weeknumber = (WeeklyOverviewParam.getFoersteUge())+i;
+        for (int i = 0; i<weeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
+            int weeknumber = (1+i);
 
             //Dagsymptomer
-            dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
+            dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, weeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
 
             //Natsymptomer
-            natSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeNatSymptomer().get(i)));
+            natSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, weeklyOverviewParam.getUgeListeNatSymptomer().get(i)));
 
             //Aktivitetsbegrænsning
-            aktivitetsBegraensning.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAktivitet().get(i)));
+            aktivitetsBegraensning.getData().add(new XYChart.Data("Uge " + weeknumber, weeklyOverviewParam.getUgeListeAktivitet().get(i)));
 
             //Anfaldsmedicin
-            anfald.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAnfaldsMed().get(i)));
+            anfald.getData().add(new XYChart.Data("Uge " + weeknumber, weeklyOverviewParam.getUgeListeAnfaldsMed().get(i)));
 
         }
         //Add data and legend to BarChart
@@ -257,8 +259,34 @@ public class WeeklyOverviewCtrl implements Initializable {
         //Add data and legend to LineChart
         LineChart.setLegendSide(Side.RIGHT);
         LineChart.getData().addAll(FEV1, pefaften, pefmorgen);
+
+        setSymptomFordelingTabel();
     }
 
+
+    public void setSymptomFordelingTabel () {
+        //Laver listen over den procentvise dagsymptomfordeling
+        List<Double> pctPeriodeDagSymptom = weeklyOverviewParam.getPctPeriodeDagSymptom();
+        //Her bestemmer vi hvor mange decimaler vi vil vise
+        DecimalFormat df = new DecimalFormat("###.##");
+        //Her sætter vi værdierne fra listen ind på deres tilhørende Labels i WeeklyOverviwViewet (Tabellen i højre side)
+        AandenoedLabel.setText(String.valueOf(df.format(pctPeriodeDagSymptom.get(0))));
+        HosteLabel.setText(String.valueOf(df.format(pctPeriodeDagSymptom.get(1))));
+        HvaesenLabel.setText(String.valueOf(df.format(pctPeriodeDagSymptom.get(2))));
+        HosteSlimLabel.setText(String.valueOf(df.format(pctPeriodeDagSymptom.get(3))));
+        TrykkenBrystLabel.setText(String.valueOf(df.format(pctPeriodeDagSymptom.get(4))));
+        //Her benytter vi tilsvarende metode for natsymptomfordelingen
+        List<Double> pctPeriodeNatSymptom = weeklyOverviewParam.getPctPeriodeNatSymptom();
+        NathosteLabel.setText(String.valueOf(df.format(pctPeriodeNatSymptom.get(0))));
+        TraethedLabel.setText(String.valueOf(df.format(pctPeriodeNatSymptom.get(1))));
+        OpvaagningLabel.setText(String.valueOf(df.format(pctPeriodeNatSymptom.get(2))));
+        //Her benytter vi tilsvarende metode for triggerfordelingen
+        List<Double> pctPeriodeTriggers = weeklyOverviewParam.getPctPeriodeTriggers();
+        AktivitetLabel.setText(String.valueOf(df.format(pctPeriodeTriggers.get(0))));
+        AllergiLabel.setText(String.valueOf(df.format(pctPeriodeTriggers.get(1))));
+        StoevLabel.setText(String.valueOf(df.format(pctPeriodeTriggers.get(2))));
+        UkendtLabel.setText(String.valueOf(df.format(pctPeriodeTriggers.get(3))));
+    }
 
 
     /**
