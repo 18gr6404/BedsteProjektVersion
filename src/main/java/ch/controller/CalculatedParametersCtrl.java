@@ -163,11 +163,11 @@ public class CalculatedParametersCtrl {
                 dagSAande.add(dagSymptomListe.get(j));
             }
         }
-        System.out.println("Hvaesen Size = " + dagSHvaesen.size());
+        /*System.out.println("Hvaesen Size = " + dagSHvaesen.size());
         System.out.println("Hoste Size = " + dagSHoste.size());
         System.out.println("Aandenød Size = " + dagSAande.size());
         System.out.println("Slim Size = " + dagSSlim.size());
-        System.out.println("Tryk Size = " + dagSTryk.size());
+        System.out.println("Tryk Size = " + dagSTryk.size());*/
 
         /**
          * Afgør hvilket symptom er forekommet mest.
@@ -308,11 +308,12 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
         WeekParam.setFoersteUge(weekNumber);
         WeekParam.setMorgenPEF(pefMorgenListe);
-        WeekParam.setMorgenPEF(pefAftenListe);
-        WeekParam.setMorgenPEF(fev1Liste);
+        WeekParam.setAftenPEF(pefAftenListe);
+        WeekParam.setFev1(fev1Liste);
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);
 
+        System.out.println("CalculatedParameters ok");
         return encapsulatedParameters;
     }
 
@@ -361,7 +362,8 @@ public class CalculatedParametersCtrl {
         for (int j = 0; j <liste.size(); j++) {
             for (int i = 1; i < numberOfWeeks + 1; i++) {
                 if (liste.get(j).getIssued().toInstant().atZone(
-                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i*7))){
+                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i*7)) &&
+                        !liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(startDate)){
                     ugeListe.set(i-1, ugeListe.get(i-1) + 1);
                     break;
                 }
@@ -388,14 +390,14 @@ public class CalculatedParametersCtrl {
         for (int i = 0; i <sumPrUgeListe.size(); i++){
             pctListe.add(new ArrayList<>());
         }
-        for (int j = 0; j <sumPrUgeListe.size(); j++){
+        for (int j = 0; j <sumPrUgeListe.get(0).size(); j++){
             for (int i = 0; i <sumPrUgeListe.size(); i++){
                 sum += sumPrUgeListe.get(i).get(j);
             }
             for (int k = 0; k <sumPrUgeListe.size();k++){
-                if (sum != 0)
+                if (sum != 0 && j < sumPrUgeListe.get(0).size())
                 pctListe.get(k).add(sumPrUgeListe.get(k).get(j)/sum);
-                else
+                else if (j < sumPrUgeListe.get(0).size())
                     pctListe.get(k).add(zero);
             }
             sum = 0;
