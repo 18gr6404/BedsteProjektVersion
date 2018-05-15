@@ -42,7 +42,7 @@ public class SummaryCtrl {
     }
 
     @FXML
-    private void handleOk(){
+    private void handleOk() {
         if (isInputValid()) {
             int cpr = mainAppRef.getPatientCPR();
             int practitionerID = mainAppRef.getPractitionerID();
@@ -56,62 +56,65 @@ public class SummaryCtrl {
 
             summary.setDate(dateOut);
 
-        
 
             dbControl dbControlOb = dbControl.getInstance();
-            
+
             dbControlOb.insertSummary(summary, cpr, practitionerID);
-       
+
             rootLayoutCtrlRef.getRootLayout().setBottom(null);
 
+        }
     }
 
-    @FXML
-    private void handleCancel(){
-        rootLayoutCtrlRef.getRootLayout().setBottom(null);
+        @FXML
+        private void handleCancel () {
+            rootLayoutCtrlRef.getRootLayout().setBottom(null);
+        }
+
+        @FXML
+        private void handlePrintSelectedData () {
+
+        }
+
+        private boolean isInputValid () {
+            String errorMessage = "";
+
+            // || !StringUtils.isStrictlyNumeric(ConsultationMeasurementTextField.getText())
+            if (summaryField.getText() == null || summaryField.getText().length() == 0) {
+                errorMessage += "Ugyldig indtastning\n";
+            }
+
+            if (errorMessage.length() == 0) {
+                return true;
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(mainAppRef.getPrimaryStage());
+                alert.setTitle("Ugyldig indtastning");
+                alert.setHeaderText("Udfyld konsultationsnotat for at bekræfte");
+                alert.setContentText(errorMessage);
+                alert.showAndWait();
+
+                return false;
+            }
+        }
+
+        /**
+         * Is called to give a reference back to itself.
+         *
+         * @param inputRootLayoutCtrl
+         */
+        public void setRootLayoutCtrlRef (RootLayoutCtrl inputRootLayoutCtrl){
+            this.rootLayoutCtrlRef = inputRootLayoutCtrl;
+        }
+
+        /**
+         * Is called by the main application to give a reference back to itself.
+         *
+         * @param inputMain
+         */
+        public void setMainApp (MainApp inputMain){
+            this.mainAppRef = inputMain;
+        }
+
     }
 
-    @FXML
-    private void handlePrintSelectedData(){
-
-    }
-
-    private boolean isInputValid() {
-        String errorMessage = "";
-
-        // || !StringUtils.isStrictlyNumeric(ConsultationMeasurementTextField.getText())
-        if (summaryField.getText() == null ||summaryField.getText().length() == 0) {
-            errorMessage += "Ugyldig indtastning\n"; }
-
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainAppRef.getPrimaryStage());
-            alert.setTitle("Ugyldig indtastning");
-            alert.setHeaderText("Udfyld konsultationsnotat for at bekræfte");
-            alert.setContentText(errorMessage);
-            alert.showAndWait();
-
-            return false;}
-    }
-
-    /**
-     * Is called to give a reference back to itself.
-     *
-     * @param inputRootLayoutCtrl
-     */
-    public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
-        this.rootLayoutCtrlRef = inputRootLayoutCtrl;
-    }
-
-    /**
-     * Is called by the main application to give a reference back to itself.
-     *
-     * @param inputMain
-     */
-    public void setMainApp(MainApp inputMain) {
-        this.mainAppRef = inputMain;
-    }
-
-}
