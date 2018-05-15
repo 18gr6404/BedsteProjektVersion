@@ -87,6 +87,7 @@ public class MainApp extends Application {
 
     }
 
+
     public Integer getPatientCPR() {return patientCPR; }
 
     public Integer getPractitionerID() { return practitionerID; }

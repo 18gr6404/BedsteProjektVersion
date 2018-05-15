@@ -79,16 +79,14 @@ public class OverviewCtrl {
     @FXML
     private void initialize() {
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
-        startDate = LocalDate.parse("2018-03-10");
-        endDate = LocalDate.parse("2018-05-10");
 
-        //startDate = LocalDate.now().minusDays(28);
-        //endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(28);
+        endDate = LocalDate.now();
     }
 
     @FXML
     private void handleConsultationMeasurement(){
-        ConsultationMeasurementCtrl.showConsultationMeasurementView();
+        ConsultationMeasurementCtrl.showConsultationMeasurementView(mainAppRef.getPatientCPR(), mainAppRef.getPractitionerID());
     }
 
     @FXML
@@ -107,20 +105,38 @@ public class OverviewCtrl {
 
     @FXML
     private void handleTwoWeeks(){
-       LocalDate startDate = LocalDate.now();
-       LocalDate endDate = LocalDate.now().minusDays(14);
+        endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(14);
+
+        showData();
     }
 
     @FXML
     private void handleFourWeeks(){
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().minusDays(28);
+        endDate = LocalDate.now();
+        startDate = LocalDate.now().minusDays(28);
+
+        showData();
     }
 
     @FXML
     private void handleCustomDate(){
-        LocalDate startDate = startPicker.getValue();
-        LocalDate endDate = endPicker.getValue();
+        /* I start pickereren vælger lægen hvilken dato han vil se fra, dette vil typisk være den nyeste dato derfor sættes denne som slutningen
+        på FHIR-søgningen. Ligeledes omvendt.
+        */
+        LocalDate tempEndDate = startPicker.getValue();
+        LocalDate tempStartDate = endPicker.getValue();
+        //Sørger for at den nyeste dato sættes som endDate:
+        if (endDate.isAfter(startDate)){
+            endDate = tempEndDate;
+            startDate = tempStartDate;
+        }
+        else{
+            endDate = tempStartDate;
+            startDate = tempEndDate;
+        }
+
+        showData();
     }
 
     @FXML
@@ -150,6 +166,10 @@ public class OverviewCtrl {
         StackPane chart = polarChartGenerator.generateChart(overviewParam);
 
         overViewCenter.getChildren().setAll(chart);
+
+        mostFreqDaySymptomLabel.setText( overviewParam.getMostFrequentDay());
+        mostFreqNigthSymptomLabel.setText( overviewParam.getMostFrequentNight());
+        triggerLabel.setText( overviewParam.getMostFrequentTrigger());
 
     }
 

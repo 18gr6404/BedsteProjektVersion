@@ -159,27 +159,68 @@ public class CalculatedParametersCtrl {
         System.out.println("Tryk Size = " + dagSTryk.size());*/
 
         /**
-         * Afgør hvilket symptom er forekommet mest.
-         * Simpelt størrelses check på de 5 lister.
+         * Afgør hvilket Dagsymptom er forekommet mest.
+         * Simpelt størrelsescheck på de 5 lister.
          */
-        String mostFrequent = dagSHvaesen.get(0).getValue().toString();
+        String mostFrequentDay;
+        if(dagSymptomListe.size() != 0){
+        mostFrequentDay = dagSHvaesen.get(0).getValue().toString();
         int size = dagSHvaesen.size();
         if (size < dagSHoste.size()) {
             size = dagSHoste.size();
-            mostFrequent = dagSHoste.get(0).getValue().toString();
-        }
-        if (size < dagSSlim.size()) {
+
+            mostFrequentDay = dagSHoste.get(0).getValue().toString();
+        }        if(size<dagSSlim.size()){
             size = dagSSlim.size();
-            mostFrequent = dagSSlim.get(0).getValue().toString();
-        }
-        if (size < dagSTryk.size()) {
+            mostFrequentDay = dagSSlim.get(0).getValue().toString();
+        }if(size<dagSTryk.size()){
             size = dagSTryk.size();
-            mostFrequent = dagSTryk.get(0).getValue().toString();
-        }
-        if (size < dagSAande.size()) {
+            mostFrequentDay = dagSTryk.get(0).getValue().toString();
+        }if(size<dagSAande.size()){
+
             size = dagSAande.size();
-            mostFrequent = dagSAande.get(0).getValue().toString();
+            mostFrequentDay = dagSAande.get(0).getValue().toString();
+        }}else{ mostFrequentDay = "Ingen";}
+
+        /**
+         * Afgør hvilket Natsymptom er forekommet mest.
+         * Simpelt størrelsescheck på de 5 lister.
+         */
+        String mostFrequentNight;
+        if(natSymptomListe.size() != 0){
+        mostFrequentNight = natSHoste.get(0).getValue().toString();
+        int size = natSHoste.size();
+        if(size<natSHoste.size()){
+            size = natSHoste.size();
+            mostFrequentNight = natSHoste.get(0).getValue().toString();
+        }        if(size<natSOpvaagning.size()){
+            size = natSOpvaagning.size();
+            mostFrequentNight = natSOpvaagning.get(0).getValue().toString();
+        }if(size<natSTraethed.size()){
+            size = natSTraethed.size();
+            mostFrequentNight = natSTraethed.get(0).getValue().toString();
+        }} else{
+            mostFrequentNight = "Ingen"; }
+
+        /**
+         * Afgør hvilken Trigger symptom er forekommet mest.
+         * Simpelt størrelsescheck på de 5 lister.
+         */
+        String mostFrequentTrigger;
+        if (triggerListe.size() != 0){
+        mostFrequentTrigger = triggerAktiv.get(0).getValue().toString();
+        int size = triggerAktiv.size();
+        if(size<triggerAllergi.size()){
+            size = triggerAllergi.size();
+            mostFrequentTrigger = triggerAllergi.get(0).getValue().toString();
+        }        if(size<triggerStoev.size()){
+            size = triggerStoev.size();
+            mostFrequentTrigger = triggerStoev.get(0).getValue().toString();
+        }if(size<triggerUkendt.size()){
+            size = triggerUkendt.size();
+            mostFrequentTrigger = triggerUkendt.get(0).getValue().toString();
         }
+        } else {mostFrequentTrigger = "Ingen";}
 
         Double maxPefMorgen = findMax(pefMorgenListe);
         Double maxPefAften = findMax(pefAftenListe);
@@ -193,7 +234,9 @@ public class CalculatedParametersCtrl {
          * se weeklyparam og observér at der ikke er erklæret nogen constructor, så vi defaulter til en noArg constructor. Det kunne også
          * gøres her.
          */
-        OVParam = new OverviewParameters(Math.round(dagSymptomListe.size() / avgWeekRounderInt), Math.round(natSymptomListe.size() / avgWeekRounderInt), Math.round(aktivitetsListe.size() / avgWeekRounderInt), Math.round(anfaldsMedListe.size() / avgWeekRounderInt), avgPefMorgen, avgPefAften, avgFev, mostFrequent);
+
+        OVParam = new OverviewParameters(Math.round(dagSymptomListe.size()/avgWeekRounderInt), Math.round(natSymptomListe.size()/avgWeekRounderInt), Math.round(aktivitetsListe.size()/avgWeekRounderInt), Math.round(anfaldsMedListe.size()/avgWeekRounderInt), avgPefMorgen, avgPefAften, avgFev, mostFrequentDay, mostFrequentNight, mostFrequentTrigger);
+
 
         //////////////////// SLUT PÅ OVERVIEWPARAMETER BEREGNING ////////////////////////////////////////////////
 
