@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -93,35 +94,40 @@ public class WeeklyOverviewCtrl implements Initializable {
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(1207731470, startDate, endDate);
         WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
-        
 
-        for (int i = 0; i<WeeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
+        XYChart.Series dagSymptomer = new XYChart.Series<>();
+        dagSymptomer.setName("Dagsymptomer");
+
+        XYChart.Series natSymptomer = new XYChart.Series<>();
+        natSymptomer.setName("Natsymptomer");
+
+        XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
+        aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
+
+        XYChart.Series anfald = new XYChart.Series<>();
+        anfald.setName("Anfaldsmedicin");
+
+        for (int i = 0; i<4; i++) {
             int weeknumber = (WeeklyOverviewParam.getFoersteUge())+i;
 
             //Dagsymptomer
-            XYChart.Series dagSymptomer = new XYChart.Series<>();
-            dagSymptomer.setName("Dagsymptomer");
-            dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
+            dagSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber,  WeeklyOverviewParam.getUgeListeDagSymptomer().get(i)));
 
             //Natsymptomer
-            XYChart.Series natSymptomer = new XYChart.Series<>();
-            natSymptomer.setName("Natsymptomer");
             natSymptomer.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeNatSymptomer().get(i)));
 
             //Aktivitetsbegrænsning
-            XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
-            aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
             aktivitetsBegraensning.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAktivitet().get(i)));
 
             //Anfaldsmedicin
-            XYChart.Series anfald = new XYChart.Series<>();
-            anfald.setName("Anfaldsmedicin");
             anfald.getData().add(new XYChart.Data("Uge " + weeknumber, WeeklyOverviewParam.getUgeListeAnfaldsMed().get(i)));
 
-
-            AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
-
         }
+
+        AstmaAppBarChart.setLegendSide(Side.RIGHT);
+        AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
+
+
         System.out.println(WeeklyOverviewParam.getUgeListeAktivitet().get(1));
         System.out.println(WeeklyOverviewParam.getUgeListeDagSymptomer().get(1));
     }
