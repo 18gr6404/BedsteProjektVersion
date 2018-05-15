@@ -39,9 +39,6 @@ public class PractitionerCtrl extends HBox {
      */
     @FXML
     private void initialize() {
-
-        //MainApp mainAppRef = new MainApp();
-
     }
 
 
@@ -53,40 +50,6 @@ public class PractitionerCtrl extends HBox {
         practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString() +" "+ practitionerObjekt.getName().get(0).getFamily());
 
     }
-
-/*
-    public void prove(dbControl myDBClass, Integer practitionerID) {
-
-
-
-/*
-    public VBox showPractitioner(VBox inputSidepane){
-        VBox thistempSidepaneLeft = new VBox();
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(PractitionerCtrl.class.getResource("/ch/view/PractitionerView.fxml"));
-            HBox practitionerView = (HBox) loader.load();
-
-
-            VBox tempSidepaneLeft = inputSidepane;
-            tempSidepaneLeft.getChildren().add(practitionerView);
-            thistempSidepaneLeft = tempSidepaneLeft;
-            //return tempSidepaneLeft;
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return thistempSidepaneLeft;
-    } */
-
-
-
-
-// practitionerNameLabel.setText(practitionerObjekt.getName().get(0).getGivenAsSingleString()) + practitionerOb.getName().get(0).getFamily();
 
 
     /**

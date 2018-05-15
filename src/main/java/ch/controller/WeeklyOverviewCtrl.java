@@ -20,22 +20,27 @@ import java.util.ResourceBundle;
 
 public class WeeklyOverviewCtrl implements Initializable {
 
+
     @FXML
-    private Button OversigtButton;
+    private Button overViewBtn;
     @FXML
-    private Button IndtastMaalingButton;
+    private Button consultationMeasurementBtn;
     @FXML
-    private Button UdfyldNotatButton;
+    private Button summaryBtn;
     @FXML
-    private Button SidenSidstButton;
+    private Button sinceLastConBtn;
     @FXML
-    private Button FireUgerButton;
+    private Button twoWeeksBtn;
     @FXML
-    private Button ToUgerButton;
+    private Button fourWeeksBtn;
     @FXML
-    private DatePicker StartDatePicker;
+    private Button dateOkBtn;
+
     @FXML
-    private DatePicker SlutDatePicker;
+    private DatePicker startPicker;
+    @FXML
+    private DatePicker endPicker;
+
     @FXML
     private Label HvaesenLabel;
     @FXML
@@ -70,6 +75,9 @@ public class WeeklyOverviewCtrl implements Initializable {
 
 
     dbControl dbControlOB = dbControl.getInstance();
+
+    // REference til Rootlayout
+    private RootLayoutCtrl rootLayoutCtrlRef;
 
     public WeeklyOverviewCtrl() {
     }
@@ -119,14 +127,58 @@ public class WeeklyOverviewCtrl implements Initializable {
     }
 
 
+    @FXML
+    private void handleConsultationMeasurement(){
+
+        ConsultationMeasurementCtrl.showConsultationMeasurementView();
+    }
+
+    @FXML
+    private void handleOverview(){
+        rootLayoutCtrlRef.showOverview();
+    }
+
+    @FXML
+    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
+
+    @FXML
+    private void handleTwoWeeks(){
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusDays(14);
+    }
+
+    @FXML
+    private void handleFourWeeks(){
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusDays(28);
+    }
+
+    @FXML
+    private void handleCustomDate(){
+        LocalDate startDate = startPicker.getValue();
+        LocalDate endDate = endPicker.getValue();
+    }
+
+    @FXML
+    private void handleSinceLastConsultation(){
+        LocalDate startDate = LocalDate.now();
+
+        //LocalDate endDate = mainAppRef.getLastConsultationDate();
+    }
 
 
-//    @FXML
-//    private void setChart(){
-//
-//
-//
-//    }
+
+
+
+    /**
+     * Is called to give a reference back to itself.
+     *
+     * @param inputRootLayoutCtrl
+     */
+    public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
+        this.rootLayoutCtrlRef = inputRootLayoutCtrl;
+    }
+
 
 }
 

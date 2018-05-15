@@ -110,7 +110,6 @@ public class FhirControl {
         /*for (int m = 0; m<observationList.size(); m++){
             System.out.println(observationList.get(m).getCode().getCoding().get(0).getCode());
         }*/
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return observationList;
 
     }
