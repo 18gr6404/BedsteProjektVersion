@@ -14,9 +14,12 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.exceptions.FHIRException;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class WeeklyOverviewCtrl implements Initializable {
@@ -72,6 +75,8 @@ public class WeeklyOverviewCtrl implements Initializable {
     private CategoryAxis UgeNr;
     @FXML
     private NumberAxis Antal;
+    @FXML
+    private LineChart PEFFEVChart;
 
 
 
@@ -94,6 +99,12 @@ public class WeeklyOverviewCtrl implements Initializable {
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(1207731470, startDate, endDate);
         WeeklyParameters WeeklyOverviewParam = beggeParam.getWeeklyParameters();
+        List<Observation> fevListe =WeeklyOverviewParam.getFev1();
+        try{
+            System.out.println(fevListe.get(0).getValueQuantity().getValue() + "," +  "," + fevListe.get(0).getIssued());
+        }catch(FHIRException e){
+            System.out.println(e.getMessage());
+        }
 
         XYChart.Series dagSymptomer = new XYChart.Series<>();
         dagSymptomer.setName("Dagsymptomer");
