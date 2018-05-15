@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class OverviewCtrl {
 
@@ -35,12 +37,15 @@ public class OverviewCtrl {
     private Button twoWeeksBtn;
     @FXML
     private Button fourWeeksBtn;
+    @FXML
+    private Button dateOkBtn;
 
     @FXML
-    private TextField fromTextfield;
+    private DatePicker startPicker;
     @FXML
-    private TextField toTextfield;
+    private DatePicker endPicker;
 
+    //Obs disse er i MostFrequentTable
     @FXML
     private Label mostFreqDaySymptomLabel;
     @FXML
@@ -73,8 +78,31 @@ public class OverviewCtrl {
     }
 
     @FXML
-    private void handleSummary(){
-        rootLayoutCtrlRef.showSummaryView();
+    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
+
+    @FXML
+    private void handleTwoWeeks(){
+       LocalDate startDate = LocalDate.now();
+       LocalDate endDate = LocalDate.now().minusDays(14);
+    }
+
+    @FXML
+    private void handleFourWeeks(){
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusDays(28);
+    }
+
+    @FXML
+    private void handleCustomDate(){
+        LocalDate startDate = startPicker.getValue();
+        LocalDate endDate = endPicker.getValue();
+    }
+
+    @FXML
+    private void handleSinceLastConsultation(){
+        LocalDate startDate = LocalDate.now();
+
+        //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
 

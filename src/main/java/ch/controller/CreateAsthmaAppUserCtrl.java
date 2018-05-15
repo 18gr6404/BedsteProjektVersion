@@ -3,6 +3,7 @@ package ch.controller;
 import ch.MainApp;
 import ch.controller.RootLayoutCtrl;
 import ch.db_And_FHIR.dbControl;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,10 +25,9 @@ public class CreateAsthmaAppUserCtrl {
 
     @FXML
     private ChoiceBox chosenAppDropdown;
+
     @FXML
     private CheckBox pastDataWantedCheckbox;
-
-    private VBox centerView;
 
     // Reference to the main application.
     private MainApp mainAppRef;
@@ -47,6 +47,9 @@ public class CreateAsthmaAppUserCtrl {
      */
     @FXML
     private void initialize() {
+        chosenAppDropdown.setValue("AstmaApp");
+        //Nedenfor tilføjes muligheder i dropdown-listen. - Vi har kun AstmaApp.
+        chosenAppDropdown.setItems(FXCollections.observableArrayList("AstmaApp"));
     }
 
 
@@ -65,7 +68,7 @@ public class CreateAsthmaAppUserCtrl {
     private void handleOk (ActionEvent event) throws IOException {
         dbControl dbControlOb = dbControl.getInstance();
 
-        String choosenAppInput = "AstmaApp";
+        String choosenAppInput = (String) chosenAppDropdown.getValue();
         int isRegisteredInput = 1;
         int pastDataWantedInput = getPastDataWantedCheckBox();
 

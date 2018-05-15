@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -42,27 +41,20 @@ public class RootLayoutCtrl {
             loader.setController(this);
             rootLayout = loader.<BorderPane>load();
 
-            //VBox mySidepaneLeft = new VBox();
+
             sidePaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
             sidePaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
-            //sidePaneLeft = mySidepaneLeft;
             rootLayout.setLeft(sidePaneLeft);
-            BorderPane.setAlignment(sidePaneLeft, Pos.TOP_LEFT);
 
-            //VBox mySidepaneRight = new VBox();
+
+
             sidePaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
             sidePaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
-            //sidePaneRight = mySidepaneRight;
             rootLayout.setRight(sidePaneRight);
-            BorderPane.setAlignment(sidePaneRight, Pos.TOP_RIGHT);
 
-            //VBox myCenterView = new VBox();
-            //VBox.setVgrow(centerView, Priority.ALWAYS);
-            //myCenterView.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
+
             centerView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
-            //centerView = myCenterView;
             rootLayout.setCenter(centerView);
-            centerView.setAlignment(Pos.CENTER);
 
 
             this.rootLayout = rootLayout;
@@ -115,7 +107,7 @@ public class RootLayoutCtrl {
         try {
             FXMLLoader loader = new FXMLLoader();
             //Tabellen med hyppigst, der skal sættes i den højre sidebar.
-            loader.setLocation(getClass().getResource("/ch/view/Overview.fxml"));
+            loader.setLocation(getClass().getResource("/ch/view/OverviewView.fxml"));
             loader.setController(overviewCtrl);
             AnchorPane overview = loader.load();
 
@@ -134,6 +126,7 @@ public class RootLayoutCtrl {
                 FXMLLoader loader = new FXMLLoader();
                 //Tabellen med hyppigst, der skal sættes i den højre sidebar.
                 loader.setLocation(getClass().getResource("/ch/view/MostFrequentTable.fxml"));
+                //OBS: Her sætter vi selv ctrl da vi ikke kan sætte det i FMLX-filen, da denne controller styrer 2 FMXML-filer
                 loader.setController(overviewCtrl);
                 mostFrequentTable = (VBox) loader.load();
 
@@ -170,13 +163,11 @@ public class RootLayoutCtrl {
 
     public void showCreateAsthmaAppUserView(){
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(CreateAsthmaAppUserCtrl.class.getResource("/ch/view/CreateAsthmaAppUserView.fxml"));
             AnchorPane createAstmaAppUserView = (AnchorPane) loader.load();
 
-            centerView.getChildren().add(createAstmaAppUserView);
-            //this.centerView = centerView;
+            centerView.getChildren().setAll(createAstmaAppUserView);
 
             CreateAsthmaAppUserCtrl controller = loader.getController();
             controller.setMainApp(mainAppRef);

@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 
+import java.time.LocalDate;
+
 public class WeeklyOverviewCtrl {
 
     @FXML
@@ -20,13 +22,15 @@ public class WeeklyOverviewCtrl {
     private Button twoWeeksBtn;
     @FXML
     private Button fourWeeksBtn;
+    @FXML
+    private Button dateOkBtn;
 
     @FXML
-    private DatePicker StartDatePicker;
+    private DatePicker startPicker;
     @FXML
-    private DatePicker SlutDatePicker;
-    @FXML
+    private DatePicker endPicker;
 
+    @FXML
     private Label HvaesenLabel;
     @FXML
     private Label HosteLabel;
@@ -78,9 +82,36 @@ public class WeeklyOverviewCtrl {
     }
 
     @FXML
-    private void handleSummary(){
-        rootLayoutCtrlRef.showSummaryView();
+    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
+
+    @FXML
+    private void handleTwoWeeks(){
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusDays(14);
     }
+
+    @FXML
+    private void handleFourWeeks(){
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().minusDays(28);
+    }
+
+    @FXML
+    private void handleCustomDate(){
+        LocalDate startDate = startPicker.getValue();
+        LocalDate endDate = endPicker.getValue();
+    }
+
+    @FXML
+    private void handleSinceLastConsultation(){
+        LocalDate startDate = LocalDate.now();
+
+        //LocalDate endDate = mainAppRef.getLastConsultationDate();
+    }
+
+
+
+
 
     /**
      * Is called to give a reference back to itself.

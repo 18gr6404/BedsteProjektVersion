@@ -1,6 +1,7 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -50,6 +51,15 @@ public class ConsultationMeasurementCtrl {
     private void handleOK() {
         if (isInputValid()) {
 
+            ///////////////// HER SKAL DER BRUGES CPR OG PRACTITIONER ID FRA MAIN /////////////////////////
+            // Laver mine egne kopier
+            int CPRkopi = 1207731450;   //mainAppRef.getCPR();
+            int PracIDkopi = 56789;     //mainAppRef.getPractiotionerID();
+            String fev1String = ConsultationMeasurementTextField.getText();
+            Integer fev1Int = Integer.parseInt(fev1String);
+            dbControl dbControlOb = dbControl.getInstance();
+            //dbControlOb.insertfev1(fev1Int, CPRkopi, PracIDkopi);
+
 //          Hvad skal vi gøre med FEV1 målingen??
 
             okClicked = true;
@@ -73,20 +83,28 @@ public class ConsultationMeasurementCtrl {
     private boolean isInputValid() {
         String errorMessage = "";
 
-        if (ConsultationMeasurementTextField.getText() == null || ConsultationMeasurementTextField.getText().length() == 0) {
-            errorMessage += "FEV1-måling må ikke være nul\n"; }
+        // || !StringUtils.isStrictlyNumeric(ConsultationMeasurementTextField.getText())
+        if (ConsultationMeasurementTextField.getText() == null ||ConsultationMeasurementTextField.getText().length() == 0) {
+            errorMessage += "Invalid input!!\n"; }
+        else {
+            // try to parse the postal code into an int.
+            try {
+                Integer.parseInt(ConsultationMeasurementTextField.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "Invalid input (must be an integer)!\n";
+            }
+        }
         if (errorMessage.length() == 0) {
             return true;
         } else {
-            // Show the error message.
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(consultationMeasurementStage);
-            alert.setTitle("Invalid indtastning");
-            alert.setHeaderText("Indtast venligst en valid FEV1-måling");
+            alert.setTitle("Invalid Fields");
+            alert.setHeaderText("Please correct invalid fields");
             alert.setContentText(errorMessage);
             alert.showAndWait();
-                return false;
-            }
+
+            return false;}
     }
 
 
