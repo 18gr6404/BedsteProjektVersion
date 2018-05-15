@@ -17,6 +17,7 @@ public class WeeklyParameters {
     private List<List<Double>> pctListeNatSymptomer;
     private List<Double> pctPeriodeDagSymptom;
     private List<Double> pctPeriodeNatSymptom;
+    private List<Double> pctPeriodeTriggers;
     private Integer FoersteUge;
 
 
@@ -115,5 +116,13 @@ public class WeeklyParameters {
 
     public void setFev1(List<Observation> fev1) {
         this.fev1 = fev1;
+    }
+
+    public List<Double> getPctPeriodeTriggers() {
+        return pctPeriodeTriggers;
+    }
+
+    public void setPctPeriodeTriggers(List<Double> pctPeriodeTriggers) {
+        this.pctPeriodeTriggers = pctPeriodeTriggers;
     }
 }
