@@ -119,7 +119,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         endDate = LocalDate.now();
         startDate = LocalDate.now().minusDays(14);
 
-        showData();
+        //showData();
     }
 
     @FXML
@@ -127,7 +127,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         endDate = LocalDate.now();
         startDate = LocalDate.now().minusDays(28);
 
-        showData();
+       // showData();
     }
 
     @FXML
@@ -148,7 +148,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         }
 
         System.out.print(endDate);
-        showData();
+        //showData();
     }
 
     @FXML
@@ -158,7 +158,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
-
+/*
     public void showData(){
         if(mainAppRef == null) {
             mainAppRef = rootLayoutCtrlRef.getMainAppRef();
@@ -205,7 +205,7 @@ public class WeeklyOverviewCtrl implements Initializable {
 
         }
 
-    }
+    }*/
 
 
 
