@@ -253,7 +253,7 @@ public class CalculatedParametersCtrl {
 
 
         /**
-         * Laver uge Listen med én værdi for
+         * Laver uge Listen med én værdi for hvert symptom pr. uge
          */
         List<Integer> ugeListeTotalNatSymptom = new ArrayList<>();
         for (int j = 0; j <ugeListeNatSymptomer.get(0).size(); j++) {
@@ -264,6 +264,20 @@ public class CalculatedParametersCtrl {
             sum = 0;
         }
 
+
+
+        List<List<Integer>> ugeListeTriggers = new ArrayList<>();
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAktiv));
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAllergi));
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerStoev));
+        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerUkendt));
+
+        List<Double> pctPeriodeTrigger = new ArrayList<>();
+        double triggerSize = triggerListe.size();
+        pctPeriodeTrigger.add(triggerAktiv.size()/triggerSize);
+        pctPeriodeTrigger.add(triggerAllergi.size()/triggerSize);
+        pctPeriodeTrigger.add(triggerStoev.size()/triggerSize);
+        pctPeriodeTrigger.add(triggerUkendt.size()/triggerSize);
 
         // Aktivitet, kun én liste
         List<Integer> ugeListeAktivitet = symptomListe(startDate, endDate, aktivitetsListe);
@@ -312,6 +326,7 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctListeNatSymptomer(pctListeNatSymptomer);
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
+        WeekParam.setPctPeriodeTriggers(pctPeriodeTrigger);
         WeekParam.setFoersteUge(weekNumber);
         WeekParam.setMorgenPEF(pctMorgenPEF);
         WeekParam.setAftenPEF(pctAftenPEF);
@@ -345,6 +360,8 @@ public class CalculatedParametersCtrl {
             }
             return ugeListe;
     }*/
+
+
     private List<Integer> symptomListe(LocalDate startDate, LocalDate endDate, List<Observation> liste){
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
@@ -353,7 +370,6 @@ public class CalculatedParametersCtrl {
         double numberOfWeeks = Math.floor(numOfDaysBetween/7);
         startDate = startDate.plusDays(extraDays);
         endDate = endDate.plusDays(1);
-
 
         //System.out.println(ChronoUnit.DAYS.between(startDate, endDate) + 1);
         //long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
