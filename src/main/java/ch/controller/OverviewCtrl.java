@@ -29,7 +29,7 @@ public class OverviewCtrl {
     private RootLayoutCtrl rootLayoutCtrlRef;
 
 
-
+//Vi bruger vil ikke disse buttons?
     @FXML
     private Button weeklyOverviewBtn;
     @FXML
@@ -58,6 +58,9 @@ public class OverviewCtrl {
     @FXML
     private Label triggerLabel;
 
+    @FXML
+    private VBox overViewCenter;
+
     private Integer patientCPR;
     private LocalDate startDate; //Start dato for FHIR-søgningen ´. Dette er den ældste dato
     private LocalDate endDate; //Slutdato for FHIR-søgningen ´. Dette er den nyeste dato
@@ -76,8 +79,11 @@ public class OverviewCtrl {
     @FXML
     private void initialize() {
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
-        startDate = LocalDate.now().minusDays(14);
-        endDate = LocalDate.now();
+        startDate = LocalDate.parse("2018-03-10");
+        endDate = LocalDate.parse("2018-05-10");
+
+        //startDate = LocalDate.now().minusDays(28);
+        //endDate = LocalDate.now();
     }
 
     @FXML
@@ -91,7 +97,13 @@ public class OverviewCtrl {
     }
 
     @FXML
-    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
+    private void handleSummary(){
+        if(rootLayoutCtrlRef.getRootLayout().getBottom() == null){
+        rootLayoutCtrlRef.showSummaryView(); }
+        else{
+        rootLayoutCtrlRef.getRootLayout().setBottom(null);
+        }
+    }
 
     @FXML
     private void handleTwoWeeks(){
@@ -118,7 +130,7 @@ public class OverviewCtrl {
         //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
-    private void showData(){
+    public void showData(){
         if(mainAppRef == null) {
             mainAppRef = rootLayoutCtrlRef.getMainAppRef();
         }
@@ -137,6 +149,7 @@ public class OverviewCtrl {
         PolarChartGenerator polarChartGenerator = new PolarChartGenerator();
         StackPane chart = polarChartGenerator.generateChart(overviewParam);
 
+        overViewCenter.getChildren().setAll(chart);
 
     }
 
