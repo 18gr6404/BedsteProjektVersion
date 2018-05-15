@@ -91,6 +91,9 @@ public class MainApp extends Application {
 
     public Integer getPractitionerID() { return practitionerID; }
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 }
 
 
