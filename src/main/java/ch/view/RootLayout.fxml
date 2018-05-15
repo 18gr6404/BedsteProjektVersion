@@ -18,10 +18,10 @@
    <left>
       <VBox fx:id="sidePaneLeft" maxWidth="200.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT" />
    </left>
-   <center>
-      <VBox fx:id="centerView" alignment="CENTER" prefHeight="766.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
-   </center>
    <right>
       <VBox fx:id="sidePaneRight" maxWidth="200.0" prefWidth="200.0" BorderPane.alignment="TOP_RIGHT" />
    </right>
+   <center>
+      <VBox fx:id="centerView" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

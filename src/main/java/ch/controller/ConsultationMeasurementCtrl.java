@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sun.applet.Main;
 
 import java.io.IOException;
 
@@ -24,7 +25,9 @@ public class ConsultationMeasurementCtrl {
     // Reference to the main application. - Denne var i AddressApp men er ikke helt sikke på om vi skal bruge den.
     private MainApp mainAppRef;
     private Stage consultationMeasurementStage;
-    private boolean okClicked = false;
+    private Integer patientCpr;
+    private Integer practitionerId;
+
 
     /**
      * The constructor.
@@ -51,18 +54,12 @@ public class ConsultationMeasurementCtrl {
     private void handleOK() {
         if (isInputValid()) {
 
-            ///////////////// HER SKAL DER BRUGES CPR OG PRACTITIONER ID FRA MAIN /////////////////////////
-            // Laver mine egne kopier
-            int CPRkopi = 1207731450;   //mainAppRef.getCPR();
-            int PracIDkopi = 56789;     //mainAppRef.getPractiotionerID();
             String fev1String = ConsultationMeasurementTextField.getText();
             Integer fev1Int = Integer.parseInt(fev1String);
             dbControl dbControlOb = dbControl.getInstance();
-            //dbControlOb.insertfev1(fev1Int, CPRkopi, PracIDkopi);
+            //OBS skal indkommenteres når vi vil sætte til DB.
+            //dbControlOb.insertfev1(fev1Int, patientCpr, practitionerId);
 
-//          Hvad skal vi gøre med FEV1 målingen??
-
-            okClicked = true;
             consultationMeasurementStage.close();
         }
     }
@@ -108,10 +105,6 @@ public class ConsultationMeasurementCtrl {
     }
 
 
-    private boolean isOkClicked() {
-        return okClicked;
-    }
-
     /**
      * Is called by the main application to give a reference back to itself.
      *
@@ -125,7 +118,7 @@ public class ConsultationMeasurementCtrl {
         this.consultationMeasurementStage = consultationMeasurementStage;
     }
 
-    public static void showConsultationMeasurementView(){
+    public static void showConsultationMeasurementView(Integer patientCpr, Integer practitionerId){
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -143,17 +136,24 @@ public class ConsultationMeasurementCtrl {
 
             ConsultationMeasurementCtrl controller = loader.getController();
             controller.setConsultationMeasurementStage(consultationMeasurementStage);
+            controller.setPatientCpr(patientCpr);
+            controller.setPractitionerId(practitionerId);
 
             // Show the dialog and wait until the user closes it
             consultationMeasurementStage.showAndWait();
 
-            //Skal vi ikke bruge da de bruger det i adressapp til at finde ud af om man har trykket OK i dialogboxen,
-            // der hvor de kalder show-metoden.
-            //return controller.isOkClicked();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPatientCpr(Integer patientCpr) {
+        this.patientCpr = patientCpr;
+    }
+
+    public void setPractitionerId(Integer practitionerId) {
+        this.practitionerId = practitionerId;
     }
 }
 

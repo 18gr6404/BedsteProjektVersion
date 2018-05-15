@@ -333,6 +333,9 @@ public class dbControl {
         }
     }
 
+    //public LocalDate requestLastConsultationDate (Integer patientCPR) { }
+
+
 }
 
 

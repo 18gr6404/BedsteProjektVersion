@@ -102,8 +102,7 @@ public class WeeklyOverviewCtrl implements Initializable {
 
     @FXML
     private void handleConsultationMeasurement(){
-
-        ConsultationMeasurementCtrl.showConsultationMeasurementView();
+        ConsultationMeasurementCtrl.showConsultationMeasurementView(mainAppRef.getPatientCPR(), mainAppRef.getPractitionerID());
     }
 
     @FXML
@@ -112,7 +111,13 @@ public class WeeklyOverviewCtrl implements Initializable {
     }
 
     @FXML
-    private void handleSummary(){ rootLayoutCtrlRef.showSummaryView(); }
+    private void handleSummary(){
+        if(rootLayoutCtrlRef.getRootLayout().getBottom() == null){
+            rootLayoutCtrlRef.showSummaryView(); }
+        else{
+            rootLayoutCtrlRef.getRootLayout().setBottom(null);
+        }
+    }
 
     @FXML
     private void handleTwoWeeks(){
@@ -216,6 +221,9 @@ public class WeeklyOverviewCtrl implements Initializable {
      */
     public void setRootLayoutCtrlRef(RootLayoutCtrl inputRootLayoutCtrl) {
         this.rootLayoutCtrlRef = inputRootLayoutCtrl;
+    }
+    public void setMainApp(MainApp inputMain) {
+        this.mainAppRef = inputMain;
     }
 
 

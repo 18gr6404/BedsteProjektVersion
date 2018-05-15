@@ -44,20 +44,11 @@ public class RootLayoutCtrl {
 
             sidePaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
             sidePaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
-            rootLayout.setLeft(sidePaneLeft);
-
-
 
             sidePaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
             sidePaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
-            rootLayout.setRight(sidePaneRight);
 
-
-            centerView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
-            rootLayout.setCenter(centerView);
-
-
-            this.rootLayout = rootLayout;
+            centerView.setPadding(new Insets(0, 5, 0, 5)); //Sætter objekternes afstand fra kanterne
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -186,6 +177,7 @@ public class RootLayoutCtrl {
 
                 OverviewCtrl controller = loader.getController();
                 controller.setRootLayoutCtrlRef(this);
+                controller.setMainApp(this.mainAppRef);
                 controller.showData();
 
 
@@ -206,7 +198,8 @@ public class RootLayoutCtrl {
 
             WeeklyOverviewCtrl controller = loader.getController();
             controller.setRootLayoutCtrlRef(this);
-          //  controller.showData();
+            controller.setMainApp(this.mainAppRef);
+           // controller.showData();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -257,9 +250,7 @@ public class RootLayoutCtrl {
     public VBox getSidepaneRight(){
         return this.sidePaneRight;
     }
-    public VBox getCenterView(){
-        return this.centerView;
-    }
+   // public HBox getCenterView(){ return this.centerView; }
     public BorderPane getRootLayout(){return rootLayout;}
     public MainApp getMainAppRef(){return this.mainAppRef;}
 
