@@ -76,7 +76,7 @@ public class CalculatedParametersCtrl {
          */
         dbControl dbClass = dbControl.getInstance();
         fev1Liste = dbClass.buildFEV(patientIdentifier-20);
-        List<Double> pctFev = new ArrayList<>();
+        List<Observation> pctFev = new ArrayList<>();
         pctFev = pctAfPEV1(fev1Liste);
 
         Double avgFev = gnmsnit(fev1Liste);
@@ -276,8 +276,9 @@ public class CalculatedParametersCtrl {
          */
         List<List<Double>> pctListeDagSymptomer = udregnPCT(ugeListeDagSymptomer);
         List<List<Double>> pctListeNatSymptomer = udregnPCT(ugeListeNatSymptomer);
-        List<Double> pctMorgenPEF = pctAfPEV1(pefMorgenListe);
-        List<Double> pctAftenPEF = pctAfPEV1(pefAftenListe);
+        List<Observation> pctMorgenPEF = pctAfPEV1(pefMorgenListe);
+        List<Observation> pctAftenPEF = pctAfPEV1(pefAftenListe);
+
         /**
          * Laver pctPerioden for dagSymptom
          */
@@ -424,8 +425,7 @@ public class CalculatedParametersCtrl {
 
     }
 
-    public List<Double> pctAfPEV1(List<Observation> liste){
-        List<Double> pctListe = new ArrayList<>();
+    public List<Observation> pctAfPEV1(List<Observation> liste){
         Double max = new Double(0);
         Double test = new Double(0);
         for (int i = 0; i < liste.size(); i++) {
@@ -440,15 +440,19 @@ public class CalculatedParametersCtrl {
         }
         for (int j = 0; j<liste.size();j++){
             try{
-
-                pctListe.add((((liste.get(j).getValueQuantity().getValue().doubleValue())/max)*100));
+                double temp = ((liste.get(j).getValueQuantity().getValue().doubleValue())/max)*100;
+                liste.get(j).setValue(new Quantity(temp));
                 //tempObs.get(1).setValue(randomPEF.get(1));
             }catch (FHIRException e){
                 System.out.println(e.getMessage());
             }
         }
-        System.out.println(liste.get(0).getValue().toString());
-        return pctListe;
+        try{
+            System.out.println(liste.get(0).getValueQuantity().getValue());
+        }catch (FHIRException e){
+            e.getMessage();
+        }
+        return liste;
     }
 
 }
