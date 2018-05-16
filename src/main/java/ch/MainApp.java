@@ -48,9 +48,6 @@ public class MainApp extends Application {
 
         dbControl myDBClass = dbControl.getInstance();
         myDBClass.startConnection();
-        myDBClass.buildFEV(patientCPR);
-
-       // myDBClass.buildPatientData(patientCPR);
 
         RootLayoutCtrl rootLayoutCtrlRef = new RootLayoutCtrl(this);
         rootLayoutCtrlRef.initRootLayout(this.primaryStage);

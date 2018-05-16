@@ -305,19 +305,26 @@ public class CalculatedParametersCtrl {
         }
 
 
-        List<List<Integer>> ugeListeTriggers = new ArrayList<>();
-        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAktiv));
-        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAllergi));
-        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerStoev));
-        ugeListeTriggers.add(symptomListe(startDate, endDate, triggerUkendt));
-
         List<Double> pctPeriodeTrigger = new ArrayList<>();
-        double triggerSize = triggerListe.size();
-        pctPeriodeTrigger.add(triggerAktiv.size() / triggerSize);
-        pctPeriodeTrigger.add(triggerAllergi.size() / triggerSize);
-        pctPeriodeTrigger.add(triggerStoev.size() / triggerSize);
-        pctPeriodeTrigger.add(triggerUkendt.size() / triggerSize);
+        if(triggerListe.size() != 0) {
+            List<List<Integer>> ugeListeTriggers = new ArrayList<>();
+            ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAktiv));
+            ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAllergi));
+            ugeListeTriggers.add(symptomListe(startDate, endDate, triggerStoev));
+            ugeListeTriggers.add(symptomListe(startDate, endDate, triggerUkendt));
 
+            double triggerSize = triggerListe.size();
+            pctPeriodeTrigger.add(triggerAktiv.size() / triggerSize);
+            pctPeriodeTrigger.add(triggerAllergi.size() / triggerSize);
+            pctPeriodeTrigger.add(triggerStoev.size() / triggerSize);
+            pctPeriodeTrigger.add(triggerUkendt.size() / triggerSize);
+        }
+        else{
+            Double zero = new Double(0);
+            for (int i=0; i<triggerListe.size();i++){
+                pctPeriodeTrigger.add(zero);
+            }
+        }
         // Aktivitet, kun én liste
         List<Integer> ugeListeAktivitet = symptomListe(startDate, endDate, aktivitetsListe);
 

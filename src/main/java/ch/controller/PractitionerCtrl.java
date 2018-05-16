@@ -39,7 +39,7 @@ public class PractitionerCtrl extends HBox {
     }
 
 
-    public void setPractitioner(){
+    public void showPractitioner(){
         dbControl dbControlOb = dbControl.getInstance();
 
         practitionerObject = dbControlOb.buildPractitionerData(mainAppRef.getPractitionerID());

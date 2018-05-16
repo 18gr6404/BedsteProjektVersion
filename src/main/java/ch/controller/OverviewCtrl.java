@@ -137,7 +137,6 @@ public class OverviewCtrl {
             startDate = tempEndDate;
         }
 
-
         showData();
 
     }
@@ -148,9 +147,8 @@ public class OverviewCtrl {
 
         dbControl dbControlOb = dbControl.getInstance();
 
-        LocalDate endDate = dbControlOb.getLatestConsultationDate(cpr);
-
-        LocalDate startDate = LocalDate.now();
+        startDate = dbControlOb.getLatestConsultationDate(cpr);
+        endDate = LocalDate.now();
 
     }
 

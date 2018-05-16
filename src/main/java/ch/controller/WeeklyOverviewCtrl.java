@@ -104,10 +104,8 @@ public class WeeklyOverviewCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle){
 
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
-        //startDate = LocalDate.now().minusDays(28);
-        //endDate = LocalDate.now();
-        startDate = LocalDate.parse("2018-03-10");
-        endDate = LocalDate.parse("2018-05-10");
+        startDate = LocalDate.now().minusDays(28);
+        endDate = LocalDate.now();
 
     }
 
@@ -173,9 +171,8 @@ public class WeeklyOverviewCtrl implements Initializable {
 
         dbControl dbControlOb = dbControl.getInstance();
 
-        LocalDate endDate = dbControlOb.getLatestConsultationDate(cpr);
-
-        LocalDate startDate = LocalDate.now();
+        startDate = dbControlOb.getLatestConsultationDate(cpr);
+        endDate = LocalDate.now();
 
     }
 

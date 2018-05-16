@@ -75,6 +75,7 @@ public class ConsultationMeasurementCtrl {
             //OBS skal indkommenteres når vi vil sætte til DB.
             dbControlOb.insertfev1(fev1, patientCpr, practitionerId);
 
+            //Her skal showData på en eller anden måde kaldes så vi får opdateret charts.
             consultationMeasurementStage.close();
         }
     }
@@ -112,7 +113,7 @@ public class ConsultationMeasurementCtrl {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(consultationMeasurementStage);
             alert.setTitle("Ugyldig indtastning");
-            alert.setHeaderText("Indtast venligst en gyldig konsultationsmåling.");
+            alert.setHeaderText("Indtast venligst en gyldig konsultationsmåling for at bekræfte.");
             alert.setContentText(errorMessage);
             alert.showAndWait();
 

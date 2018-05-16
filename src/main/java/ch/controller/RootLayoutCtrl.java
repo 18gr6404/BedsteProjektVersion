@@ -72,7 +72,7 @@ public class RootLayoutCtrl {
 
                 PractitionerCtrl controller = loader.getController();
                 controller.setMainApp(mainAppRef);
-                controller.setPractitioner();
+                controller.showPractitioner();
 
 
             } catch (IOException e) {
