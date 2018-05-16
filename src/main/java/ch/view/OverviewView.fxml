@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="766.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="766.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SplitPane dividerPositions="0.056282722513089, 0.8717277486910995" layoutX="64.0" layoutY="18.0" orientation="VERTICAL" prefHeight="764.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -30,7 +30,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="337.0" prefWidth="798.0">
                <children>
-                  <VBox fx:id="overViewCenter" alignment="CENTER" prefHeight="562.0" prefWidth="550.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <VBox fx:id="overViewCenter" alignment="CENTER" prefHeight="609.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="70.0" minWidth="0.0" prefHeight="138.0" prefWidth="798.0">
@@ -62,8 +62,8 @@
                         </Button>
                         <Button fx:id="fourWeeksBtn" mnemonicParsing="false" onAction="#handleFourWeeks" prefHeight="35.0" text="Seneste 4 uger" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
                         <Button fx:id="twoWeeksBtn" mnemonicParsing="false" onAction="#handleTwoWeeks" prefHeight="35.0" text="Seneste 2 uger" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                        <DatePicker fx:id="SlutDatePicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                        <DatePicker fx:id="StartDatePicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                        <DatePicker fx:id="endPicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                        <DatePicker fx:id="startPicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
                         <Label text="Start:" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <font>
                               <Font size="10.0" />

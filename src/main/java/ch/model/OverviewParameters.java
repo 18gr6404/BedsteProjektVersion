@@ -12,17 +12,19 @@ public class OverviewParameters {
     private final DoubleProperty avgMorningPEF;
     private final DoubleProperty avgEveningPEF;
     private final DoubleProperty avgFEV1;
-    private final StringProperty mostFrequentSymptom;
+    private final StringProperty mostFrequentDay;
+    private final StringProperty mostFrequentNight;
+    private final StringProperty mostFrequentTrigger;
 
     /**
      * Default Constructor
      * Kan pt ikke benyttes. Den forårsager NullPointerException når den kaldes og kan ikke gennemskue en fiks...
      *
      */
-    public OverviewParameters(){this(null, null, null, null, null, null, null, null);}
+    public OverviewParameters(){this(null, null, null, null, null, null, null, null, null,null);}
 
 
-    public OverviewParameters(Integer avgDaySymptoms, Integer avgNightSymptoms, Integer avgActiveLim, Integer avgRelivMed, Double avgMorningPEF, Double avgEveningPEF, Double avgFEV1, String mostFrequentSymptom) {
+    public OverviewParameters(Integer avgDaySymptoms, Integer avgNightSymptoms, Integer avgActiveLim, Integer avgRelivMed, Double avgMorningPEF, Double avgEveningPEF, Double avgFEV1, String mostFrequentDay, String mostFrequentNight, String mostFrequentTrigger) {
         this.avgDaySymptoms = new SimpleIntegerProperty(avgDaySymptoms);
         this.avgNightSymptoms = new SimpleIntegerProperty(avgNightSymptoms);
         this.avgActiveLim = new SimpleIntegerProperty(avgActiveLim);
@@ -30,7 +32,9 @@ public class OverviewParameters {
         this.avgMorningPEF = new SimpleDoubleProperty(avgMorningPEF);
         this.avgEveningPEF = new SimpleDoubleProperty(avgEveningPEF);
         this.avgFEV1 = new SimpleDoubleProperty(avgFEV1);
-        this.mostFrequentSymptom = new SimpleStringProperty(mostFrequentSymptom);
+        this.mostFrequentDay = new SimpleStringProperty(mostFrequentDay);
+        this.mostFrequentNight = new SimpleStringProperty(mostFrequentNight);
+        this.mostFrequentTrigger = new SimpleStringProperty(mostFrequentTrigger);
     }
 
     public IntegerProperty avgDaySymptomsProperty() {
@@ -105,19 +109,30 @@ public class OverviewParameters {
         this.avgEveningPEF.set(avgEveningPEF);
     }
 
-    public StringProperty mostFrequentProperty(){return mostFrequentSymptom;}
+    public StringProperty mostFrequentPropertyDay(){return mostFrequentDay;}
 
-    public String getMostFrequent(){
-        return mostFrequentSymptom.get();
-    }
+    public String getMostFrequentDay(){ return mostFrequentDay.get(); }
 
-    public void setMostFrequentSymptom(String mostFrequentSymptom){
-        this.mostFrequentSymptom.set(mostFrequentSymptom);
-    }
+    public void setMostFrequentDay(String mostFrequentDay){ this.mostFrequentDay.set(mostFrequentDay); }
 
-    public DoubleProperty getAvgFEV1() {
+    public StringProperty mostFrequentPropertyNight(){return mostFrequentNight;}
+
+    public String getMostFrequentNight(){ return mostFrequentNight.get(); }
+
+    public void setMostFrequentNight(String mostFrequentNight){ this.mostFrequentNight.set(mostFrequentNight); }
+
+    public StringProperty mostFrequentPropertyTrigger(){return mostFrequentTrigger;}
+
+    public String getMostFrequentTrigger(){ return mostFrequentTrigger.get(); }
+
+    public void setMostFrequentTrigger(String mostFrequentTrigger){ this.mostFrequentTrigger.set(mostFrequentTrigger); }
+
+    public DoubleProperty getAvgFEV1Property() {
         return avgFEV1;
     }
+
+    public Double getAvgFEV1(){return
+            avgEveningPEF.get();}
 
     public void setAvgFEV1(Double avgFEV1) {
         this.avgFEV1.set(avgFEV1);

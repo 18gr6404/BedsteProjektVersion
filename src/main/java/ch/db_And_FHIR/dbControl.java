@@ -10,9 +10,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -191,6 +189,28 @@ public class dbControl {
         return allergyintoleranceList;
     }
 
+    public void insertSummary(ClinicalImpression summary, Integer patientCPR, Integer practitionerID) {
+
+        String query = "INSERT INTO Summary (cpr, dateTime, text, practitionerID) values ("
+                + "'" + patientCPR + "',"
+                + "'" + Instant.ofEpochMilli(summary.getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() + "',"
+                + "'" + summary.getSummary() + "',"
+                + "'" + practitionerID + "')"
+                ;
+
+        try { //Noget Daniel har brugt til at teste det.
+            int rows = con.createStatement().executeUpdate(query, 1);
+          /*  if (rows>0)
+            //System.out.println("Succes!");
+            else
+            throw new RuntimeException();*/
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     public List<Condition> buildConditionData(int patientCPR) {
@@ -232,14 +252,13 @@ public class dbControl {
                 Patient patient = new Patient();
 
 
-
                 //Ny extension til alder
-             //   Extension ext3 = new Extension();
-              //  ext3.setUrl("age");
-              //  ext3.setValue(new Quantity(rs.getInt("age")));
-              //  patient.addExtension(ext3);
+                //Extension ext3 = new Extension();
+                //ext3.setUrl("age");
+                //ext3.setValue(new Quantity(rs.getInt("age")));
+                //patient.addExtension(ext3);
 
-                patient.addIdentifier().setValue(String.valueOf(rs.getInt("cpr"))); //Vi beregner alder i patientCtrl ud fra cpr
+                patient.addIdentifier().setValue(String.valueOf(rs.getInt("cpr"))); //Vi beregner alder i patientCtrl ud fra cpr.
                 patient.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
                if (rs.getString("gender").equals("K")) {
                    patient.setGender(Enumerations.AdministrativeGender.FEMALE);
@@ -314,6 +333,7 @@ public class dbControl {
     }
 
     public void insertfev1(Observation fev1, Integer patientCPR, Integer practitionerID){
+
         String query = "INSERT INTO Fev1(cpr, dateTime, value, practitionerID) values ("
                 + "'" + patientCPR + "',"
                 + "'" + Instant.ofEpochMilli(fev1.getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() + "',"
@@ -321,7 +341,9 @@ public class dbControl {
                 + "'" + practitionerID + "')"
                 ;
 
-        try { //Noget Daniel har brugt til at teste det.
+
+
+        try {
             int rows = con.createStatement().executeUpdate(query, 1);
             /*if (rows>0)
                 //System.out.println("Succes!");
@@ -333,26 +355,6 @@ public class dbControl {
         }
     }
 
-    public void insertSummary(ClinicalImpression summary, Integer patientCPR, Integer practitionerID) {
-
-        String query = "INSERT INTO Summary (cpr, dateTime, text, practitionerID) values ("
-                + "'" + patientCPR + "',"
-                + "'" + Instant.ofEpochMilli(summary.getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() + "',"
-                + "'" + summary.getSummary() + "',"
-                + "'" + practitionerID + "')"
-                ;
-
-        try { //Noget Daniel har brugt til at teste det.
-            int rows = con.createStatement().executeUpdate(query, 1);
-          /*  if (rows>0)
-            //System.out.println("Succes!");
-            else
-            throw new RuntimeException();*/
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public LocalDate getLatestConsultationDate(Integer patientCPR){
 
@@ -391,8 +393,6 @@ public class dbControl {
     }
 
     }
-
-
 
 
 

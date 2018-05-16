@@ -13,8 +13,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.hl7.fhir.dstu3.model.Observation;
-import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.StringType;
+import sun.applet.Main;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -30,7 +30,9 @@ public class ConsultationMeasurementCtrl {
     // Reference to the main application.
     private MainApp mainAppRef;
     private Stage consultationMeasurementStage;
-    private boolean okClicked = false;
+    private Integer patientCpr;
+    private Integer practitionerId;
+
 
     /**
      * The constructor.
@@ -48,6 +50,8 @@ public class ConsultationMeasurementCtrl {
 
     }
 
+
+
     /**
      * Håndterer OK knappen
      */
@@ -55,12 +59,10 @@ public class ConsultationMeasurementCtrl {
     private void handleOK() {
         if (isInputValid()) {
 
-            Integer cpr = 1207731450; //mainAppRef.getPatientCPR();
-            Integer practitionerID = 56789;//mainAppRef.getPractitionerID();
+
             Observation fev1 = new Observation();
 
             fev1.setValue(new StringType(ConsultationMeasurementTextField.getText()));
-          //  System.out.println(fev1.getValue());
 
             Date dateIn = new Date();
             LocalDateTime ldt = LocalDateTime.ofInstant(dateIn.toInstant(), ZoneId.systemDefault());
@@ -68,11 +70,11 @@ public class ConsultationMeasurementCtrl {
 
             fev1.setIssued(dateOut);
 
+
             dbControl dbControlOb = dbControl.getInstance();
-            dbControlOb.insertfev1(fev1, cpr, practitionerID);
+            //OBS skal indkommenteres når vi vil sætte til DB.
+            dbControlOb.insertfev1(fev1, patientCpr, practitionerId);
 
-
-            okClicked = true;
             consultationMeasurementStage.close();
         }
     }
@@ -101,7 +103,7 @@ public class ConsultationMeasurementCtrl {
             try {
                 Integer.parseInt(ConsultationMeasurementTextField.getText());
             } catch (NumberFormatException e) {
-                errorMessage += "Ugyldig indtastning.\n Indtastningen skal bestå af et tal.";
+                errorMessage += "Ugyldig indtastning. Indtastning skal bestå af et tal.\n";
             }
         }
         if (errorMessage.length() == 0) {
@@ -110,17 +112,13 @@ public class ConsultationMeasurementCtrl {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(consultationMeasurementStage);
             alert.setTitle("Ugyldig indtastning");
-            alert.setHeaderText("Indtast konsultationsmåling for at bekræfte");
+            alert.setHeaderText("Indtast venligst en gyldig konsultationsmåling.");
             alert.setContentText(errorMessage);
             alert.showAndWait();
 
             return false;}
     }
 
-
-    private boolean isOkClicked() {
-        return okClicked;
-    }
 
     /**
      * Is called by the main application to give a reference back to itself.
@@ -135,7 +133,7 @@ public class ConsultationMeasurementCtrl {
         this.consultationMeasurementStage = consultationMeasurementStage;
     }
 
-    public static void showConsultationMeasurementView(){
+    public static void showConsultationMeasurementView(Integer patientCpr, Integer practitionerId){
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -153,17 +151,24 @@ public class ConsultationMeasurementCtrl {
 
             ConsultationMeasurementCtrl controller = loader.getController();
             controller.setConsultationMeasurementStage(consultationMeasurementStage);
+            controller.setPatientCpr(patientCpr);
+            controller.setPractitionerId(practitionerId);
 
             // Show the dialog and wait until the user closes it
             consultationMeasurementStage.showAndWait();
 
-            //Skal vi ikke bruge da de bruger det i adressapp til at finde ud af om man har trykket OK i dialogboxen,
-            // der hvor de kalder show-metoden.
-            //return controller.isOkClicked();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPatientCpr(Integer patientCpr) {
+        this.patientCpr = patientCpr;
+    }
+
+    public void setPractitionerId(Integer practitionerId) {
+        this.practitionerId = practitionerId;
     }
 }
 

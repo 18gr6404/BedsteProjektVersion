@@ -24,6 +24,7 @@ public class RootLayoutCtrl {
 
     private MainApp mainAppRef;
     private VBox mostFrequentTable;
+    private OverviewCtrl overviewCtrlRef;
 
     /**
      * Constructor
@@ -44,20 +45,11 @@ public class RootLayoutCtrl {
 
             sidePaneLeft.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
             sidePaneLeft.setPadding(new Insets(5, 5, 10, 10)); //Sætter objekternes afstand fra kanterne
-            rootLayout.setLeft(sidePaneLeft);
-
-
 
             sidePaneRight.setSpacing(20); //laver mellemrum mellem objekterne i VBox'en.
             sidePaneRight.setPadding(new Insets(5, 10, 10, 5)); //Sætter objekternes afstand fra kanterne
-            rootLayout.setRight(sidePaneRight);
 
-
-            centerView.setPadding(new Insets(5, 5, 5, 5)); //Sætter objekternes afstand fra kanterne
-            rootLayout.setCenter(centerView);
-
-
-            this.rootLayout = rootLayout;
+            centerView.setPadding(new Insets(0, 5, 0, 5)); //Sætter objekternes afstand fra kanterne
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,7 +72,7 @@ public class RootLayoutCtrl {
 
                 PractitionerCtrl controller = loader.getController();
                 controller.setMainApp(mainAppRef);
-            controller.setPractitioner();
+                controller.setPractitioner();
 
 
             } catch (IOException e) {
@@ -161,18 +153,16 @@ public class RootLayoutCtrl {
             loader.setLocation(getClass().getResource("/ch/view/OverviewView.fxml"));
             loader.setController(overviewCtrl);
             AnchorPane overview = loader.load();
-
             centerView.getChildren().setAll(overview);
-
-
             //centerView.setFillWidth(true);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        FXMLLoader loader = new FXMLLoader();
         if (!sidePaneRight.getChildren().contains(mostFrequentTable)) {
             try {
-                FXMLLoader loader = new FXMLLoader();
                 //Tabellen med hyppigst, der skal sættes i den højre sidebar.
                 loader.setLocation(getClass().getResource("/ch/view/MostFrequentTable.fxml"));
                 //OBS: Her sætter vi selv ctrl da vi ikke kan sætte det i FMLX-filen, da denne controller styrer 2 FMXML-filer
@@ -184,15 +174,18 @@ public class RootLayoutCtrl {
 
                 sidePaneRight.getChildren().add(mostFrequentTable);
 
-                OverviewCtrl controller = loader.getController();
-                controller.setRootLayoutCtrlRef(this);
-                controller.showData();
+                overviewCtrlRef = loader.getController();
+                overviewCtrlRef.setRootLayoutCtrlRef(this);
+                overviewCtrlRef.setMainApp(this.mainAppRef);
+                overviewCtrlRef.showData();
 
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+
     }
 
     public void showWeeklyOverview() {
@@ -206,7 +199,8 @@ public class RootLayoutCtrl {
 
             WeeklyOverviewCtrl controller = loader.getController();
             controller.setRootLayoutCtrlRef(this);
-          //  controller.showData();
+            controller.setMainApp(this.mainAppRef);
+           controller.showData();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -257,9 +251,7 @@ public class RootLayoutCtrl {
     public VBox getSidepaneRight(){
         return this.sidePaneRight;
     }
-    public VBox getCenterView(){
-        return this.centerView;
-    }
+   // public HBox getCenterView(){ return this.centerView; }
     public BorderPane getRootLayout(){return rootLayout;}
     public MainApp getMainAppRef(){return this.mainAppRef;}
 

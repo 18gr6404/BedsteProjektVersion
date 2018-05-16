@@ -37,6 +37,7 @@ public class PolarChartGenerator {
     private XYSeries<XYChartItem> xySeries4;
     private XYSeries<XYChartItem> xySeries5;
     private XYSeries<XYChartItem> xySeries6;
+    private XYSeries<XYChartItem> xySeries7;
 
     private PolarChart<XYChartItem> polarChart;
 
@@ -50,8 +51,12 @@ public class PolarChartGenerator {
         List<XYChartItem> xyItems4 = new ArrayList<>();
         List<XYChartItem> xyItems5 = new ArrayList<>();
         List<XYChartItem> xyItems6 = new ArrayList<>();
+        List<XYChartItem> xyItems7 = new ArrayList<>();
 
-        double xy1Length = 20;
+        double xy1Length;
+        if (overViewParam.getAvgRelivMed() < 5) {
+            xy1Length = 20 * overViewParam.getAvgRelivMed();
+        }else {xy1Length = 100;}
         xyItems1.add(new XYChartItem(0, 0));
         xyItems1.add(new XYChartItem(46, xy1Length));
         xyItems1.add(new XYChartItem(50, xy1Length));
@@ -65,7 +70,10 @@ public class PolarChartGenerator {
         xyItems1.add(new XYChartItem(89, xy1Length));
         xyItems1.add(new XYChartItem(90, 0));
 
-        double xy2Length = 20;
+        double xy2Length;
+        if (overViewParam.getAvgActiveLim() < 5) {
+            xy2Length = 20 * overViewParam.getAvgActiveLim();
+        }else {xy2Length = 100;}
         xyItems2.add(new XYChartItem(0, 0));
         xyItems2.add(new XYChartItem(1, xy2Length));
         xyItems2.add(new XYChartItem(5, xy2Length));
@@ -78,7 +86,10 @@ public class PolarChartGenerator {
         xyItems2.add(new XYChartItem(40, xy2Length));
         xyItems2.add(new XYChartItem(44, xy2Length));
 
-        double xy3Length = 20;
+        double xy3Length;
+        if (overViewParam.getAvgNightSymptoms() < 5) {
+            xy3Length = 20 * overViewParam.getAvgNightSymptoms();
+        }else {xy3Length = 100;}
         xyItems3.add(new XYChartItem(0, 0));
         xyItems3.add(new XYChartItem(316, xy3Length));
         xyItems3.add(new XYChartItem(320, xy3Length));
@@ -91,7 +102,10 @@ public class PolarChartGenerator {
         xyItems3.add(new XYChartItem(355, xy3Length));
         xyItems3.add(new XYChartItem(359, xy3Length));
 
-        double xy4Length = 20;
+        double xy4Length;
+        if (overViewParam.getAvgDaySymptoms() < 5) {
+            xy4Length = 20 * overViewParam.getAvgDaySymptoms();
+        }else {xy4Length = 100;}
         xyItems4.add(new XYChartItem(0, 0));
         xyItems4.add(new XYChartItem(271, xy4Length));
         xyItems4.add(new XYChartItem(275, xy4Length));
@@ -104,7 +118,8 @@ public class PolarChartGenerator {
         xyItems4.add(new XYChartItem(310, xy4Length));
         xyItems4.add(new XYChartItem(314, xy4Length));
 
-        double xy5Length = 80;
+        double xy5Length;
+        xy5Length = overViewParam.getAvgFEV1();
         xyItems5.add(new XYChartItem(0, 0));
         xyItems5.add(new XYChartItem(91, xy5Length));
         xyItems5.add(new XYChartItem(95, xy5Length));
@@ -126,7 +141,7 @@ public class PolarChartGenerator {
         xyItems5.add(new XYChartItem(175, xy5Length));
         xyItems5.add(new XYChartItem(179, xy5Length));
 
-        double xy6Length = 80;
+        double xy6Length = overViewParam.getAvgEveningPEF();
         xyItems6.add(new XYChartItem(0, 0));
         xyItems6.add(new XYChartItem(181, xy6Length));
         xyItems6.add(new XYChartItem(185, xy6Length));
@@ -148,7 +163,18 @@ public class PolarChartGenerator {
         xyItems6.add(new XYChartItem(265, xy6Length));
         xyItems6.add(new XYChartItem(269, xy6Length));
 
-
+        double xy7Length = overViewParam.getAvgMorningPEF();
+        xyItems7.add(new XYChartItem(0, 0));
+        xyItems7.add(new XYChartItem(226, xy7Length));
+        xyItems7.add(new XYChartItem(230, xy7Length));
+        xyItems7.add(new XYChartItem(235, xy7Length));
+        xyItems7.add(new XYChartItem(240, xy7Length));
+        xyItems7.add(new XYChartItem(245, xy7Length));
+        xyItems7.add(new XYChartItem(250, xy7Length));
+        xyItems7.add(new XYChartItem(255, xy7Length));
+        xyItems7.add(new XYChartItem(260, xy7Length));
+        xyItems7.add(new XYChartItem(265, xy7Length));
+        xyItems7.add(new XYChartItem(269, xy7Length));
        /* int Ypropery = 80;
         xyItems1.add(new XYChartItem(0, 0));
         xyItems1.add(new XYChartItem(45, 0));
@@ -183,12 +209,15 @@ public class PolarChartGenerator {
         xySeries6.setStroke(Color.rgb(90, 90, 90));
         xySeries6.setSymbolsVisible(false);
 
+        xySeries7 = new XYSeries(xyItems7, ChartType.POLAR, Color.rgb(0, 255, 255, 0.5), Color.RED);
+        xySeries7.setStroke(Color.rgb(90, 90, 90));
+        xySeries7.setSymbolsVisible(false);
         /*xySeries1.setSymbolStroke(Color.LIME);
         xySeries1.setSymbolFill(Color.GREEN);
         xySeries1.setSymbol(Symbol.SQUARE);*/
 
 
-        XYPane polarPane = new XYPane(xySeries1, xySeries2, xySeries3, xySeries4, xySeries5, xySeries6);
+        XYPane polarPane = new XYPane(xySeries1, xySeries2, xySeries3, xySeries4, xySeries5, xySeries6, xySeries7);
 
 
         polarPane.setLowerBoundY(polarPane.getDataMinY() + 28);

@@ -44,7 +44,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </BarChart>
-                        <LineChart fx:id="LineChart" prefHeight="250.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
+                        <LineChart prefHeight="250.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
