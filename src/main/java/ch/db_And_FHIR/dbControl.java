@@ -353,7 +353,47 @@ public class dbControl {
             e.printStackTrace();
         }
     }
-}
+
+    public LocalDate getLatestConsultationDate(Integer patientCPR){
+
+        Statement stmnt = null;
+        List<ClinicalImpression> clinicalImpressionDateList = new ArrayList<>();
+        List<LocalDate> dateList = new ArrayList<>();
+        LocalDate localDate = null;
+        String query = "SELECT dateTime FROM Summary WHERE cpr=" + patientCPR;
+
+        try {
+            stmnt = con.createStatement();
+            ResultSet rs = stmnt.executeQuery(query);
+            while (rs.next()) {
+                ClinicalImpression clinicalImpression = new ClinicalImpression();
+                clinicalImpression.setDate(rs.getDate("dateTime"));
+                clinicalImpressionDateList.add(clinicalImpression);
+                }
+
+            for (int i = 0; i<clinicalImpressionDateList.size(); i++) {
+                dateList.add(Instant.ofEpochMilli(clinicalImpressionDateList.get(i).getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
+            }
+            for (int i = 0; i<dateList.size(); i++) {
+                LocalDate testDate = dateList.get(0);
+                if (dateList.get(i).isAfter(testDate) || dateList.get(i).equals(testDate)) {
+                    localDate = dateList.get(i);
+                    i++;
+                }
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(localDate);
+        return localDate;
+    }
+
+    }
+
+
+
 
 
 

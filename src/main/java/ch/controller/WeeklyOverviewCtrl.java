@@ -163,9 +163,14 @@ public class WeeklyOverviewCtrl implements Initializable {
 
     @FXML
     private void handleSinceLastConsultation(){
-        endDate = LocalDate.now();
+        int cpr = mainAppRef.getPatientCPR();
 
-        //LocalDate endDate = mainAppRef.getLastConsultationDate();
+        dbControl dbControlOb = dbControl.getInstance();
+
+        LocalDate endDate = dbControlOb.getLatestConsultationDate(cpr);
+
+        LocalDate startDate = LocalDate.now();
+
     }
 
 

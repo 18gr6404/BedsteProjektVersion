@@ -1,6 +1,7 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
@@ -119,15 +120,35 @@ public class OverviewCtrl {
 
     @FXML
     private void handleCustomDate(){
-        LocalDate startDate = startPicker.getValue();
-        LocalDate endDate = endPicker.getValue();
+        /* I start pickereren vælger lægen hvilken dato han vil se fra, dette vil typisk være den nyeste dato derfor sættes denne som slutningen
+        på FHIR-søgningen. Ligeledes omvendt.
+        */
+        LocalDate tempEndDate = startPicker.getValue();
+        LocalDate tempStartDate = endPicker.getValue();
+        //Sørger for at den nyeste dato sættes som endDate:
+        if (endDate.isAfter(startDate)){
+            endDate = tempEndDate;
+            startDate = tempStartDate;
+        }
+        else{
+            endDate = tempStartDate;
+            startDate = tempEndDate;
+        }
+
+        System.out.print(endDate);
+        //showData();
     }
 
     @FXML
     private void handleSinceLastConsultation(){
+        int cpr = mainAppRef.getPatientCPR();
+
+        dbControl dbControlOb = dbControl.getInstance();
+
+        LocalDate endDate = dbControlOb.getLatestConsultationDate(cpr);
+
         LocalDate startDate = LocalDate.now();
 
-        //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
     public void showData(){
