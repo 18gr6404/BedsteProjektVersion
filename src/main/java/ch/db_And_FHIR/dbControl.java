@@ -6,8 +6,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,6 +189,28 @@ public class dbControl {
         return allergyintoleranceList;
     }
 
+    public void insertSummary(ClinicalImpression summary, Integer patientCPR, Integer practitionerID) {
+
+        String query = "INSERT INTO Summary (cpr, dateTime, text, practitionerID) values ("
+                + "'" + patientCPR + "',"
+                + "'" + Instant.ofEpochMilli(summary.getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() + "',"
+                + "'" + summary.getSummary() + "',"
+                + "'" + practitionerID + "')"
+                ;
+
+        try { //Noget Daniel har brugt til at teste det.
+            int rows = con.createStatement().executeUpdate(query, 1);
+          /*  if (rows>0)
+            //System.out.println("Succes!");
+            else
+            throw new RuntimeException();*/
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     public List<Condition> buildConditionData(int patientCPR) {
@@ -227,17 +251,14 @@ public class dbControl {
             while (rs.next()) {
                 Patient patient = new Patient();
 
-//                LocalDate birthDate = LocalDate.parse("04.04.2018");
-//                LocalDate today = LocalDate.now();
-//                long age1 = ChronoUnit.YEARS.between(today, birthDate);
 
                 //Ny extension til alder
-                Extension ext3 = new Extension();
-                ext3.setUrl("age");
-                ext3.setValue(new Quantity(rs.getInt("age")));
-                patient.addExtension(ext3);
+                //Extension ext3 = new Extension();
+                //ext3.setUrl("age");
+                //ext3.setValue(new Quantity(rs.getInt("age")));
+                //patient.addExtension(ext3);
 
-                patient.addIdentifier().setValue(String.valueOf(rs.getInt("cpr")));
+                patient.addIdentifier().setValue(String.valueOf(rs.getInt("cpr"))); //Vi beregner alder i patientCtrl ud fra cpr.
                 patient.addName().setFamily(rs.getString("lastName")).addGiven(rs.getString("firstName"));
                if (rs.getString("gender").equals("K")) {
                    patient.setGender(Enumerations.AdministrativeGender.FEMALE);
@@ -311,14 +332,15 @@ public class dbControl {
         return fev1List;
     }
 
-    public void insertfev1(int Fev1, int patientCPR, int practitionerID){
-        Statement stmnt = null;
+    public void insertfev1(Observation fev1, Integer patientCPR, Integer practitionerID){
+
         String query = "INSERT INTO Fev1(cpr, dateTime, value, practitionerID) values ("
                 + "'" + patientCPR + "',"
-                + "'" + LocalDateTime.now() + "',"
-                + "'" + Fev1 + "',"
+                + "'" + Instant.ofEpochMilli(fev1.getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() + "',"
+                + "'" + fev1.getValue() + "',"
                 + "'" + practitionerID + "')"
                 ;
+
 
 
         try {
@@ -334,7 +356,6 @@ public class dbControl {
     }
 
     //public LocalDate requestLastConsultationDate (Integer patientCPR) { }
-
 
 }
 

@@ -162,10 +162,12 @@ public class CalculatedParametersCtrl {
          * Afgør hvilket Dagsymptom er forekommet mest.
          * Simpelt størrelsescheck på de 5 lister.
          */
-        String mostFrequentDay;
+        String mostFrequentDay = "Ingen";
         if(dagSymptomListe.size() != 0){
+            int size = 0;
+            if(size<dagSHvaesen.size())
         mostFrequentDay = dagSHvaesen.get(0).getValue().toString();
-        int size = dagSHvaesen.size();
+            size = dagSHvaesen.size();
         if (size < dagSHoste.size()) {
             size = dagSHoste.size();
 
@@ -186,10 +188,12 @@ public class CalculatedParametersCtrl {
          * Afgør hvilket Natsymptom er forekommet mest.
          * Simpelt størrelsescheck på de 5 lister.
          */
-        String mostFrequentNight;
+        String mostFrequentNight = "Ingen";
         if(natSymptomListe.size() != 0){
+            int size = 0;
+        if(size<natSHoste.size())
         mostFrequentNight = natSHoste.get(0).getValue().toString();
-        int size = natSHoste.size();
+        size = natSHoste.size();
         if(size<natSHoste.size()){
             size = natSHoste.size();
             mostFrequentNight = natSHoste.get(0).getValue().toString();
@@ -206,10 +210,12 @@ public class CalculatedParametersCtrl {
          * Afgør hvilken Trigger symptom er forekommet mest.
          * Simpelt størrelsescheck på de 5 lister.
          */
-        String mostFrequentTrigger;
+        String mostFrequentTrigger = "Ingen";
         if (triggerListe.size() != 0){
+            int size = 0;
+        if(size<triggerAktiv.size())
         mostFrequentTrigger = triggerAktiv.get(0).getValue().toString();
-        int size = triggerAktiv.size();
+        size = triggerAktiv.size();
         if(size<triggerAllergi.size()){
             size = triggerAllergi.size();
             mostFrequentTrigger = triggerAllergi.get(0).getValue().toString();

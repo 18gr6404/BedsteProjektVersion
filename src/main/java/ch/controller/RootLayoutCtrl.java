@@ -24,6 +24,7 @@ public class RootLayoutCtrl {
 
     private MainApp mainAppRef;
     private VBox mostFrequentTable;
+    private OverviewCtrl overviewCtrlRef;
 
     /**
      * Constructor
@@ -152,18 +153,16 @@ public class RootLayoutCtrl {
             loader.setLocation(getClass().getResource("/ch/view/OverviewView.fxml"));
             loader.setController(overviewCtrl);
             AnchorPane overview = loader.load();
-
             centerView.getChildren().setAll(overview);
-
-
             //centerView.setFillWidth(true);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        FXMLLoader loader = new FXMLLoader();
         if (!sidePaneRight.getChildren().contains(mostFrequentTable)) {
             try {
-                FXMLLoader loader = new FXMLLoader();
                 //Tabellen med hyppigst, der skal sættes i den højre sidebar.
                 loader.setLocation(getClass().getResource("/ch/view/MostFrequentTable.fxml"));
                 //OBS: Her sætter vi selv ctrl da vi ikke kan sætte det i FMLX-filen, da denne controller styrer 2 FMXML-filer
@@ -175,16 +174,18 @@ public class RootLayoutCtrl {
 
                 sidePaneRight.getChildren().add(mostFrequentTable);
 
-                OverviewCtrl controller = loader.getController();
-                controller.setRootLayoutCtrlRef(this);
-                controller.setMainApp(this.mainAppRef);
-                controller.showData();
+                overviewCtrlRef = loader.getController();
+                overviewCtrlRef.setRootLayoutCtrlRef(this);
+                overviewCtrlRef.setMainApp(this.mainAppRef);
+                overviewCtrlRef.showData();
 
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+
     }
 
     public void showWeeklyOverview() {
@@ -199,7 +200,7 @@ public class RootLayoutCtrl {
             WeeklyOverviewCtrl controller = loader.getController();
             controller.setRootLayoutCtrlRef(this);
             controller.setMainApp(this.mainAppRef);
-           // controller.showData();
+           controller.showData();
 
         } catch (IOException e) {
             e.printStackTrace();

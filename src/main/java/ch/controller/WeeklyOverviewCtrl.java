@@ -136,7 +136,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         endDate = LocalDate.now();
         startDate = LocalDate.now().minusDays(14);
 
-        //showData();
+        showData();
     }
 
     @FXML
@@ -144,7 +144,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         endDate = LocalDate.now();
         startDate = LocalDate.now().minusDays(28);
 
-       // showData();
+       showData();
     }
 
     @FXML
@@ -164,8 +164,7 @@ public class WeeklyOverviewCtrl implements Initializable {
             startDate = tempEndDate;
         }
 
-        System.out.print(endDate);
-        //showData();
+        showData();
     }
 
     @FXML

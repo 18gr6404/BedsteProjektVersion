@@ -64,7 +64,6 @@ public class PatientCtrl {
       //  String cpr = patientObject.getIdentifier().get(0).getValue();
 
         if (String.valueOf(patientObject.getGender()).equals("FEMALE")) {
-            // ageLabel.setText(patientObject; //Vender tilbage hertil
             genderLabel.setText("K");
         }
         else if (String.valueOf(patientObject.getGender()).equals("MALE")) {
