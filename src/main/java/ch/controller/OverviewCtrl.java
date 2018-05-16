@@ -1,6 +1,7 @@
 package ch.controller;
 
 import ch.MainApp;
+import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
@@ -136,14 +137,21 @@ public class OverviewCtrl {
             startDate = tempEndDate;
         }
 
+
         showData();
+
     }
 
     @FXML
     private void handleSinceLastConsultation(){
+        int cpr = mainAppRef.getPatientCPR();
+
+        dbControl dbControlOb = dbControl.getInstance();
+
+        LocalDate endDate = dbControlOb.getLatestConsultationDate(cpr);
+
         LocalDate startDate = LocalDate.now();
 
-        //LocalDate endDate = mainAppRef.getLastConsultationDate();
     }
 
     public void showData(){
