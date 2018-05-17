@@ -55,29 +55,35 @@ public class CalculatedParametersCtrl {
 
         // Sætter de to instans variable til null, da vi aldrig skal bibeholde noget data hvis denne metode kaldes igen.
 
-        // INDDEL listerne i intervaller af 7 dage IKKE kalender uger.
+
+        OverviewParameters OVParam;
         WeeklyParameters WeekParam = new WeeklyParameters();
         EncapsulatedParameters encapsulatedParameters = new EncapsulatedParameters();
         //OVParam = null;
         //WeekParam = null;
 
-
+        // Antallet af uger inkluderet i observationerne
         Long avgWeekRounder = (ChronoUnit.DAYS.between(startDate, endDate)) / 7;
         Integer avgWeekRounderInt = Math.round(avgWeekRounder.intValue());
-        //System.out.println(avgWeekRounderInt);
+
+
         // Henter instansen af FhirControl, dette er IKKE at lave et nyt objekt.
         FhirControl FhirClass = FhirControl.getInstance();
 
+        // Henter observationer
         FhirObservations = FhirClass.getFHIRObservations(patientIdentifier.toString(), startDate, endDate);
 
         /**
-         *
+         * Henter DB instans
+         * Henter FEV fra DB
+         * Udregner % ift. forventet af Fev Målingerne (Bruges i WeeklyParam)
          */
         dbControl dbClass = dbControl.getInstance();
         fev1Liste = dbClass.buildFEV(patientIdentifier - 20);
         List<Observation> pctFev = new ArrayList<>();
         pctFev = pctAfPEV1(fev1Liste);
 
+        //Max findes i oprindelige Fev liste, hvorefter der udregnes hvad dene gennemsnitlige FEV måling svarer til i % af forventet
         Double maxFev = findMax(fev1Liste);
         Double avgFev = ((gnmsnit(fev1Liste))/maxFev)*100;
 
@@ -113,7 +119,7 @@ public class CalculatedParametersCtrl {
             }
         }
         //System.out.println("DagsSymptom size = " + dagSymptomListe.size());
-        OverviewParameters OVParam;
+
 
         /**
          * Inddeler yderligere listerne "NatSymptomer", "DagSymptomer" og "Triggers", i deres respektive underkomponenter vha. deres values.
@@ -152,7 +158,9 @@ public class CalculatedParametersCtrl {
                 dagSAande.add(dagSymptomListe.get(j));
             }
         }
-        /*System.out.println("Hvaesen Size = " + dagSHvaesen.size());
+        /*
+        // Test print
+        System.out.println("Hvaesen Size = " + dagSHvaesen.size());
         System.out.println("Hoste Size = " + dagSHoste.size());
         System.out.println("Aandenød Size = " + dagSAande.size());
         System.out.println("Slim Size = " + dagSSlim.size());
@@ -161,6 +169,7 @@ public class CalculatedParametersCtrl {
         /**
          * Afgør hvilket Dagsymptom er forekommet mest.
          * Simpelt størrelsescheck på de 5 lister.
+         * Kan laves til metode. (Burde laves til metode)
          */
         String mostFrequentDay = "Ingen";
         if(dagSymptomListe.size() != 0){
@@ -240,7 +249,6 @@ public class CalculatedParametersCtrl {
          * se weeklyparam og observér at der ikke er erklæret nogen constructor, så vi defaulter til en noArg constructor. Det kunne også
          * gøres her.
          */
-
         OVParam = new OverviewParameters(Math.round(dagSymptomListe.size()/avgWeekRounderInt), Math.round(natSymptomListe.size()/avgWeekRounderInt), Math.round(aktivitetsListe.size()/avgWeekRounderInt), Math.round(anfaldsMedListe.size()/avgWeekRounderInt), avgPefMorgen, avgPefAften, avgFev, mostFrequentDay, mostFrequentNight, mostFrequentTrigger);
 
 
@@ -249,6 +257,7 @@ public class CalculatedParametersCtrl {
 
         /**
          * Skaffer ugenumre for start og slut dato
+         * Ikke længere aktuelt.
          */
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         int weekNumber = startDate.get(woy);
@@ -263,6 +272,7 @@ public class CalculatedParametersCtrl {
          * Inderste liste har den første uge = index[0]
          * Det samme er gældende for de efterfølgende lister
          */
+
         List<List<Integer>> ugeListeDagSymptomer = new ArrayList<>();
         ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSAande));
         ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSHoste));
@@ -270,9 +280,13 @@ public class CalculatedParametersCtrl {
         ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSSlim));
         ugeListeDagSymptomer.add(symptomListe(startDate, endDate, dagSTryk));
 
-       /* for (int i = 0; i<ugeListeDagSymptomer.size(); i++){
-            System.out.println(ugeListeDagSymptomer.get(0).get(i));
-        }*/
+
+        /**
+         * Tager listen med lister og summerer med fastholdt inderste index, mens der itereres over den yderste liste
+         * På denne måde tilføjer vi det totale antal symptomer (summen) pr. uge til en ny liste
+         * Nyt index er så i uger (I ugeListeTotalDagSymptomer
+         * Kan laves til en metode.
+         */
         List<Integer> ugeListeTotalDagSymptom = new ArrayList<>();
         Integer sum = 0;
         for (int j = 0; j < ugeListeDagSymptomer.get(0).size(); j++) {
@@ -284,7 +298,7 @@ public class CalculatedParametersCtrl {
         }
 
 
-        //System.out.println(ugeListeTotalDagSymptom);
+
         // Nat Symptomer
         List<List<Integer>> ugeListeNatSymptomer = new ArrayList<>();
         ugeListeNatSymptomer.add(symptomListe(startDate, endDate, natSHoste));
@@ -306,13 +320,13 @@ public class CalculatedParametersCtrl {
 
 
         List<Double> pctPeriodeTrigger = new ArrayList<>();
-        if(triggerListe.size() != 0) {
+
             List<List<Integer>> ugeListeTriggers = new ArrayList<>();
             ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAktiv));
             ugeListeTriggers.add(symptomListe(startDate, endDate, triggerAllergi));
             ugeListeTriggers.add(symptomListe(startDate, endDate, triggerStoev));
             ugeListeTriggers.add(symptomListe(startDate, endDate, triggerUkendt));
-
+            if(triggerListe.size() != 0) {
             double triggerSize = triggerListe.size();
             pctPeriodeTrigger.add(triggerAktiv.size() / triggerSize);
             pctPeriodeTrigger.add(triggerAllergi.size() / triggerSize);
@@ -321,7 +335,8 @@ public class CalculatedParametersCtrl {
         }
         else{
             Double zero = new Double(0);
-            for (int i=0; i<triggerListe.size();i++){
+            // Her skal i < antallet af mulige symptomer
+            for (int i=0; i<ugeListeTriggers.size();i++){
                 pctPeriodeTrigger.add(zero);
             }
         }
@@ -343,22 +358,37 @@ public class CalculatedParametersCtrl {
          * Laver pctPerioden for dagSymptom
          */
         List<Double> pctPeriodeDagSymptom = new ArrayList<>();
-        double dagSymptomSize = dagSymptomListe.size();
-        pctPeriodeDagSymptom.add(dagSAande.size() / dagSymptomSize);
-        pctPeriodeDagSymptom.add(dagSHoste.size() / dagSymptomSize);
-        pctPeriodeDagSymptom.add(dagSHvaesen.size() / dagSymptomSize);
-        pctPeriodeDagSymptom.add(dagSSlim.size() / dagSymptomSize);
-        pctPeriodeDagSymptom.add(dagSTryk.size() / dagSymptomSize);
+        if (dagSymptomListe.size() != 0){
+
+            double dagSymptomSize = dagSymptomListe.size();
+            pctPeriodeDagSymptom.add(dagSAande.size() / dagSymptomSize);
+            pctPeriodeDagSymptom.add(dagSHoste.size() / dagSymptomSize);
+            pctPeriodeDagSymptom.add(dagSHvaesen.size() / dagSymptomSize);
+            pctPeriodeDagSymptom.add(dagSSlim.size() / dagSymptomSize);
+            pctPeriodeDagSymptom.add(dagSTryk.size() / dagSymptomSize);
+        } else{
+            Double zero = new Double(0);
+            for (int i=0; i<ugeListeDagSymptomer.size();i++){
+                pctPeriodeDagSymptom.add(zero);
+            }
+        }
+
 
         /**
          * Laver pctPerioden for natSymptom
          */
         List<Double> pctPeriodeNatSymptom = new ArrayList<>();
+        if (natSymptomListe.size() != 0){
         double natSymptomSize = natSymptomListe.size();
         pctPeriodeNatSymptom.add(natSHoste.size() / natSymptomSize);
         pctPeriodeNatSymptom.add(natSTraethed.size() / natSymptomSize);
         pctPeriodeNatSymptom.add(natSHoste.size() / natSymptomSize);
-
+    } else{
+        Double zero = new Double(0);
+        for (int i=0; i<ugeListeNatSymptomer.size();i++){
+            pctPeriodeNatSymptom.add(zero);
+            }
+        }
 
         /**
          * Sætter Weekly Parametre
@@ -407,49 +437,60 @@ public class CalculatedParametersCtrl {
     }*/
 
 
+    /**
+     * Tager en liste med observationer og tæller op på antallet af observationer i hver uge (7 dage) baseret på start og slut dato
+     * @param startDate startdato, dvs den dato der er længst fra dagsdato
+     * @param endDate slutdato, dvs den dato der er tættest på dags dato
+     * @param liste Liste med observationer, som skal tælles op på
+     * @return  Returnerer en liste med Integers, som indeholder det totale antal forekomster for [0] = første uge, [1] = anden uge osv.
+     */
     private List<Integer> symptomListe(LocalDate startDate, LocalDate endDate, List<Observation> liste) {
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         // % er resten efter division med tallet efter %
         long extraDays = (long) (numOfDaysBetween % 7);
         double numberOfWeeks = Math.floor(numOfDaysBetween / 7);
-        startDate = startDate.plusDays(extraDays);
+        // Disse to skal bruges som ikke-inklusive senere, derfor +-
+        startDate = startDate.plusDays(extraDays-1);
         endDate = endDate.plusDays(1);
 
-        //System.out.println(ChronoUnit.DAYS.between(startDate, endDate) + 1);
-        //long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        //System.out.println(numOfDaysBetween);
         List<Integer> ugeListe = new ArrayList<>();
-        int value = 0;
         for (int k = 0; k < numberOfWeeks; k++) {
             ugeListe.add(0);
         }
-        //System.out.println(ugeListe.size());
 
         for (int j = 0; j < liste.size(); j++) {
             for (int i = 1; i < numberOfWeeks + 1; i++) {
+                /**
+                 * Hvis observationsdatoen er indenfor startdatoen plus i*7 (Husk i = 1, som det første)
+                 * så tilføj på plads i
+                 * Ydermere skal det gælde at observationen ikke har en dato, som ligger FØR startDato eller EFTER slutdato
+                 * Disse to er ikke inklusive, hvorfor der er +- en dag ved start og slutdato længere oppe
+                 */
                 if (liste.get(j).getIssued().toInstant().atZone(
                         ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i * 7)) &&
-                        !liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(startDate)) {
+                        !liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(startDate) &&
+                        !liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(endDate) ) {
                     ugeListe.set(i - 1, ugeListe.get(i - 1) + 1);
                     break;
                 }
 
             }
         }
-        //for (int i = 0; i < antalKalenderUger; i++){
-            /*for (int j = 0; j <liste.size(); j++){
-                Integer weekNr = liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().get(woy);
-                for (int i = 0; i <Math.ceil(numOfDaysBetween/7); i++) {
-                    if (weekNr.equals(foersteUge + i) && weekNr < foersteUge + antalKalenderUger + 1) {
-                        ugeListe.set(i, ugeListe.get(i) + 1);// += ugeListe
-                        break;
-                    }
-                }
-            }*/
+
         return ugeListe;
     }
 
+    /**
+     * Kører over en liste inden i en liste og udregner pctfordeling af de inderste listes elementer
+     * Bruges til at finde pctfordelingerne i "Symptomfordeling"
+     * @param sumPrUgeListe Liste med antal af forekomster for hvert symptom pr. uge.
+     *                      Yderste Index = symptomer
+     *                      Inderste Index = uger
+     * @return Returnerer en liste på samme form (bare som Doubles for decimalernes skyld),
+     * hvor det nu er et symptoms bidrag til en given uges symptom antal
+     *
+     */
     private List<List<Double>> udregnPCT(List<List<Integer>> sumPrUgeListe) {
         List<List<Double>> pctListe = new ArrayList<>();
         double sum = 0;
@@ -472,6 +513,12 @@ public class CalculatedParametersCtrl {
         return pctListe;
     }
 
+    /**
+     * Finder et gennemsnit af en observationslistes værdier, tiltænkt PEF
+     * Dette kam ikke gøres med Java's average metoder, da der skal ekstraheres en værdi fra en FHIR ressource
+     * @param liste Observations liste
+     * @return gennemsnittet som Double
+     */
     private Double gnmsnit(List<Observation> liste) {
         Double sum = new Double(0);
         for (int i = 0; i < liste.size(); i++) {
@@ -487,6 +534,11 @@ public class CalculatedParametersCtrl {
 
     }
 
+    /**
+     * Udregner % af maks PEF, igen kan dette ikke gøres med Java's metoder grundet FHIR
+     * @param liste observationsliste
+     * @return returnerer inputliste, men nu med pct værdier fremfor PEF værdier
+     */
     public List<Observation> pctAfPEV1(List<Observation> liste) {
         Double max = new Double(0);
         Double test = new Double(0);
