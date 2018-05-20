@@ -10,6 +10,7 @@ import ch.controller.CreateAsthmaAppUserCtrl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -67,15 +68,26 @@ public class MainApp extends Application {
         System.out.println(OverviewParam.getAvgFEV1()); */
 
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
+        boolean isAppData = FhirClass.requestIsAppData(patientCPR.toString());
 
-        if(isRegistered) {
+        if(isRegistered && isAppData) {
             rootLayoutCtrlRef.initBasicLayout();
             rootLayoutCtrlRef.showOverview();
 
 
         }
         else {
-          
+            /**
+             * Denne advarsel skal også forekomme i Create AsthmaAppUserCtrl, hvor programmet skal termineres.
+             */
+          if (!isAppData){
+              Alert alert = new Alert(Alert.AlertType.ERROR);
+              alert.initOwner(primaryStage);
+              alert.setTitle("Ingen Appdata");
+              alert.setHeaderText("Brugeren skal have mindst én uges astmaappdata");
+              alert.setContentText("Denne patient har ikke astmaappdata!");
+              alert.showAndWait();
+          }
 
             //denne sætter basicLayout og overviewView efter patienten er oprettet
             rootLayoutCtrlRef.showCreateAsthmaAppUserView();

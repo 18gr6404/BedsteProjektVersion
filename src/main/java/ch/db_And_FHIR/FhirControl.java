@@ -123,8 +123,40 @@ public class FhirControl {
         return observationList;
 
     }
+public boolean requestIsAppData(String patientIdentifer){
+       boolean isAppData = false;
+    Bundle results = instansClient
+            .search()
+            .forResource(Patient.class)
+            .where(Patient.IDENTIFIER.exactly().identifier(patientIdentifer))
+            .returnBundle(Bundle.class)
+            .execute();
+
+    /**
+     * Hvis der ikke findes en patient, så returnér false
+     */
+    if (results.getEntry().isEmpty())
+    return isAppData;
+
+    Bundle observationsBundle = instansClient
+            .search()
+            .forResource(Observation.class)
+            .where(Observation.SUBJECT.hasId(results.getEntry().get(0).getResource().getId()))
+            //.where(Observation.DATE.after().day(FHIRstartDate))
+            .returnBundle(Bundle.class)
+            .execute();
+
+    /**
+     * Hvis observationsbundle ikke er tomt, så lav appData = true og returnér
+     */
+        if (!observationsBundle.getEntry().isEmpty())
+            isAppData = true;
+        return isAppData;
+}
 
 }
+
+
 /**
  * Ting i Main:
         String startString = "10.04.2018";
