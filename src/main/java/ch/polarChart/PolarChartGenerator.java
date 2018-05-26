@@ -231,28 +231,6 @@ public class PolarChartGenerator {
 
         StackPane pane = new StackPane(polarChart);
         return pane;
-        //       lastTimerCall = System.nanoTime();
-        //      timer = new AnimationTimer() {
-        /*@Override public void handle ( final long now){
-            if (now > lastTimerCall + UPDATE_INTERVAL) {
-                ObservableList<XYChartItem> xyItems = xySeries1.getItems();
-                xyItems.forEach(item -> {
-                    item.setX(RND.nextDouble() * 360.0);
-                    item.setY(RND.nextDouble() * 8 + RND.nextDouble() * 10);*/
-        // });
-
-        // Can be used to update charts but if more than one series is in one xyPane
-        // it's easier to use the refresh() method of XYChart
-        //xySeries1.refresh();
-        //xySeries2.refresh();
-        //xySeries3.refresh();
-        //xySeries4.refresh();
-
-        // Useful to refresh the chart if it contains more than one series to avoid
-        // multiple redraws
-        //polarChart.refresh();
-
-        //lastTimerCall = now;
     }
 
 

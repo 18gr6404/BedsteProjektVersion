@@ -6,6 +6,7 @@ import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
 import ch.polarChart.PolarChartGenerator;
+import ch.utility.dateUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -81,8 +82,11 @@ public class OverviewCtrl {
     private void initialize() {
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
 
-        startDate = LocalDate.now().minusDays(28);
-        endDate = LocalDate.now();
+        //startDate = LocalDate.now().minusDays(28);
+        //endDate = LocalDate.now();
+        String startDateString = "16.04.2018";
+        startDate = dateUtil.parse(startDateString);
+        endDate = startDate.plusDays(28);
     }
 
     @FXML
@@ -149,7 +153,7 @@ public class OverviewCtrl {
 
         startDate = dbControlOb.getLatestConsultationDate(cpr);
         endDate = LocalDate.now();
-
+        showData();
     }
 
     public void showData(){
