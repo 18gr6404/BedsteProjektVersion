@@ -6,6 +6,7 @@ import ch.db_And_FHIR.dbControl;
 import ch.model.EncapsulatedParameters;
 import ch.model.OverviewParameters;
 import ch.model.WeeklyParameters;
+import javafx.scene.control.Alert;
 import org.hl7.fhir.dstu3.model.IntegerType;
 import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Quantity;
@@ -26,6 +27,7 @@ public class CalculatedParametersCtrl {
 
     public CalculatedParametersCtrl() {
     }
+
 
 
     //FhirControl FhirClass = FhirControl.getInstance();
@@ -79,7 +81,7 @@ public class CalculatedParametersCtrl {
          * Udregner % ift. forventet af Fev Målingerne (Bruges i WeeklyParam)
          */
         dbControl dbClass = dbControl.getInstance();
-        fev1Liste = dbClass.buildFEV(patientIdentifier - 20);
+        fev1Liste = dbClass.buildFEV(patientIdentifier);
         List<Observation> pctFev = new ArrayList<>();
         pctFev = pctAfPEV1(fev1Liste);
 
@@ -106,7 +108,6 @@ public class CalculatedParametersCtrl {
             } else if (FhirObservations.get(0).getCode().getCoding().get(0).getCode().equals("Triggers")) {
                 triggerListe.add(FhirObservations.get(0));
                 FhirObservations.remove(0);
-
             } else if (FhirObservations.get(0).getCode().getCoding().get(0).getCode().equals("Aktivitetsbegraensning")) {
                 aktivitetsListe.add(FhirObservations.get(0));
                 FhirObservations.remove(0);
@@ -382,7 +383,7 @@ public class CalculatedParametersCtrl {
         double natSymptomSize = natSymptomListe.size();
         pctPeriodeNatSymptom.add(natSHoste.size() / natSymptomSize);
         pctPeriodeNatSymptom.add(natSTraethed.size() / natSymptomSize);
-        pctPeriodeNatSymptom.add(natSHoste.size() / natSymptomSize);
+        pctPeriodeNatSymptom.add(natSOpvaagning.size() / natSymptomSize);
     } else{
         Double zero = new Double(0);
         for (int i=0; i<ugeListeNatSymptomer.size();i++){
@@ -393,6 +394,23 @@ public class CalculatedParametersCtrl {
         /**
          * Sætter Weekly Parametre
          */
+        boolean emptyWeek = false;
+        for (int i = 0; i < ugeListeTotalDagSymptom.size(); i++){
+            if (ugeListeTotalDagSymptom.get(i) == 0 && ugeListeTotalDagSymptom.get(i) == 0 &&
+                    ugeListeAktivitet.get(i) ==0 && ugeListeAnfaldsMed.get(i) ==0){
+                emptyWeek = true;
+                break;
+            }
+        }
+       if (emptyWeek){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            //alert.initOwner(getPrimaryStage);
+            alert.setTitle("Tomme uger");
+            alert.setHeaderText("Der findes uger uden astmadata");
+            alert.setContentText("Visse uger indeholder ikke astmaappdata! Tjek Ugeoversigt!");
+            alert.showAndWait();
+        }
+
         WeekParam.setUgeListeDagSymptomer(ugeListeTotalDagSymptom);
         WeekParam.setUgeListeNatSymptomer(ugeListeTotalNatSymptom);
         WeekParam.setUgeListeAktivitet(ugeListeAktivitet);
@@ -402,10 +420,10 @@ public class CalculatedParametersCtrl {
         WeekParam.setPctPeriodeDagSymptom(pctPeriodeDagSymptom);
         WeekParam.setPctPeriodeNatSymptom(pctPeriodeNatSymptom);
         WeekParam.setPctPeriodeTriggers(pctPeriodeTrigger);
-        WeekParam.setFoersteUge(weekNumber);
         WeekParam.setMorgenPEF(pctMorgenPEF);
         WeekParam.setAftenPEF(pctAftenPEF);
         WeekParam.setFev1(pctFev);
+
         encapsulatedParameters.setOverviewParameters(OVParam);
         encapsulatedParameters.setWeeklyParameters(WeekParam);
 
@@ -446,13 +464,13 @@ public class CalculatedParametersCtrl {
      */
     private List<Integer> symptomListe(LocalDate startDate, LocalDate endDate, List<Observation> liste) {
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-        double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         // % er resten efter division med tallet efter %
         long extraDays = (long) (numOfDaysBetween % 7);
         double numberOfWeeks = Math.floor(numOfDaysBetween / 7);
         // Disse to skal bruges som ikke-inklusive senere, derfor +-
-        startDate = startDate.plusDays(extraDays-1);
-        endDate = endDate.plusDays(1);
+        startDate = startDate.plusDays(extraDays - 1);
+        //endDate = endDate.plusDays(1);
 
         List<Integer> ugeListe = new ArrayList<>();
         for (int k = 0; k < numberOfWeeks; k++) {
@@ -468,7 +486,7 @@ public class CalculatedParametersCtrl {
                  * Disse to er ikke inklusive, hvorfor der er +- en dag ved start og slutdato længere oppe
                  */
                 if (liste.get(j).getIssued().toInstant().atZone(
-                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i * 7)) &&
+                        ZoneId.systemDefault()).toLocalDate().isBefore(startDate.plusDays(i * 7 + 1)) &&
                         !liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(startDate) &&
                         !liste.get(j).getIssued().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(endDate) ) {
                     ugeListe.set(i - 1, ugeListe.get(i - 1) + 1);
@@ -561,11 +579,11 @@ public class CalculatedParametersCtrl {
                 System.out.println(e.getMessage());
             }
         }
-        try {
+        /*try {
             System.out.println(liste.get(0).getValueQuantity().getValue());
         } catch (FHIRException e) {
             e.getMessage();
-        }
+        }*/
         return liste;
     }
 

@@ -18,7 +18,7 @@ public class WeeklyParameters {
     private List<Double> pctPeriodeDagSymptom;
     private List<Double> pctPeriodeNatSymptom;
     private List<Double> pctPeriodeTriggers;
-    private Integer FoersteUge;
+
 
 
 
@@ -84,14 +84,6 @@ public class WeeklyParameters {
 
     public void setPctPeriodeNatSymptom(List<Double> pctPeriodeNatSympmtom) {
         this.pctPeriodeNatSymptom = pctPeriodeNatSympmtom;
-    }
-
-    public Integer getFoersteUge() {
-        return FoersteUge;
-    }
-
-    public void setFoersteUge(Integer foersteUge) {
-        FoersteUge = foersteUge;
     }
 
     public List<Observation> getMorgenPEF() {

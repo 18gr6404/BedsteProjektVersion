@@ -76,7 +76,7 @@ public class CreateAsthmaAppUserCtrl {
         Integer patientCPR = mainAppRef.getPatientCPR();
 
         //skal indkommenteres hvis vi vil sætte isRegistered i DB. Det er dog træls når man tester
-        //dbControlOb.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
+        dbControlOb.setAsthmaAppUser(patientCPR, choosenAppInput, isRegisteredInput, pastDataWantedInput);
 
         //Henter den stage som actionevent'et (altså knap-trykket) kommer fra.
 
@@ -86,7 +86,7 @@ public class CreateAsthmaAppUserCtrl {
 
         rootLayoutCtrlRef.initBasicLayout();
 
-        //HVis showOverview er i rootlayout.
+        //Vis showOverview er i rootlayout.
         rootLayoutCtrlRef.showOverview();
     }
 

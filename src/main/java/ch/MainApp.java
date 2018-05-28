@@ -25,9 +25,13 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
   
-
+    // mia OVergaard = 1405936524
+    // Emma Dahl = 1906982274
+    // Lazarus Fisker = 2002802067
+    //
     private Integer patientCPR = 1207731450; //Marianne. Daniel vil gerne = 1207731470
     //private Integer patientCPR = 1303803813;  //Jens. Daniel vil gerne = 1303803823
+    //private Integer patientCPR = 2002802067;
     private Integer practitionerID = 56789; // Ole Bosen
 
 
@@ -66,9 +70,19 @@ public class MainApp extends Application {
 
 
         System.out.println(OverviewParam.getAvgFEV1()); */
-
+        boolean isAppData;
+        Integer FHIR = 0;
         boolean isRegistered = myDBClass.requestIsRegistered(patientCPR);
-        boolean isAppData = FhirClass.requestIsAppData(patientCPR.toString());
+        if (patientCPR.equals(1207731450)){
+            FHIR = patientCPR + 20;
+        }
+        else if (patientCPR.equals(1303803813)) {
+            FHIR = patientCPR + 10;
+        }
+        if (FHIR != 0)
+            isAppData = FhirClass.requestIsAppData(FHIR.toString());
+        else
+            isAppData = FhirClass.requestIsAppData(patientCPR.toString());
 
         if(isRegistered && isAppData) {
             rootLayoutCtrlRef.initBasicLayout();
@@ -76,22 +90,32 @@ public class MainApp extends Application {
 
 
         }
-        else {
+        else if (!isRegistered && isAppData){
             /**
              * Denne advarsel skal også forekomme i Create AsthmaAppUserCtrl, hvor programmet skal termineres.
              */
-          if (!isAppData){
-              Alert alert = new Alert(Alert.AlertType.ERROR);
-              alert.initOwner(primaryStage);
-              alert.setTitle("Ingen Appdata");
-              alert.setHeaderText("Brugeren skal have mindst én uges astmaappdata");
-              alert.setContentText("Denne patient har ikke astmaappdata!");
-              alert.showAndWait();
-          }
+            if (!isAppData){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(primaryStage);
+                alert.setTitle("Ingen Appdata");
+                alert.setHeaderText("Brugeren skal have mindst én uges astmaappdata");
+                alert.setContentText("Denne patient har ikke astmaappdata!");
+                alert.showAndWait();
+            }
 
             //denne sætter basicLayout og overviewView efter patienten er oprettet
             rootLayoutCtrlRef.showCreateAsthmaAppUserView();
 
+        }
+        else if (!isAppData && isRegistered){
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(primaryStage);
+                alert.setTitle("Ingen Appdata");
+                alert.setHeaderText("Brugeren skal have mindst én uges astmaappdata");
+                alert.setContentText("Denne patient har ikke astmaappdata!");
+                alert.showAndWait();
+                rootLayoutCtrlRef.initBasicLayout();
         }
 
     }

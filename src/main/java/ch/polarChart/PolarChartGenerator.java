@@ -152,16 +152,8 @@ public class PolarChartGenerator {
         xyItems6.add(new XYChartItem(210, xy6Length));
         xyItems6.add(new XYChartItem(215, xy6Length));
         xyItems6.add(new XYChartItem(220, xy6Length));
-        xyItems6.add(new XYChartItem(225, xy6Length));
-        xyItems6.add(new XYChartItem(230, xy6Length));
-        xyItems6.add(new XYChartItem(235, xy6Length));
-        xyItems6.add(new XYChartItem(240, xy6Length));
-        xyItems6.add(new XYChartItem(245, xy6Length));
-        xyItems6.add(new XYChartItem(250, xy6Length));
-        xyItems6.add(new XYChartItem(255, xy6Length));
-        xyItems6.add(new XYChartItem(260, xy6Length));
-        xyItems6.add(new XYChartItem(265, xy6Length));
-        xyItems6.add(new XYChartItem(269, xy6Length));
+        xyItems6.add(new XYChartItem(224, xy6Length));
+
 
         double xy7Length = overViewParam.getAvgMorningPEF();
         xyItems7.add(new XYChartItem(0, 0));
@@ -212,9 +204,7 @@ public class PolarChartGenerator {
         xySeries7 = new XYSeries(xyItems7, ChartType.POLAR, Color.rgb(0, 255, 255, 0.5), Color.RED);
         xySeries7.setStroke(Color.rgb(90, 90, 90));
         xySeries7.setSymbolsVisible(false);
-        /*xySeries1.setSymbolStroke(Color.LIME);
-        xySeries1.setSymbolFill(Color.GREEN);
-        xySeries1.setSymbol(Symbol.SQUARE);*/
+
 
 
         XYPane polarPane = new XYPane(xySeries1, xySeries2, xySeries3, xySeries4, xySeries5, xySeries6, xySeries7);
@@ -223,36 +213,13 @@ public class PolarChartGenerator {
         polarPane.setLowerBoundY(polarPane.getDataMinY() + 28);
         polarPane.getChartBackground();
         polarPane.setUpperBoundY(100);
-        //polarPane.setThresholdY(80);
-        //polarPane.setThresholdYVisible(true);
+
 
 
         polarChart = new PolarChart<>(polarPane);
 
         StackPane pane = new StackPane(polarChart);
         return pane;
-        //       lastTimerCall = System.nanoTime();
-        //      timer = new AnimationTimer() {
-        /*@Override public void handle ( final long now){
-            if (now > lastTimerCall + UPDATE_INTERVAL) {
-                ObservableList<XYChartItem> xyItems = xySeries1.getItems();
-                xyItems.forEach(item -> {
-                    item.setX(RND.nextDouble() * 360.0);
-                    item.setY(RND.nextDouble() * 8 + RND.nextDouble() * 10);*/
-        // });
-
-        // Can be used to update charts but if more than one series is in one xyPane
-        // it's easier to use the refresh() method of XYChart
-        //xySeries1.refresh();
-        //xySeries2.refresh();
-        //xySeries3.refresh();
-        //xySeries4.refresh();
-
-        // Useful to refresh the chart if it contains more than one series to avoid
-        // multiple redraws
-        //polarChart.refresh();
-
-        //lastTimerCall = now;
     }
 
 

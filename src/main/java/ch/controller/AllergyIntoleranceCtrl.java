@@ -44,7 +44,7 @@ public class AllergyIntoleranceCtrl{
     private void initialize() {
     }
 
-    public void setAllergyIntolerance(){
+    public void setAllergyIntolerance() {
 
         dbControl dbControlOb = dbControl.getInstance();
 
@@ -52,12 +52,19 @@ public class AllergyIntoleranceCtrl{
 
         AllergyIntolerance.AllergyIntoleranceType a = AllergyIntolerance.AllergyIntoleranceType.ALLERGY;
         AllergyIntolerance.AllergyIntoleranceType b = AllergyIntolerance.AllergyIntoleranceType.INTOLERANCE;
-
+        int largestSize = 1;
+        if (allergyIntoleranceList.size() > 0){
+            for (int j = 0; j<allergyIntoleranceList.size(); j++)
+                if (largestSize < allergyIntoleranceList.get(j).size())
+                largestSize = allergyIntoleranceList.get(j).size();
+    }
         for (int i = 0; i<allergyIntoleranceList.size(); i++) {
-            if (allergyIntoleranceList.get(i).get(0).getType().equals(a)){
-                allergyList.add(allergyIntoleranceList.get(i).get(0).getCode().getCoding().get(0).getCode());
-            } else if (allergyIntoleranceList.get(i).get(0).getType().equals(b)) {
-                intoleranceList.add(allergyIntoleranceList.get(i).get(0).getCode().getCoding().get(0).getCode());
+            for (int j = 0; j < largestSize; j++) {
+                if (allergyIntoleranceList.get(i).get(j).getType().equals(a)) {
+                    allergyList.add(allergyIntoleranceList.get(i).get(j).getCode().getCoding().get(0).getCode());
+                } else if (allergyIntoleranceList.get(i).get(j).getType().equals(b)) {
+                    intoleranceList.add(allergyIntoleranceList.get(i).get(j).getCode().getCoding().get(0).getCode());
+                }
             }
         }
             allergyListView.setItems(allergyList);

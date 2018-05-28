@@ -61,11 +61,11 @@ public class FhirControl {
     public List<Observation> getFHIRObservations(String patientIdentifer, LocalDate startDate, LocalDate endDate){
         List<Observation> observationList = new ArrayList<Observation>();
 
-        double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        double numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) ;
         // % er resten efter division med tallet efter %
         long extraDays = (long) (numOfDaysBetween % 7);
         startDate = startDate.plusDays(extraDays-1);
-        endDate = endDate.plusDays(1);
+        //endDate = endDate.plusDays(1);
 
         System.out.println(ChronoUnit.DAYS.between(startDate, endDate));
 
@@ -97,12 +97,10 @@ public class FhirControl {
      * Loader næster side af bundle og lægger det ind i en array liste
      *
      */
-        for (int j = 0; j < floor(observationsBundle.getTotal()/20); j++){
+        for (int j = 0; j < (floor(observationsBundle.getTotal()/20))-1; j++){
 
             observationsBundle = instansClient.loadPage().next(observationsBundle).execute();
-          /*  for(int q =0; q < observationList.size(); q++) {
-                System.out.println(observationList.get(q).getCode().getCoding().get(0).getCode());
-            }*/
+
             for (int i = 0; i<observationsBundle.getEntry().size(); i++){
                 if(observationList.size() < observationsBundle.getTotal()) {
                     observationList.add((Observation) observationsBundle.getEntry().get(i).getResource());

@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+/**
+ * Klasse til upload af FHIR patienter og observationer
+ */
 public class FhirUpload {
 
     public static void main(String[] args) throws IOException {
@@ -34,21 +37,22 @@ public class FhirUpload {
 
         // CPR Marianne: 120773-1450
         // CPR Jens: 130380-3813
+        String CPRtest = "2002802067";
         String MarianneCPR = "1207731470";
         String JensCPR = "1303803833";
 
-        String startString = "10.03.2018";
-        String slutString = "10.05.2018";
+        String startString = "21.05.2018";
+        String slutString = "25.05.2018";
 
         LocalDate startDate = dateUtil.parse(startString);
         LocalDate endDate = dateUtil.parse(slutString);
 
         //Put Marianne
-        //putMarianne(client, MarianneCPR);
+        //putMarianne(client, CPRtest);
         //putJens(client, JensCPR);
 
-        // Se generateObservations metoden for at ændre antallet af observationer, som uploades
-        //generateObservations(MarianneCPR, client, startDate, endDate);
+        // Se "generateObservations" metoden for at ændre antallet af observationer, som uploades
+        generateObservations(CPRtest, client, startDate, endDate);
         //generateObservations(JensCPR, client, startDate, endDate);
 
 
@@ -63,9 +67,9 @@ public class FhirUpload {
             Patient Marianne = new Patient();
 
             Marianne.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(patientIdentifier);
-            Marianne.addName().setFamily("Jensen").addGiven("Marianne");
+            Marianne.addName().setFamily("Fisker").addGiven("Lazarus");
             Marianne.setGender(Enumerations.AdministrativeGender.FEMALE);
-            LocalDate dato = dateUtil.parse("12.07.1973");
+            LocalDate dato = dateUtil.parse("24.02.1980");
             Marianne.setBirthDate(java.sql.Date.valueOf(dato));
 
             Marianne.getName().get(0).getGiven();
@@ -74,7 +78,7 @@ public class FhirUpload {
             ext.setUrl("Is Registered?");
             ext.setValue(new BooleanType(true));
             Marianne.addExtension(ext);
-            LocalDate dato1 = dateUtil.parse("04.04.2018");
+            LocalDate dato1 = dateUtil.parse("10.04.2018");
 
 
             //Index 1
@@ -164,17 +168,17 @@ public class FhirUpload {
             //Kalder metoderne for observations
 
 
-            List<Observation> aktivitetsList =  generateAktivitetsbegraensning(searchedPatient, startDate, endDate, 10);
+            List<Observation> aktivitetsList =  generateAktivitetsbegraensning(searchedPatient, startDate, endDate, 1);
             List<Observation> anfaldOgTrigger =  generateAnfaldOgTrigger(searchedPatient, startDate, endDate, 1); //Antal Obs * 2
-            List<Observation> dagSymptom =  generateDagSymptom(searchedPatient, startDate, endDate, 45); //Antal Obs * 2 (i gennemsnit)
-            List<Observation> natSymptom =  generateNatSymptom(searchedPatient, startDate, endDate,20);  //Antal Obs * 2 (i gennemsnit)
-            List<Observation> PEF =  generatePEF(searchedPatient, startDate, endDate, 61); //Antal Obs * 2
+            List<Observation> dagSymptom =  generateDagSymptom(searchedPatient, startDate, endDate, 3); //Antal Obs * 2 (i gennemsnit)
+            List<Observation> natSymptom =  generateNatSymptom(searchedPatient, startDate, endDate,2);  //Antal Obs * 2 (i gennemsnit)
+            //List<Observation> PEF =  generatePEF(searchedPatient, startDate, endDate, 7); //Antal Obs * 2
 
             client.transaction().withResources(aktivitetsList).execute();
-            client.transaction().withResources(anfaldOgTrigger).execute();
+            //client.transaction().withResources(anfaldOgTrigger).execute();
             client.transaction().withResources(dagSymptom).execute();
             client.transaction().withResources(natSymptom).execute();
-            client.transaction().withResources(PEF).execute();
+            //client.transaction().withResources(PEF).execute();
 
 
         }
@@ -497,7 +501,7 @@ public class FhirUpload {
     }
 
         private static List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
-
+            endDate = endDate.plusDays(1);
             long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
             return IntStream.iterate(0, i -> i + 1)
                     .limit(numOfDaysBetween)

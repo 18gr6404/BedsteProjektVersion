@@ -25,7 +25,7 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="798.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <Button fx:id="overviewBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleOverview" prefHeight="35.0" prefWidth="132.0" text="Oversigt" />
+                                <Button fx:id="overviewBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleOverview" prefHeight="35.0" prefWidth="132.0" text="Overblik" />
                                 <Button fx:id="consultationMeasurementBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleConsultationMeasurement" prefHeight="35.0" prefWidth="132.0" text="Indtast måling" textAlignment="CENTER" />
                                 <Button fx:id="summaryBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleSummary" prefHeight="35.0" prefWidth="132.0" text="Udfyld notat" textAlignment="CENTER" />
                             </children>
@@ -320,8 +320,8 @@
                                 </Button>
                                 <Button fx:id="fourWeeksBtn" mnemonicParsing="false" onAction="#handleFourWeeks" prefHeight="35.0" text="Seneste 4 uger" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
                                 <Button fx:id="twoWeeksBtn" mnemonicParsing="false" onAction="#handleTwoWeeks" prefHeight="35.0" text="Seneste 2 uger" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <DatePicker fx:id="SlutDatePicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-                                <DatePicker fx:id="StartDatePicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                                <DatePicker fx:id="endPicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+                                <DatePicker fx:id="startPicker" prefHeight="25.0" prefWidth="102.0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
                                 <Label text="Start:" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="10.0" />

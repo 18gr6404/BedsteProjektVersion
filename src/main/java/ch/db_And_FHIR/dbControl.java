@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -61,10 +62,10 @@ public class dbControl {
 
     public void setAsthmaAppUser(Integer patientCPR, String choosenAppInput, Integer isRegisteredInput, Integer pastDataWantedInput) {
 
+        LocalDateTime dateTimeInput = LocalDateTime.now();
           try{
-
-
             String SQL = "UPDATE App SET choosenApp = '" + choosenAppInput + "'," +
+                    " dateTime = '" + dateTimeInput + "'," +
                     " isRegistered = '" + isRegisteredInput + "'," +
                     " pastDataWanted = '" + pastDataWantedInput+ "'" +
                     "WHERE cpr = '" + patientCPR + "'";
@@ -189,7 +190,7 @@ public class dbControl {
         return allergyintoleranceList;
     }
 
-    public void insertSummary(ClinicalImpression summary, Integer patientCPR, Integer practitionerID) {
+        public void insertSummary(ClinicalImpression summary, Integer patientCPR, Integer practitionerID) {
 
         String query = "INSERT INTO Summary (cpr, dateTime, text, practitionerID) values ("
                 + "'" + patientCPR + "',"
@@ -209,9 +210,6 @@ public class dbControl {
             e.printStackTrace();
         }
     }
-
-
-
 
     public List<Condition> buildConditionData(int patientCPR) {
 
@@ -355,7 +353,6 @@ public class dbControl {
         }
     }
 
-
     public LocalDate getLatestConsultationDate(Integer patientCPR){
 
         Statement stmnt = null;
@@ -372,7 +369,6 @@ public class dbControl {
                 clinicalImpression.setDate(rs.getDate("dateTime"));
                 clinicalImpressionDateList.add(clinicalImpression);
                 }
-
             for (int i = 0; i<clinicalImpressionDateList.size(); i++) {
                 dateList.add(Instant.ofEpochMilli(clinicalImpressionDateList.get(i).getDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
             }

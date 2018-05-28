@@ -23,9 +23,7 @@ import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class WeeklyOverviewCtrl implements Initializable {
 
@@ -87,7 +85,13 @@ public class WeeklyOverviewCtrl implements Initializable {
     private Integer patientCPR;
     private LocalDate startDate; //Start dato for FHIR-søgningen ´. Dette er den ældste dato
     private LocalDate endDate; //Slutdato for FHIR-søgningen ´. Dette er den nyeste dato
-
+    private XYChart.Series pefaften;
+    private XYChart.Series dagSymptomer;
+    private XYChart.Series natSymptomer;
+    private XYChart.Series aktivitetsBegraensning;
+    private XYChart.Series anfald;
+    private XYChart.Series FEV1;
+    private XYChart.Series pefmorgen;
     private MainApp mainAppRef;
     dbControl dbControlOB = dbControl.getInstance();
     // REference til Rootlayout
@@ -104,8 +108,12 @@ public class WeeklyOverviewCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle){
 
         //Sætter instansvariablerne for start og slut dato til defaultværdier for at vise de seneste 4 uger.
-        startDate = LocalDate.now().minusDays(28);
-        endDate = LocalDate.now();
+        //startDate = LocalDate.now().minusDays(28);
+        //endDate = LocalDate.now();
+        String startDateString = "16.04.2018";
+        startDate = dateUtil.parse(startDateString);
+        endDate = startDate.plusDays(28);
+
 
     }
 
@@ -173,7 +181,7 @@ public class WeeklyOverviewCtrl implements Initializable {
 
         startDate = dbControlOb.getLatestConsultationDate(cpr);
         endDate = LocalDate.now();
-
+        showData();
     }
 
 
@@ -188,6 +196,7 @@ public class WeeklyOverviewCtrl implements Initializable {
         else if (patientCPR == 1303803813){
             patientCPR = 1303803823;
         }
+
         //Dette hører til BarChart
         CalculatedParametersCtrl calcParam = new CalculatedParametersCtrl();
         EncapsulatedParameters beggeParam = calcParam.buildCalculatedParameters(patientCPR, startDate, endDate);
@@ -200,29 +209,51 @@ public class WeeklyOverviewCtrl implements Initializable {
         List<Observation> PEFMorgen = weeklyOverviewParam.getMorgenPEF();
         List<Observation> PEFAften = weeklyOverviewParam.getAftenPEF();
 
+        if (!AstmaAppBarChart.getData().isEmpty())
+        AstmaAppBarChart.getData().removeAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
+        if (!LineChart.getData().isEmpty()) {
+            LineChart.getData().removeAll(FEV1, pefaften, pefmorgen);
+        }
         //BarChart
-        XYChart.Series dagSymptomer = new XYChart.Series<>();
+
+        dagSymptomer = new XYChart.Series<>();
         dagSymptomer.setName("Dagsymptomer");
 
-        XYChart.Series natSymptomer = new XYChart.Series<>();
+
+        natSymptomer = new XYChart.Series<>();
         natSymptomer.setName("Natsymptomer");
 
-        XYChart.Series aktivitetsBegraensning = new XYChart.Series<>();
+
+        aktivitetsBegraensning = new XYChart.Series<>();
         aktivitetsBegraensning.setName("Aktivitetsbegrænsning");
 
-        XYChart.Series anfald = new XYChart.Series<>();
+
+        anfald = new XYChart.Series<>();
         anfald.setName("Anfaldsmedicin");
 
         //LineChart
-        XYChart.Series FEV1 = new XYChart.Series<>();
+        FEV1 = new XYChart.Series<>();
         FEV1.setName("FEV1");
 
-        XYChart.Series pefmorgen = new XYChart.Series<>();
+
+
+        pefmorgen = new XYChart.Series<>();
         pefmorgen.setName("Morgen PEF");
 
-        XYChart.Series pefaften = new XYChart.Series<>();
+
+
+        pefaften = new XYChart.Series<>();
         pefaften.setName("Aften PEF");
 
+        /**
+         * Dato sortering
+         */
+
+        Collections.sort(FEVListe, new Comparator<Observation>() {
+            public int compare(Observation o1, Observation o2) {
+                return o1.getIssued().compareTo(o2.getIssued());
+            }
+        });
         //Add data to LineChart:FEV1
         for (int i = 0; i<FEVListe.size(); i++){
             try{
@@ -231,11 +262,28 @@ public class WeeklyOverviewCtrl implements Initializable {
                 System.out.println(e.getMessage());
             }
         }
+
+
+        /**
+         * Sortér lister, så de er i dato rækkefølge
+         */
+        Collections.sort(PEFMorgen, new Comparator<Observation>() {
+            public int compare(Observation o1, Observation o2) {
+                return o1.getIssued().compareTo(o2.getIssued());
+            }
+        });
+        Collections.sort(PEFAften, new Comparator<Observation>() {
+            public int compare(Observation o1, Observation o2) {
+                return o1.getIssued().compareTo(o2.getIssued());
+            }
+        });
         //Add data to LineChart:PEF
        for (int i = 0; i<PEFMorgen.size(); i++){
            try{
-               pefmorgen.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFMorgen.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), PEFMorgen.get(i).getValueQuantity().getValue()));
-               pefaften.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFAften.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), PEFAften.get(i).getValueQuantity().getValue()));
+               pefmorgen.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFMorgen.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
+                       PEFMorgen.get(i).getValueQuantity().getValue()));
+               pefaften.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFAften.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
+                       PEFAften.get(i).getValueQuantity().getValue()));
            }catch(FHIRException e){
                System.out.println(e.getMessage());
            }
@@ -260,12 +308,13 @@ public class WeeklyOverviewCtrl implements Initializable {
         }
         //Add data and legend to BarChart
         AstmaAppBarChart.setLegendSide(Side.RIGHT);
+        //AstmaAppBarChart.getData().removeAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
         AstmaAppBarChart.getData().addAll(dagSymptomer, natSymptomer, aktivitetsBegraensning, anfald);
-
+        AstmaAppBarChart.setAnimated(false);
         //Add data and legend to LineChart
         LineChart.setLegendSide(Side.RIGHT);
         LineChart.getData().addAll(FEV1, pefaften, pefmorgen);
-
+        LineChart.setAnimated(false);
         setSymptomFordelingTabel();
     }
 
