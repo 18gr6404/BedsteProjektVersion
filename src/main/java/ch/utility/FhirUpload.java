@@ -67,7 +67,7 @@ public class FhirUpload {
             Patient Marianne = new Patient();
 
             Marianne.addIdentifier().setSystem("urn:https://www.cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret/").setValue(patientIdentifier);
-            Marianne.addName().setFamily("Fisker").addGiven("Lazarus");
+            Marianne.addName().setFamily("Jensen").addGiven("Marianne");
             Marianne.setGender(Enumerations.AdministrativeGender.FEMALE);
             LocalDate dato = dateUtil.parse("24.02.1980");
             Marianne.setBirthDate(java.sql.Date.valueOf(dato));
