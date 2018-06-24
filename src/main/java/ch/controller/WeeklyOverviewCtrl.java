@@ -282,13 +282,23 @@ public class WeeklyOverviewCtrl implements Initializable {
            try{
                pefmorgen.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFMorgen.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
                        PEFMorgen.get(i).getValueQuantity().getValue()));
-               pefaften.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFAften.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
-                       PEFAften.get(i).getValueQuantity().getValue()));
+               //pefaften.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFAften.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
+               //        PEFAften.get(i).getValueQuantity().getValue()));
            }catch(FHIRException e){
                System.out.println(e.getMessage());
            }
 
        }
+
+        for (int i = 0; i<PEFAften.size(); i++){
+            try{
+                pefaften.getData().add(new XYChart.Data(""+ Instant.ofEpochMilli(PEFAften.get(i).getIssued().getTime()).atZone(ZoneId.systemDefault()).toLocalDate(),
+                        PEFAften.get(i).getValueQuantity().getValue()));
+            }catch(FHIRException e){
+                System.out.println(e.getMessage());
+            }
+
+        }
         //Add data to BarChart
         for (int i = 0; i<weeklyOverviewParam.getUgeListeDagSymptomer().size(); i++) {
             int weeknumber = (1+i);
